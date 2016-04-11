@@ -2,10 +2,15 @@ package com.veontomo.yoda;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View {
+
+    private TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,7 +19,19 @@ public class MainActivity extends AppCompatActivity implements View {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        mTextView = (TextView) findViewById(R.id.editText);
+
+    }
+
+    @Override
     public void loadText(String text) {
+        if (mTextView != null){
+            mTextView.setText(text);
+        } else {
+            Log.i(Config.appName, "Can not load ");
+        }
     }
 
     @Override
