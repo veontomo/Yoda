@@ -1,21 +1,19 @@
 package com.veontomo.yoda;
 
-import java.lang.ref.WeakReference;
-
 /**
  * Presenter for the activity
  *
  */
 public class Presenter {
     /**
-     * A reference (weak) to the view
+     * A reference to the view
      */
-    private final WeakReference mView;
+    private final View mView;
 
     /**
-     * A reference (weak) to the model
+     * A reference to the model
      */
-    private final WeakReference mModel;
+    private final Model mModel;
 
     /**
      * Constructor.
@@ -25,7 +23,17 @@ public class Presenter {
      * @param model
      */
     public Presenter(View view, Model model) {
-        mView = new WeakReference(view);
-        mModel = new WeakReference(model);
+        mView = view;
+        mModel = model;
+    }
+
+
+    /**
+     * This method is called once the translation button is clicked.
+     * @param text string contained in the edit text
+     */
+    public void onTranslate(final String text) {
+        mModel.onTranslate(text);
+
     }
 }

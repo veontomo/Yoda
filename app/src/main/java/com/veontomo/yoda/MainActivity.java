@@ -23,7 +23,12 @@ public class MainActivity extends AppCompatActivity implements View {
     public void onStart(){
         super.onStart();
         init();
+    }
 
+    public void translate(View view){
+        if (mPresenter != null){
+            mPresenter.onTranslate(mTextView.getEditableText().toString());
+        }
     }
 
     /**
@@ -39,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View {
         if (mTextView != null){
             mTextView.setText(text);
         } else {
-            Log.i(Config.appName, "Can not load ");
+            Log.i(Config.appName, "Can not load");
         }
     }
 

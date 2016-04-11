@@ -5,6 +5,6 @@ package com.veontomo.yoda;
  *
  */
 public abstract class Config {
-    public final String appName = "Yoda";
+    public static final String appName = "Yoda";
 
 }
