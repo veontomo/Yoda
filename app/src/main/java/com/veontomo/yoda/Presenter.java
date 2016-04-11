@@ -7,8 +7,25 @@ import java.lang.ref.WeakReference;
  *
  */
 public class Presenter {
-    private final WeakReference<View> mView;
-    public Presenter(View view) {
+    /**
+     * A reference (weak) to the view
+     */
+    private final WeakReference mView;
+
+    /**
+     * A reference (weak) to the model
+     */
+    private final WeakReference mModel;
+
+    /**
+     * Constructor.
+     *
+     * Converts hard reference into weak ones.
+     * @param view
+     * @param model
+     */
+    public Presenter(View view, Model model) {
         mView = new WeakReference(view);
+        mModel = new WeakReference(model);
     }
 }

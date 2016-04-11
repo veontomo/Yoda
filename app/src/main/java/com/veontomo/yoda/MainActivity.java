@@ -22,9 +22,16 @@ public class MainActivity extends AppCompatActivity implements View {
     @Override
     public void onStart(){
         super.onStart();
-        mTextView = (TextView) findViewById(R.id.editText);
-        mPresenter = new Presenter(this);
+        init();
 
+    }
+
+    /**
+     * Initializes the MVP entities
+     */
+    private void init() {
+        mTextView = (TextView) findViewById(R.id.editText);
+        mPresenter = new Presenter(this, new Model());
     }
 
     @Override
