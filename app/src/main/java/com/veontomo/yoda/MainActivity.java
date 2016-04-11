@@ -3,15 +3,15 @@ package com.veontomo.yoda;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View {
+public class MainActivity extends AppCompatActivity implements MVPView {
 
     private TextView mTextView;
-    private Presenter mPresenter;
+    private MVPPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View {
      */
     private void init() {
         mTextView = (TextView) findViewById(R.id.editText);
-        mPresenter = new Presenter(this, new Model());
+        mPresenter = new MVPPresenter(this, new MVPModel());
     }
 
     @Override

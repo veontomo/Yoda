@@ -1,10 +1,10 @@
 package com.veontomo.yoda;
 
 /**
- * Model class of the activity
+ * Model class of the activity according to MVP approach
  *
  */
-public class Model {
+public class MVPModel {
 
     /**
      * This method gets called once the presenter receives a text to translate.

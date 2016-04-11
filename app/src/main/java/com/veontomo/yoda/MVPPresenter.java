@@ -1,19 +1,19 @@
 package com.veontomo.yoda;
 
 /**
- * Presenter for the activity
+ * Presenter for the activity according to MVP approach
  *
  */
-public class Presenter {
+public class MVPPresenter {
     /**
      * A reference to the view
      */
-    private final View mView;
+    private final MVPView mView;
 
     /**
      * A reference to the model
      */
-    private final Model mModel;
+    private final MVPModel mModel;
 
     /**
      * Constructor.
@@ -22,7 +22,7 @@ public class Presenter {
      * @param view
      * @param model
      */
-    public Presenter(View view, Model model) {
+    public MVPPresenter(MVPView view, MVPModel model) {
         mView = view;
         mModel = model;
     }
