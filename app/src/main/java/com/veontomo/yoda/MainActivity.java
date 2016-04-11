@@ -11,6 +11,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View {
 
     private TextView mTextView;
+    private Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View {
     public void onStart(){
         super.onStart();
         mTextView = (TextView) findViewById(R.id.editText);
+        mPresenter = new Presenter(this);
 
     }
 
