@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MVPView {
+public class MainView extends AppCompatActivity implements MVPView {
 
     private EditText mInput;
     private TextView mText;
