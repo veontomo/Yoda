@@ -33,7 +33,15 @@ public class MVPPresenter {
      * @param text string contained in the edit text
      */
     public void onTranslate(final String text) {
-        mModel.onTranslate(text);
+        mModel.onTranslate(text, this);
+    }
+
+    /**
+     * This method is called once the model has translated the phrase.
+     * @param s
+     */
+    public void onTraslated(String s) {
+        mView.loadText(s);
 
     }
 }
