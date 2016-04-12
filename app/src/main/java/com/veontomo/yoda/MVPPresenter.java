@@ -18,13 +18,14 @@ public class MVPPresenter {
     /**
      * Constructor.
      *
-     * Converts hard reference into weak ones.
+     * NB: Creates a new instance of a model using operator "new" explicitly.
+     *
      * @param view
-     * @param model
      */
-    public MVPPresenter(MVPView view, MVPModel model) {
+    public MVPPresenter(final MVPView view) {
         mView = view;
-        mModel = model;
+        // TODO: avoid creating a new instance here
+        mModel = new MVPModel(this);
     }
 
 

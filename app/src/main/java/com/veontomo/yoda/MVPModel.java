@@ -4,14 +4,17 @@ import android.util.Log;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Func1;
 
 /**
  * Model class of the activity according to MVP approach
  */
 public class MVPModel {
     private final Subscriber<String> mUserInputReceiver;
+    private final MVPPresenter mPresenter;
 
-    public MVPModel(){
+    public MVPModel(final MVPPresenter presenter){
+        this.mPresenter = presenter;
 
         mUserInputReceiver = new Subscriber<String>() {
             @Override
@@ -28,6 +31,7 @@ public class MVPModel {
             @Override
             public void onNext(String s) {
                 Log.i(Config.appName, "enqueued for translation: "  + s);
+                onTranslated("translated what Yoda said" + s);
             }
         };
     }
@@ -39,17 +43,21 @@ public class MVPModel {
      */
     public void onTranslate(String text, final MVPPresenter presenter) {
         Log.i(Config.appName, "text: " + text + " is received.");
-        Observable.just(text).subscribe(mUserInputReceiver);
-        onTranslated("translated what Yoda said" + text, presenter);
+        Observable.just(text).map(new Func1<String, String>() {
+            @Override
+            public String call(String s) {
+                return s.trim();
+            }
+        }).subscribe(mUserInputReceiver);
+
     }
 
     /**
      * This method gets called once the phrase has been translated.
      * @param s
-     * @param presenter
      */
-    private void onTranslated(final String s, final MVPPresenter presenter) {
-        presenter.onTraslated(s);
+    private void onTranslated(final String s) {
+        mPresenter.onTraslated(s);
 
 
     }
