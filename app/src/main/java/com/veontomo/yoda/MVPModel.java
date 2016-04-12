@@ -17,7 +17,12 @@ public class MVPModel {
         onTranslated("translated what Yoda said" + text, presenter);
     }
 
-    private void onTranslated(String s, final MVPPresenter presenter) {
+    /**
+     * This method gets called once the phrase has been translated.
+     * @param s
+     * @param presenter
+     */
+    private void onTranslated(final String s, final MVPPresenter presenter) {
         presenter.onTraslated(s);
 
 

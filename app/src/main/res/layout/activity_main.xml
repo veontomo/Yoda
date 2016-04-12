@@ -38,8 +38,10 @@
             android:text="Clean"/>
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/list"
+    <TextView
+        android:id="@+id/text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content"/>
+
+
 </LinearLayout>

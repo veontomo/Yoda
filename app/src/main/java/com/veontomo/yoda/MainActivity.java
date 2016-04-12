@@ -4,13 +4,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MVPView {
 
-    private TextView mTextView;
+    private EditText mInput;
+    private TextView mText;
     private MVPPresenter mPresenter;
 
     @Override
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements MVPView {
 
     public void translate(View view){
         if (mPresenter != null){
-            mPresenter.onTranslate(mTextView.getEditableText().toString());
+            mPresenter.onTranslate(mInput.getEditableText().toString());
         }
     }
 
@@ -35,14 +37,15 @@ public class MainActivity extends AppCompatActivity implements MVPView {
      * Initializes the MVP entities
      */
     private void init() {
-        mTextView = (TextView) findViewById(R.id.editText);
+        mInput = (EditText) findViewById(R.id.editText);
+        mText = (TextView) findViewById(R.id.text);
         mPresenter = new MVPPresenter(this, new MVPModel());
     }
 
     @Override
     public void loadText(String text) {
-        if (mTextView != null){
-            mTextView.setText(text);
+        if (mText != null){
+            mText.setText(text);
         } else {
             Log.i(Config.appName, "Can not load");
         }
