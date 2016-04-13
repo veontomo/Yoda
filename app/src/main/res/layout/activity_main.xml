@@ -41,7 +41,14 @@
     <TextView
         android:id="@+id/text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:drawablePadding="16dp"
+        android:drawableLeft="@mipmap/avatar"
+        android:drawableStart="@mipmap/avatar"
+        android:maxLines="3"
+        android:lines="2"
+        tools:text="New day, this is, new beginning.  Hmmmmmm."/>
 
 
 </LinearLayout>
