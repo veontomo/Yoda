@@ -55,4 +55,9 @@ public class MainView extends AppCompatActivity implements MVPView {
     public void loadList(List<String> sayings) {
 
     }
+
+    @Override
+    public void onTranslationFailure() {
+        mText.setText(getString(R.string.translation_failed));
+    }
 }

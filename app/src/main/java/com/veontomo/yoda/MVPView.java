@@ -10,4 +10,6 @@ public interface MVPView {
     void loadText(String text);
 
     void loadList(List<String> sayings);
+
+    void onTranslationFailure();
 }

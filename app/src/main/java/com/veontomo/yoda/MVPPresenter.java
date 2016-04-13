@@ -45,4 +45,14 @@ public class MVPPresenter {
         mView.loadText(s);
 
     }
+
+    /**
+     * This method is called if the translation was not successful.
+     */
+    public void onTranslationFailure() {
+        mView.onTranslationFailure();
+
+
+
+    }
 }

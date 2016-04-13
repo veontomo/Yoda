@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Yoda</string>
+    <string name="translation_failed">Yoda response failed</string>
 </resources>

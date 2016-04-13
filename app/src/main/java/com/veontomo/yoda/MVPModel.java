@@ -44,10 +44,9 @@ public class MVPModel {
             public void onResponse(Call<String> call, Response<String> response) {
                 Log.i(Config.appName, response.body());
                 if (response.isSuccessful()) {
-                    String message = response.body();
-                    onTranslated("translated what Yoda said: " + message);
+                    onTranslated(response.body());
                 } else {
-                    onTranslated("Yoda response failed");
+                    onTranslationFailure();
                 }
             }
 
@@ -77,6 +76,13 @@ public class MVPModel {
                 call.enqueue(callback);
             }
         };
+    }
+
+    /**
+     * This method is called if the response from the Yoda API is not successful.
+     */
+    private void onTranslationFailure() {
+        mPresenter.onTranslationFailure();
     }
 
     /**
