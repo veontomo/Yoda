@@ -11,7 +11,8 @@
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:ems="10"
+        android:lines="1"
+        android:maxLines="2"
         android:inputType="textMultiLine"/>
 
     <LinearLayout
