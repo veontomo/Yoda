@@ -60,4 +60,8 @@ public class MainView extends AppCompatActivity implements MVPView {
     public void onTranslationFailure() {
         mText.setText(getString(R.string.translation_failed));
     }
+
+    public void clean(View view) {
+        mInput.setText(null);
+    }
 }
