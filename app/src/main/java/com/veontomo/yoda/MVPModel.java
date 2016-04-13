@@ -68,9 +68,10 @@ public class MVPModel {
             @Override
             public void onResponse(Call<Quote> call, Response<Quote> response) {
                 Log.i(Config.appName, "quote on response");
-                Log.i(Config.appName, response.body().quote + " by " + response.body().author);
+
                 if (response.isSuccessful()) {
                     Log.i(Config.appName, "response is successful");
+                    onTranslated(response.body().quote + " by " + response.body().author);
                 } else {
                     Log.i(Config.appName, "response is not successful");
                 }
