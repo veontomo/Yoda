@@ -34,7 +34,7 @@ public class MVPPresenter {
      * @param text string contained in the edit text
      */
     public void onTranslate(final String text) {
-        mModel.onTranslate(text, this);
+        mModel.onTranslate(text);
     }
 
     /**

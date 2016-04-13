@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.ScalarsConverterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.Subscriber;
@@ -30,7 +31,8 @@ public class MVPModel {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Config.YODA_SERVICE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+//                .addConverterFactory(new ToStringConverterFactory())
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         yodaService = retrofit.create(YodaApi.class);
 
@@ -80,7 +82,7 @@ public class MVPModel {
      *
      * @param text string to translate
      */
-    public void onTranslate(String text, final MVPPresenter presenter) {
+    public void onTranslate(String text) {
         Log.i(Config.appName, "text: " + text + " is received.");
         Observable.just(text).map(new Func1<String, String>() {
             @Override
