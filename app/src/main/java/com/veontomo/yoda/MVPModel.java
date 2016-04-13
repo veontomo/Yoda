@@ -2,6 +2,9 @@ package com.veontomo.yoda;
 
 import android.util.Log;
 
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,7 +22,7 @@ public class MVPModel {
     private final Subscriber<String> mUserInputReceiver;
     private final MVPPresenter mPresenter;
     private final YodaApi yodaService;
-    private final Callback<YodaMessage> callback;
+    private final Callback<String> callback;
 
     /**
      * Constructor.
@@ -31,25 +34,25 @@ public class MVPModel {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Config.YODA_SERVICE_URL)
-//                .addConverterFactory(new ToStringConverterFactory())
-                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(new ToStringConverterFactory())
+//                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         yodaService = retrofit.create(YodaApi.class);
 
-        callback = new Callback<YodaMessage>() {
+        callback = new Callback<String>() {
             @Override
-            public void onResponse(Call<YodaMessage> call, Response<YodaMessage> response) {
-                Log.i(Config.appName, response.body().message);
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.i(Config.appName, response.body());
                 if (response.isSuccessful()) {
-                    YodaMessage message = response.body();
-                    onTranslated("translated what Yoda said: " + message.message);
+                    String message = response.body();
+                    onTranslated("translated what Yoda said: " + message);
                 } else {
                     onTranslated("Yoda response failed");
                 }
             }
 
             @Override
-            public void onFailure(Call<YodaMessage> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 onTranslated("Yoda fail: " + t.getMessage() + call.request().toString());
             }
         };
@@ -70,9 +73,8 @@ public class MVPModel {
             @Override
             public void onNext(String s) {
                 Log.i(Config.appName, "enqueued for translation: " + s);
-                Call<YodaMessage> call = yodaService.translate(s);
+                Call<String> call = yodaService.translate(s);
                 call.enqueue(callback);
-
             }
         };
     }
