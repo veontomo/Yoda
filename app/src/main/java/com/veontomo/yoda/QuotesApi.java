@@ -13,6 +13,6 @@ public interface QuotesApi {
     @Headers({
             "Accept: application/json",
             "X-Mashape-Key: " + Config.YODA_API_KEY})
-    @GET("")
+    @GET("/")
     Call<Quote> getByCategory(@Query("cat") String category);
 }
