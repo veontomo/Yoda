@@ -68,6 +68,8 @@ public class MVPModel {
                 if (response.isSuccessful()) {
                     Log.i(Config.appName, "response is successful");
                     onQuoteReceived(response.body());
+                    Call<String> call2 = yodaService.translate(response.body().quote);
+                    call2.enqueue(callback);
                 } else {
                     Log.i(Config.appName, "response is not successful");
                 }
@@ -109,6 +111,7 @@ public class MVPModel {
 
     /**
      * This method is called once a quote is received from the service
+     *
      * @param quote
      */
     private void onQuoteReceived(final Quote quote) {
