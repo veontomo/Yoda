@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 public interface QuotesApi {
     @Headers({
             "Accept: application/json",
-            "X-Mashape-Key: " + Config.YODA_API_KEY})
+            "X-Mashape-Key: " + Config.API_KEY_1})
     @GET("/")
     Call<Quote> getByCategory(@Query("cat") String category);
 }
