@@ -12,4 +12,6 @@ public interface MVPView {
     void loadList(List<String> sayings);
 
     void onTranslationFailure();
+
+    void setQuote(Quote quote);
 }

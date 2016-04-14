@@ -12,7 +12,8 @@ import java.util.List;
 public class MainView extends AppCompatActivity implements MVPView {
 
     private EditText mInput;
-    private TextView mText;
+    private TextView mTranslation;
+    private TextView mQuote;
     private MVPPresenter mPresenter;
 
     @Override
@@ -38,14 +39,15 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     private void init() {
         mInput = (EditText) findViewById(R.id.editText);
-        mText = (TextView) findViewById(R.id.translation);
+        mTranslation = (TextView) findViewById(R.id.translation);
+        mQuote = (TextView) findViewById(R.id.phrase);
         mPresenter = new MVPPresenter(this);
     }
 
     @Override
     public void loadText(String text) {
-        if (mText != null){
-            mText.setText(text);
+        if (mTranslation != null){
+            mTranslation.setText(text);
         } else {
             Log.i(Config.appName, "Can not load");
         }
@@ -58,7 +60,13 @@ public class MainView extends AppCompatActivity implements MVPView {
 
     @Override
     public void onTranslationFailure() {
-        mText.setText(getString(R.string.translation_failed));
+        mTranslation.setText(getString(R.string.translation_failed));
+    }
+
+    @Override
+    public void setQuote(Quote quote) {
+        mQuote.setText(quote.quote + "\n" + quote.author);
+
     }
 
     public void clean(View view) {

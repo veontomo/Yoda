@@ -55,4 +55,13 @@ public class MVPPresenter {
 
 
     }
+
+    /**
+     * This method is called when the quote us received
+     */
+    public void onQuoteReceived(final Quote quote) {
+        mView.setQuote(quote);
+
+
+    }
 }

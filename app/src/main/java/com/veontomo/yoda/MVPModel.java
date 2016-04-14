@@ -2,14 +2,10 @@ package com.veontomo.yoda;
 
 import android.util.Log;
 
-import java.io.IOException;
-
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.ScalarsConverterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.Subscriber;
@@ -71,7 +67,7 @@ public class MVPModel {
 
                 if (response.isSuccessful()) {
                     Log.i(Config.appName, "response is successful");
-                    onTranslated(response.body().quote + " by " + response.body().author);
+                    onQuoteReceived(response.body());
                 } else {
                     Log.i(Config.appName, "response is not successful");
                 }
@@ -108,6 +104,15 @@ public class MVPModel {
             }
         };
 
+
+    }
+
+    /**
+     * This method is called once a quote is received from the service
+     * @param quote
+     */
+    private void onQuoteReceived(final Quote quote) {
+        mPresenter.onQuoteReceived(quote);
 
     }
 
