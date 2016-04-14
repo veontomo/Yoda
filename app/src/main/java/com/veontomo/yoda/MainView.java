@@ -20,7 +20,10 @@ public class MainView extends AppCompatActivity implements MVPView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        consequtiveStreams();
     }
+
 
     @Override
     public void onStart(){
@@ -71,5 +74,15 @@ public class MainView extends AppCompatActivity implements MVPView {
 
     public void clean(View view) {
         mInput.setText(null);
+    }
+
+
+    /**
+     * A toy example of consecutive streams
+     */
+    private void consequtiveStreams() {
+
+
+
     }
 }

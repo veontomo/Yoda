@@ -19,8 +19,8 @@ public class MVPModel {
     private final MVPPresenter mPresenter;
     private final YodaApi yodaService;
     private final QuotesApi quoteService;
-    private final Callback<String> callback;
-    private final Callback<Quote> callback2;
+    private final Callback<String> translateExec;
+    private final Callback<Quote> quoteExec;
 
     /**
      * Constructor.
@@ -33,7 +33,6 @@ public class MVPModel {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Config.YODA_SERVICE_URL)
                 .addConverterFactory(new ToStringConverterFactory())
-//                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         yodaService = retrofit.create(YodaApi.class);
 
@@ -43,7 +42,7 @@ public class MVPModel {
                 .build();
         quoteService = retrofit2.create(QuotesApi.class);
 
-        callback = new Callback<String>() {
+        translateExec = new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 Log.i(Config.appName, response.body());
@@ -60,7 +59,7 @@ public class MVPModel {
             }
         };
 
-        callback2 = new Callback<Quote>() {
+        quoteExec = new Callback<Quote>() {
             @Override
             public void onResponse(Call<Quote> call, Response<Quote> response) {
                 Log.i(Config.appName, "quote on response");
@@ -69,7 +68,7 @@ public class MVPModel {
                     Log.i(Config.appName, "response is successful");
                     onQuoteReceived(response.body());
                     Call<String> call2 = yodaService.translate(response.body().quote);
-                    call2.enqueue(callback);
+                    call2.enqueue(translateExec);
                 } else {
                     Log.i(Config.appName, "response is not successful");
                 }
@@ -96,13 +95,9 @@ public class MVPModel {
 
             @Override
             public void onNext(String s) {
-//                Log.i(Config.appName, "enqueued for translation: " + s);
-//                Call<String> call = yodaService.translate(s);
-//                call.enqueue(callback);
-
                 Log.i(Config.appName, "retrieve the quote");
                 Call<Quote> call2 = quoteService.getByCategory("movie");
-                call2.enqueue(callback2);
+                call2.enqueue(quoteExec);
             }
         };
 
