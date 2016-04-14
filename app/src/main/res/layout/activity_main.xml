@@ -41,7 +41,19 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/phrase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/avatar"
+        android:drawablePadding="16dp"
+        android:drawableEnd="@drawable/r2d2_icon"
+        android:gravity="center_vertical"
+        android:text="@string/yoda_default_string"
+        android:textSize="16sp"/>
+
+
+    <TextView
+        android:id="@+id/translation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@mipmap/avatar"

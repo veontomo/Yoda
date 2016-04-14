@@ -38,7 +38,7 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     private void init() {
         mInput = (EditText) findViewById(R.id.editText);
-        mText = (TextView) findViewById(R.id.text);
+        mText = (TextView) findViewById(R.id.translation);
         mPresenter = new MVPPresenter(this);
     }
 
