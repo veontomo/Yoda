@@ -49,13 +49,14 @@ public class MVPModel {
                 if (response.isSuccessful()) {
                     onTranslated(response.body());
                 } else {
-                    onTranslationFailure();
+                    onTranslationFailure(response.body());
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                onTranslated("Yoda fail: " + t.getMessage() + call.request().toString());
+                Log.i(Config.appName, "");
+                onTranslationFailure(t.getMessage() + " " + call.request().toString());
             }
         };
 
@@ -117,8 +118,8 @@ public class MVPModel {
     /**
      * This method is called if the response from the Yoda API is not successful.
      */
-    private void onTranslationFailure() {
-        mPresenter.onTranslationFailure();
+    private void onTranslationFailure(final String s) {
+        mPresenter.onTranslationFailure(s);
     }
 
     /**

@@ -6,14 +6,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
+
+import rx.Observer;
+import rx.schedulers.Schedulers;
+import rx.subjects.PublishSubject;
 
 public class MainView extends AppCompatActivity implements MVPView {
 
     private EditText mInput;
     private TextView mTranslation;
-    private TextView mQuote;
+    private TextView mQuoteText;
+    private TextView mQuoteAuthor;
     private MVPPresenter mPresenter;
 
     @Override
@@ -43,7 +49,8 @@ public class MainView extends AppCompatActivity implements MVPView {
     private void init() {
         mInput = (EditText) findViewById(R.id.editText);
         mTranslation = (TextView) findViewById(R.id.translation);
-        mQuote = (TextView) findViewById(R.id.phrase);
+        mQuoteText = (TextView) findViewById(R.id.phrase);
+        mQuoteAuthor = (TextView) findViewById(R.id.author);
         mPresenter = new MVPPresenter(this);
     }
 
@@ -62,13 +69,15 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
     @Override
-    public void onTranslationFailure() {
-        mTranslation.setText(getString(R.string.translation_failed));
+    public void onTranslationFailure(final String s) {
+        mTranslation.setText(getString(R.string.yoda_default_string));
+        Toast.makeText(this, s, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void setQuote(Quote quote) {
-        mQuote.setText(quote.quote + "\n" + quote.author);
+        mQuoteText.setText(quote.quote);
+        mQuoteAuthor.setText(quote.author);
 
     }
 
@@ -81,6 +90,29 @@ public class MainView extends AppCompatActivity implements MVPView {
      * A toy example of consecutive streams
      */
     private void consequtiveStreams() {
+        PublishSubject<String> subject = PublishSubject.create();
+        Observer<String> greeter = new Observer<String>() {
+
+            @Override
+            public void onCompleted() {
+                Log.i("GDG1", "No more greetings." + " " + System.currentTimeMillis());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i("GDG1", "I'd greet somebody more!");
+            }
+
+            @Override
+            public void onNext(String t) {
+                Log.i(Config.appName, t + " " + System.currentTimeMillis());
+            }
+
+        };
+
+        subject.subscribeOn(Schedulers.io()).subscribe(greeter);
+        subject.onNext("hi!");
+        subject.onNext("bye!");
 
 
 

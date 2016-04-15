@@ -49,8 +49,8 @@ public class MVPPresenter {
     /**
      * This method is called if the translation was not successful.
      */
-    public void onTranslationFailure() {
-        mView.onTranslationFailure();
+    public void onTranslationFailure(final String s) {
+        mView.onTranslationFailure(s);
 
 
 

@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">Yoda</string>
-    <string name="translation_failed">Yoda response failed</string>
     <string name="translate_command">Go</string>
     <string name="clean_command">Clean</string>
-    <string name="yoda_default_string">New day, this is, new beginning. Hmmmmmm.</string>
+    <string name="yoda_default_string">Patience you must have my young padawan.</string>
     <string name="user_default_string">Ciao</string>
 </resources>
