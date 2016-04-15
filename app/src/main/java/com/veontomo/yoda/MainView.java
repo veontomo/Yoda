@@ -19,6 +19,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     private TextView mTranslation;
     private TextView mQuoteText;
     private TextView mQuoteAuthor;
+    private ViewSwitcher switcher;
     private MVPPresenter mPresenter;
 
     @Override
@@ -37,6 +38,8 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
     public void start(View view){
+        mQuoteText.setText("aaaaaaaaaaaaaaaa");
+        switcher.showPrevious();
         if (mPresenter != null){
             mPresenter.onStart();
         }
@@ -49,6 +52,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         mTranslation = (TextView) findViewById(R.id.translation);
         mQuoteText = (TextView) findViewById(R.id.phrase);
         mQuoteAuthor = (TextView) findViewById(R.id.author);
+        switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
         mPresenter = new MVPPresenter(this);
     }
 
@@ -82,11 +86,7 @@ public class MainView extends AppCompatActivity implements MVPView {
 
 
     public void textViewClicked(View v) {
-        ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
-        switcher.showNext(); //or
-        TextView myTV = (TextView) switcher.findViewById(R.id.phrase);
-        myTV.setText("value");
-        switcher.showPrevious();
+        switcher.showNext();
     }
 
 
