@@ -129,12 +129,7 @@ public class MVPModel {
      */
     public void onTranslate(String text) {
         Log.i(Config.appName, "text: " + text + " is received.");
-        Observable.just(text).map(new Func1<String, String>() {
-            @Override
-            public String call(String s) {
-                return s.trim();
-            }
-        }).subscribe(mUserInputReceiver);
+        Observable.just(text).subscribe(mUserInputReceiver);
 
     }
 

@@ -28,15 +28,6 @@ public class MVPPresenter {
         mModel = new MVPModel(this);
     }
 
-
-    /**
-     * This method is called once the translation button is clicked.
-     * @param text string contained in the edit text
-     */
-    public void onTranslate(final String text) {
-        mModel.onTranslate(text);
-    }
-
     /**
      * This method is called once the model has translated the phrase.
      * @param s
@@ -63,5 +54,12 @@ public class MVPPresenter {
         mView.setQuote(quote);
 
 
+    }
+
+    /**
+     * Starts the retrieval of a quote and its then its translation
+     */
+    public void onStart() {
+        mModel.onTranslate("");
     }
 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import java.util.List;
 
@@ -15,8 +16,6 @@ import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 
 public class MainView extends AppCompatActivity implements MVPView {
-
-    private EditText mInput;
     private TextView mTranslation;
     private TextView mQuoteText;
     private TextView mQuoteAuthor;
@@ -37,9 +36,9 @@ public class MainView extends AppCompatActivity implements MVPView {
         init();
     }
 
-    public void translate(View view){
+    public void start(View view){
         if (mPresenter != null){
-            mPresenter.onTranslate(mInput.getEditableText().toString());
+            mPresenter.onStart();
         }
     }
 
@@ -47,7 +46,6 @@ public class MainView extends AppCompatActivity implements MVPView {
      * Initializes the MVP entities
      */
     private void init() {
-        mInput = (EditText) findViewById(R.id.editText);
         mTranslation = (TextView) findViewById(R.id.translation);
         mQuoteText = (TextView) findViewById(R.id.phrase);
         mQuoteAuthor = (TextView) findViewById(R.id.author);
@@ -81,8 +79,14 @@ public class MainView extends AppCompatActivity implements MVPView {
 
     }
 
-    public void clean(View view) {
-        mInput.setText(null);
+
+
+    public void textViewClicked(View v) {
+        ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
+        switcher.showNext(); //or
+        TextView myTV = (TextView) switcher.findViewById(R.id.phrase);
+        myTV.setText("value");
+        switcher.showPrevious();
     }
 
 
