@@ -9,28 +9,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:onClick="start"
-            android:text="@string/translate_command"/>
-
-      
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_margin="8dp"
         android:background="@drawable/border"
         android:orientation="vertical"
+        android:layout_weight="1"
         android:padding="4dp">
 
         <ViewSwitcher
@@ -66,6 +49,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:textSize="12sp"
+            android:layout_weight="1"
             tools:text="Quote Source"/>
     </LinearLayout>
 
@@ -73,7 +57,8 @@
     <TextView
         android:id="@+id/translation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_margin="8dp"
         android:background="@drawable/border"
         android:drawableLeft="@mipmap/avatar"
@@ -83,6 +68,14 @@
         android:padding="4dp"
         android:text="@string/yoda_default_string"
         android:textSize="20sp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:onClick="start"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="@string/translate_command"/>
 
 
 </LinearLayout>
