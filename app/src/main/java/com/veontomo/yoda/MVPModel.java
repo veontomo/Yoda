@@ -9,18 +9,26 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Func1;
 
 /**
  * Model class of the activity according to MVP approach
  */
 public class MVPModel {
+    public static final String CATEGORY_MOVIES = "movies";
+    public static final String CATEGORY_FAMOUS = "famous";
+
     private final Subscriber<String> mUserInputReceiver;
     private final MVPPresenter mPresenter;
     private final YodaApi yodaService;
     private final QuotesApi quoteService;
     private final Callback<String> translateExec;
     private final Callback<Quote> quoteExec;
+
+    /**
+     * Category of the quote.
+     * By default it is set to "movies".
+     */
+    private String mCategory = CATEGORY_MOVIES;
 
     /**
      * Constructor.
@@ -97,7 +105,7 @@ public class MVPModel {
             @Override
             public void onNext(String s) {
                 Log.i(Config.appName, "retrieve the quote");
-                Call<Quote> call2 = quoteService.getByCategory("movie");
+                Call<Quote> call2 = quoteService.getByCategory(mCategory);
                 call2.enqueue(quoteExec);
             }
         };
@@ -141,6 +149,12 @@ public class MVPModel {
     private void onTranslated(final String s) {
         mPresenter.onTraslated(s);
 
+
+    }
+
+    public void setCategory(String category) {
+        this.mCategory = category;
+        Log.i(Config.appName, "Set category to " + category);
 
     }
 }

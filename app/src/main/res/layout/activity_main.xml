@@ -7,6 +7,24 @@
     android:orientation="vertical"
     tools:context=".MainView">
 
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:checkedButton="@+id/radio_movie"
+        android:orientation="horizontal">
+        <RadioButton android:id="@id/radio_movie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_movie"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/radio_famous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_famous"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -18,7 +36,6 @@
 
         <ViewSwitcher
             android:id="@+id/my_switcher"
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

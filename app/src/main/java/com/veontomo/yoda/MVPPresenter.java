@@ -62,4 +62,12 @@ public class MVPPresenter {
     public void onStart() {
         mModel.onTranslate("");
     }
+
+    /**
+     * Sets the category
+     * @param category
+     */
+    public void setCategory(String category) {
+        mModel.setCategory(category);
+    }
 }

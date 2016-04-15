@@ -4,4 +4,6 @@
     <string name="clean_command">Clean</string>
     <string name="yoda_default_string">Patience you must have my young padawan.</string>
     <string name="user_default_string">Ciao</string>
+    <string name="category_movie">movie</string>
+    <string name="category_famous">famous</string>
 </resources>

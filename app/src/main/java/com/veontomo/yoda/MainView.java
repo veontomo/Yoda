@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -38,8 +38,8 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
     public void start(View view){
-        mQuoteText.setText("aaaaaaaaaaaaaaaa");
-        switcher.showPrevious();
+        //mQuoteText.setText("aaaaaaaaaaaaaaaa");
+        // switcher.showPrevious();
         if (mPresenter != null){
             mPresenter.onStart();
         }
@@ -90,6 +90,24 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
 
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radio_movie:
+                if (checked)
+                    mPresenter.setCategory(MVPModel.CATEGORY_MOVIES);
+                    break;
+            case R.id.radio_famous:
+                if (checked)
+                    mPresenter.setCategory(MVPModel.CATEGORY_FAMOUS);
+                    break;
+        }
+    }
+
+
     /**
      * A toy example of consecutive streams
      */
@@ -99,12 +117,12 @@ public class MainView extends AppCompatActivity implements MVPView {
 
             @Override
             public void onCompleted() {
-                Log.i("GDG1", "No more greetings." + " " + System.currentTimeMillis());
+                Log.i(Config.appName, "No more greetings." + " " + System.currentTimeMillis());
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.i("GDG1", "I'd greet somebody more!");
+                Log.i(Config.appName, "I'd greet somebody more!");
             }
 
             @Override
