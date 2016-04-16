@@ -1,5 +1,6 @@
 package com.veontomo.yoda;
 
+import android.provider.CallLog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,8 @@ public class MainView extends AppCompatActivity implements MVPView {
         setContentView(R.layout.activity_main);
 
         consequtiveStreams();
+
+        Log.i(Config.appName, CallLog.Calls.getLastOutgoingCall(this));
     }
 
 

@@ -104,7 +104,7 @@ public class MVPModel {
 
             @Override
             public void onNext(String s) {
-                Log.i(Config.appName, "retrieve the quote");
+                Log.i(Config.appName, "retrieve the quote from category " + mCategory);
                 Call<Quote> call2 = quoteService.getByCategory(mCategory);
                 call2.enqueue(quoteExec);
             }
