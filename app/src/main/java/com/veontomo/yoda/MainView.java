@@ -30,7 +30,7 @@ public class MainView extends AppCompatActivity implements MVPView {
 
         consequtiveStreams();
 
-        Log.i(Config.appName, CallLog.Calls.getLastOutgoingCall(this));
+        Log.i(Config.appName, "last call: " + CallLog.Calls.getLastOutgoingCall(this));
     }
 
 
