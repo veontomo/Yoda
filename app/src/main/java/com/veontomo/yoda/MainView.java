@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     private TextView mQuoteAuthor;
     private ViewSwitcher switcher;
     private MVPPresenter mPresenter;
+    private Button mButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +41,9 @@ public class MainView extends AppCompatActivity implements MVPView {
         init();
     }
 
-    public void start(View view) {
-        //mQuoteText.setText("aaaaaaaaaaaaaaaa");
-        // switcher.showPrevious();
+    public void retrievePhrase(View view) {
         if (mPresenter != null) {
-            mPresenter.onStart();
+            mPresenter.retrievePhrase();
         }
     }
 
@@ -55,6 +55,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         mQuoteText = (TextView) findViewById(R.id.phrase);
         mQuoteAuthor = (TextView) findViewById(R.id.author);
         switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
+        mButton = (Button) findViewById(R.id.retrieveBtn);
         mPresenter = new MVPPresenter(this);
     }
 
@@ -83,6 +84,16 @@ public class MainView extends AppCompatActivity implements MVPView {
         mQuoteText.setText(quote.quote);
         mQuoteAuthor.setText(quote.author);
 
+    }
+
+    /**
+     * Disables the button that activates  phrase retrieval
+     *
+     * @param b
+     */
+    @Override
+    public void disableButton(boolean b) {
+        mButton.setEnabled(!b);
     }
 
 

@@ -148,8 +148,6 @@ public class MVPModel {
      */
     private void onTranslated(final String s) {
         mPresenter.onTraslated(s);
-
-
     }
 
     public void setCategory(String category) {
@@ -157,4 +155,6 @@ public class MVPModel {
         Log.i(Config.appName, "Set category to " + category);
 
     }
+
+
 }

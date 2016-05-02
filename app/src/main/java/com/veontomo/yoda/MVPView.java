@@ -14,4 +14,10 @@ public interface MVPView {
     void onTranslationFailure(final String s);
 
     void setQuote(Quote quote);
+
+    /**
+     * Disables the button that activates  phrase retrieval
+     * @param b
+     */
+    void disableButton(boolean b);
 }
