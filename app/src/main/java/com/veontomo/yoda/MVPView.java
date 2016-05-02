@@ -9,8 +9,6 @@ import java.util.List;
 public interface MVPView {
     void loadText(String text);
 
-    void loadList(List<String> sayings);
-
     void onTranslationFailure(final String s);
 
     void setQuote(Quote quote);

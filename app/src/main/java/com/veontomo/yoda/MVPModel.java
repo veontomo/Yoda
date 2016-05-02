@@ -18,7 +18,7 @@ public class MVPModel {
     public static final String CATEGORY_FAMOUS = "famous";
 
     private final Subscriber<String> mUserInputReceiver;
-    private final MVPPresenter mPresenter;
+    private MVPPresenter mPresenter;
     private final YodaApi yodaService;
     private final QuotesApi quoteService;
     private final Callback<String> translateExec;
@@ -30,13 +30,16 @@ public class MVPModel {
      */
     private String mCategory = CATEGORY_MOVIES;
 
+
+    public void setPresenter(final MVPPresenter presenter){
+        this.mPresenter = presenter;
+    }
+
     /**
      * Constructor.
      *
-     * @param presenter
      */
-    public MVPModel(final MVPPresenter presenter) {
-        this.mPresenter = presenter;
+    public MVPModel() {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Config.YODA_SERVICE_URL)

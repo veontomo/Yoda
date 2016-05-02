@@ -28,10 +28,6 @@ public class MainView extends AppCompatActivity implements MVPView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        consequtiveStreams();
-
-
     }
 
 
@@ -56,7 +52,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         mQuoteAuthor = (TextView) findViewById(R.id.author);
         switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
         mButton = (Button) findViewById(R.id.retrieveBtn);
-        mPresenter = new MVPPresenter(this);
+        mPresenter = MVPPresenter.create(this);
     }
 
     @Override
@@ -68,10 +64,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         }
     }
 
-    @Override
-    public void loadList(List<String> sayings) {
 
-    }
 
     @Override
     public void onTranslationFailure(final String s) {
@@ -120,34 +113,5 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
 
-    /**
-     * A toy example of consecutive streams
-     */
-    private void consequtiveStreams() {
-        PublishSubject<String> subject = PublishSubject.create();
-        Observer<String> greeter = new Observer<String>() {
 
-            @Override
-            public void onCompleted() {
-                Log.i(Config.appName, "No more greetings." + " " + System.currentTimeMillis());
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.i(Config.appName, "I'd greet somebody more!");
-            }
-
-            @Override
-            public void onNext(String t) {
-                Log.i(Config.appName, t + " " + System.currentTimeMillis());
-            }
-
-        };
-
-        subject.subscribeOn(Schedulers.io()).subscribe(greeter);
-        subject.onNext("hi!");
-        subject.onNext("bye!");
-
-
-    }
 }

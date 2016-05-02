@@ -16,15 +16,14 @@ public class MVPPresenter {
 
     /**
      * Constructor.
-     * <p/>
-     * NB: Creates a new instance of a model using operator "new" explicitly.
      *
-     * @param view
+     * @param view view corresponding to the presenter
+     * @param model model corresponding to the presenter. In its turn, it is bound to the presenter.
      */
-    public MVPPresenter(final MVPView view) {
+    private MVPPresenter(final MVPView view, final MVPModel model) {
         mView = view;
-        // TODO: avoid creating a new instance here
-        mModel = new MVPModel(this);
+        mModel = model;
+        mModel.setPresenter(this);
     }
 
     /**
@@ -71,5 +70,18 @@ public class MVPPresenter {
      */
     public void setCategory(String category) {
         mModel.setCategory(category);
+    }
+
+
+    /**
+     * Creates a presenter with properly set view and model objects.
+     *
+     * @param view
+     * @return
+     */
+    public static MVPPresenter create(final MVPView view) {
+        MVPPresenter presenter = new MVPPresenter(view, new MVPModel());
+        return presenter;
+
     }
 }
