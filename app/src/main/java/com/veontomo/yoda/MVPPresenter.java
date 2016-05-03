@@ -42,6 +42,7 @@ public class MVPPresenter {
     public void onTranslated(String s) {
         mView.loadText(s);
         mView.disableButton(false);
+        mView.stopBladeAnimation();
 
     }
 
@@ -51,6 +52,7 @@ public class MVPPresenter {
     public void onTranslationFailure(final String s) {
         mView.onTranslationFailure(s);
         mView.disableButton(false);
+        mView.stopBladeAnimation();
     }
 
     /**
@@ -67,6 +69,7 @@ public class MVPPresenter {
     public void retrieveQuote() {
         mView.disableButton(true);
         mRetrieveModel.retrieveQuote();
+        mView.startBladeAnimation();
     }
 
     /**

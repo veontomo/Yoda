@@ -18,4 +18,8 @@ public interface MVPView {
      * @param b
      */
     void disableButton(boolean b);
+
+    void startBladeAnimation();
+
+    void stopBladeAnimation();
 }

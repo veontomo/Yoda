@@ -11,6 +11,7 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 public class MainView extends AppCompatActivity implements MVPView {
+    private static final String TAG = Config.appName;
     private TextView mTranslation;
     private TextView mQuoteText;
     private TextView mQuoteAuthor;
@@ -85,6 +86,16 @@ public class MainView extends AppCompatActivity implements MVPView {
     @Override
     public void disableButton(boolean b) {
         mButton.setEnabled(!b);
+    }
+
+    @Override
+    public void startBladeAnimation() {
+        Log.i(TAG, "startBladeAnimation: animation start");
+    }
+
+    @Override
+    public void stopBladeAnimation() {
+        Log.i(TAG, "stopBladeAnimation: animation stop");
     }
 
 
