@@ -12,15 +12,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * A model of the MVP architecture responsible for retrieval of the phrases.
  */
 public class MVPRetrieveModel {
+    private static final String TAG = Config.appName;
     public static final String CATEGORY_MOVIES = "movies";
     public static final String CATEGORY_FAMOUS = "famous";
-    private static final String TAG = Config.appName;
 
     private MVPPresenter mPresenter;
 
-    private final QuotesApi mPhraseRetrievalService;
+    private final QuotesApi mQuoteRetrievalService;
 
-    private final Callback<Quote> callback;
+    private final Callback<Quote> mQuoteCallback;
 
     /**
      * Category of the quote.
@@ -41,9 +41,9 @@ public class MVPRetrieveModel {
                 .baseUrl(Config.QUOTES_SERVICE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        mPhraseRetrievalService = retrofit2.create(QuotesApi.class);
+        mQuoteRetrievalService = retrofit2.create(QuotesApi.class);
 
-        callback = new Callback<Quote>() {
+        mQuoteCallback = new Callback<Quote>() {
             @Override
             public void onResponse(Call<Quote> call, Response<Quote> response) {
                 Log.i(Config.appName, "quote on response");
@@ -79,20 +79,18 @@ public class MVPRetrieveModel {
      */
     public void retrieveQuote() {
         Log.i(TAG, "retrieveQuote: start");
-        Call<Quote> call = mPhraseRetrievalService.getByCategory(mCategory);
-        call.enqueue(callback);
+        Call<Quote> call = mQuoteRetrievalService.getByCategory(mCategory);
+        call.enqueue(mQuoteCallback);
     }
 
     /**
      * {@link #mCategory} setter
+     *
      * @param category name of category
      */
     public void setCategory(String category) {
         this.mCategory = category;
     }
-
-
-
 
 
 }

@@ -45,8 +45,6 @@ public class MVPTranslateModel {
         };
 
 //        Call<String> call2 = yodaService.translate(response.body().quote);
-        Call<String> call2 = yodaService.translate("a sample to translate");
-        call2.enqueue(translateExec);
     }
 
 
@@ -56,7 +54,7 @@ public class MVPTranslateModel {
      * @param s
      */
     private void onTranslated(final String s) {
-        mPresenter.onTraslated(s);
+        mPresenter.onTranslated(s);
     }
 
     /**
@@ -67,12 +65,12 @@ public class MVPTranslateModel {
     }
 
     /**
-     * Request for the service to translate the quote.
+     * Request for the service to translate a given phrase.
      *
-     * @param quote a quote to translate
+     * @param phrase a phrase to translate
      */
-    public void translate(Quote quote) {
-
-
+    public void translate(final String phrase) {
+        Call<String> call = yodaService.translate(phrase);
+        call.enqueue(translateExec);
     }
 }

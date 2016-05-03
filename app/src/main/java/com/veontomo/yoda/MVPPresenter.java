@@ -39,7 +39,7 @@ public class MVPPresenter {
      *
      * @param s
      */
-    public void onTraslated(String s) {
+    public void onTranslated(String s) {
         mView.loadText(s);
         mView.disableButton(false);
 
@@ -58,17 +58,15 @@ public class MVPPresenter {
      */
     public void onQuoteReceived(final Quote quote) {
         mView.setQuote(quote);
-        mTranslateModel.translate(quote);
-
-
+        mTranslateModel.translate(quote.quote);
     }
 
     /**
      * Starts the retrieval of a quote.
      */
     public void retrieveQuote() {
-        mRetrieveModel.retrieveQuote();
         mView.disableButton(true);
+        mRetrieveModel.retrieveQuote();
     }
 
     /**
