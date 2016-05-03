@@ -1,10 +1,14 @@
 package com.veontomo.yoda;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,10 +34,13 @@ public class MainView extends AppCompatActivity implements MVPView {
     public void onStart() {
         super.onStart();
         init();
+
+
     }
 
     /**
      * A callback associated with the button that activates the quote retrieval.
+     *
      * @param view
      */
     public void retrieveQuote(View view) {
@@ -62,7 +69,6 @@ public class MainView extends AppCompatActivity implements MVPView {
             Log.i(Config.appName, "Can not load");
         }
     }
-
 
 
     @Override
@@ -98,6 +104,11 @@ public class MainView extends AppCompatActivity implements MVPView {
         Log.i(TAG, "stopBladeAnimation: animation stop");
     }
 
+    @Override
+    public void retrieveResponseFailure(final String s) {
+        Toast.makeText(MainView.this, s, Toast.LENGTH_SHORT).show();
+    }
+
 
     public void textViewClicked(View v) {
         switcher.showNext();
@@ -120,7 +131,6 @@ public class MainView extends AppCompatActivity implements MVPView {
                 break;
         }
     }
-
 
 
 }

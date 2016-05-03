@@ -22,4 +22,6 @@ public interface MVPView {
     void startBladeAnimation();
 
     void stopBladeAnimation();
+
+    void retrieveResponseFailure(final String s);
 }

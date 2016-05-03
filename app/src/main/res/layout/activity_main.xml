@@ -10,28 +10,32 @@
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
         android:checkedButton="@+id/radio_movie"
-        android:orientation="horizontal">
-        <RadioButton android:id="@id/radio_movie"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <RadioButton
+            android:id="@id/radio_movie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/category_movie"
-            android:onClick="onRadioButtonClicked"/>
-        <RadioButton android:id="@+id/radio_famous"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/category_movie"/>
+
+        <RadioButton
+            android:id="@+id/radio_famous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/category_famous"
-            android:onClick="onRadioButtonClicked"/>
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/category_famous"/>
     </RadioGroup>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="8dp"
+        android:layout_weight="1"
         android:background="@drawable/border"
         android:orientation="vertical"
-        android:layout_weight="1"
         android:padding="4dp">
 
         <ViewSwitcher
@@ -69,13 +73,19 @@
             tools:text="Quote Source"/>
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sword"/>
+
 
     <TextView
         android:id="@+id/translation"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_margin="8dp"
+        android:layout_weight="1"
         android:background="@drawable/border"
         android:drawableLeft="@mipmap/avatar"
         android:drawablePadding="16dp"
@@ -86,12 +96,12 @@
         android:textSize="20sp"/>
 
     <Button
+        android:id="@+id/retrieveBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
         android:layout_margin="16dp"
         android:onClick="retrieveQuote"
-        android:id="@+id/retrieveBtn"
-        android:layout_gravity="bottom|center_horizontal"
         android:text="@string/translate_command"/>
 
 

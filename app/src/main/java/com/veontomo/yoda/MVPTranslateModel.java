@@ -29,7 +29,6 @@ public class MVPTranslateModel {
         translateExec = new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                Log.i(Config.appName, response.body());
                 if (response.isSuccessful()) {
                     onTranslated(response.body());
                 } else {
@@ -40,11 +39,9 @@ public class MVPTranslateModel {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Log.i(Config.appName, "MVPTranslateModel failure: " + t.getMessage());
-                onTranslationFailure(t.getMessage() + " " + call.request().toString());
+                onTranslationFailure(t.getMessage());
             }
         };
-
-//        Call<String> call2 = yodaService.translate(response.body().quote);
     }
 
 

@@ -93,4 +93,12 @@ public class MVPPresenter {
         return presenter;
 
     }
+
+    /**
+     *
+     */
+    public void onRetrieveResponseFailure(final String s) {
+        mView.retrieveResponseFailure(s);
+
+    }
 }

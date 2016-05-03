@@ -46,23 +46,23 @@ public class MVPRetrieveModel {
         mQuoteCallback = new Callback<Quote>() {
             @Override
             public void onResponse(Call<Quote> call, Response<Quote> response) {
-                Log.i(Config.appName, "quote on response");
-
                 if (response.isSuccessful()) {
-                    Log.i(Config.appName, "response is successful");
                     onQuoteReceived(response.body());
-
                 } else {
-                    Log.i(Config.appName, "response is not successful");
+                    onRetrieveFailure("Something wrong I have retrieved.");
                 }
             }
 
             @Override
             public void onFailure(Call<Quote> call, Throwable t) {
-                Log.i(Config.appName, "Quote response fail: " + t.getMessage() + "\n" + call.request().toString());
+                onRetrieveFailure(t.getMessage());
             }
         };
 
+    }
+
+    private void onRetrieveFailure(final String s) {
+        mPresenter.onRetrieveResponseFailure(s);
     }
 
     /**
