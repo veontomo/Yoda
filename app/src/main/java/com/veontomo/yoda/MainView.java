@@ -31,14 +31,18 @@ public class MainView extends AppCompatActivity implements MVPView {
         init();
     }
 
-    public void retrievePhrase(View view) {
+    /**
+     * A callback associated with the button that activates the quote retrieval.
+     * @param view
+     */
+    public void retrieveQuote(View view) {
         if (mPresenter != null) {
-            mPresenter.retrievePhrase();
+            mPresenter.retrieveQuote();
         }
     }
 
     /**
-     * Initializes the MVP entities
+     * Create references to required views and initialize the presenter.
      */
     private void init() {
         mTranslation = (TextView) findViewById(R.id.translation);

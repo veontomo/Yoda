@@ -89,7 +89,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:onClick="retrievePhrase"
+        android:onClick="retrieveQuote"
         android:id="@+id/retrieveBtn"
         android:layout_gravity="bottom|center_horizontal"
         android:text="@string/translate_command"/>

@@ -7,8 +7,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
-import rx.Subscriber;
 
 /**
  * A model of the MVP architecture responsible for retrieval of the phrases.
@@ -16,13 +14,13 @@ import rx.Subscriber;
 public class MVPRetrieveModel {
     public static final String CATEGORY_MOVIES = "movies";
     public static final String CATEGORY_FAMOUS = "famous";
+    private static final String TAG = Config.appName;
 
-    private final Subscriber<String> mUserInputReceiver;
     private MVPPresenter mPresenter;
 
     private final QuotesApi mPhraseRetrievalService;
 
-    private final Callback<Quote> mCallback;
+    private final Callback<Quote> callback;
 
     /**
      * Category of the quote.
@@ -31,13 +29,12 @@ public class MVPRetrieveModel {
     private String mCategory = CATEGORY_MOVIES;
 
 
-    public void setPresenter(final MVPPresenter presenter){
+    public void setPresenter(final MVPPresenter presenter) {
         this.mPresenter = presenter;
     }
 
     /**
      * Constructor.
-     *
      */
     public MVPRetrieveModel() {
         Retrofit retrofit2 = new Retrofit.Builder()
@@ -46,7 +43,7 @@ public class MVPRetrieveModel {
                 .build();
         mPhraseRetrievalService = retrofit2.create(QuotesApi.class);
 
-        mCallback = new Callback<Quote>() {
+        callback = new Callback<Quote>() {
             @Override
             public void onResponse(Call<Quote> call, Response<Quote> response) {
                 Log.i(Config.appName, "quote on response");
@@ -66,28 +63,6 @@ public class MVPRetrieveModel {
             }
         };
 
-
-        mUserInputReceiver = new Subscriber<String>() {
-            @Override
-            public void onCompleted() {
-                Log.i(Config.appName, "is over");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.i(Config.appName, "an error occurred: " + e.getMessage());
-
-            }
-
-            @Override
-            public void onNext(String s) {
-                Log.i(Config.appName, "retrieve the quote from category " + mCategory);
-                Call<Quote> call2 = mPhraseRetrievalService.getByCategory(mCategory);
-                call2.enqueue(mCallback);
-            }
-        };
-
-
     }
 
     /**
@@ -97,28 +72,27 @@ public class MVPRetrieveModel {
      */
     private void onQuoteReceived(final Quote quote) {
         mPresenter.onQuoteReceived(quote);
-
     }
-
-
 
     /**
-     * This method gets called once the presenter receives a text to translate.
-     *
-     * @param text string to translate
+     * Activates the retrieval of a quote.
      */
-    public void onTranslate(String text) {
-        Log.i(Config.appName, "text: " + text + " is received.");
-        Observable.just(text).subscribe(mUserInputReceiver);
-
+    public void retrieveQuote() {
+        Log.i(TAG, "retrieveQuote: start");
+        Call<Quote> call = mPhraseRetrievalService.getByCategory(mCategory);
+        call.enqueue(callback);
     }
 
-
+    /**
+     * {@link #mCategory} setter
+     * @param category name of category
+     */
     public void setCategory(String category) {
         this.mCategory = category;
-        Log.i(Config.appName, "Set category to " + category);
-
     }
+
+
+
 
 
 }
