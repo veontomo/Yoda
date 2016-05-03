@@ -12,18 +12,25 @@ public class MVPPresenter {
     /**
      * A reference to the model
      */
-    private final MVPModel mModel;
+    private final MVPRetrieveModel mModel;
+
+    private final MVPTranslateModel mTranslateModel;
 
     /**
-     * Constructor.
+     * A private constructor.
+     * <p/>
+     * Apart from setting the fields {@link #mView}, {@link #mModel} and {@link #mTranslateModel},
+     * it configures the models by passing the instance of the presenter to the models.
      *
-     * @param view view corresponding to the presenter
+     * @param view  view corresponding to the presenter
      * @param model model corresponding to the presenter. In its turn, it is bound to the presenter.
      */
-    private MVPPresenter(final MVPView view, final MVPModel model) {
+    private MVPPresenter(final MVPView view, final MVPRetrieveModel model, final MVPTranslateModel model2) {
         mView = view;
         mModel = model;
+        mTranslateModel = model2;
         mModel.setPresenter(this);
+        mTranslateModel.setPresenter(this);
     }
 
     /**
@@ -50,6 +57,7 @@ public class MVPPresenter {
      */
     public void onQuoteReceived(final Quote quote) {
         mView.setQuote(quote);
+        mTranslateModel.translate(quote);
 
 
     }
@@ -80,7 +88,7 @@ public class MVPPresenter {
      * @return
      */
     public static MVPPresenter create(final MVPView view) {
-        MVPPresenter presenter = new MVPPresenter(view, new MVPModel());
+        MVPPresenter presenter = new MVPPresenter(view, new MVPRetrieveModel(), new MVPTranslateModel());
         return presenter;
 
     }

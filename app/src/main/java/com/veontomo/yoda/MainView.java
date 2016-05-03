@@ -10,12 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import java.util.List;
-
-import rx.Observer;
-import rx.schedulers.Schedulers;
-import rx.subjects.PublishSubject;
-
 public class MainView extends AppCompatActivity implements MVPView {
     private TextView mTranslation;
     private TextView mQuoteText;
@@ -103,11 +97,11 @@ public class MainView extends AppCompatActivity implements MVPView {
         switch (view.getId()) {
             case R.id.radio_movie:
                 if (checked)
-                    mPresenter.setCategory(MVPModel.CATEGORY_MOVIES);
+                    mPresenter.setCategory(MVPRetrieveModel.CATEGORY_MOVIES);
                 break;
             case R.id.radio_famous:
                 if (checked)
-                    mPresenter.setCategory(MVPModel.CATEGORY_FAMOUS);
+                    mPresenter.setCategory(MVPRetrieveModel.CATEGORY_FAMOUS);
                 break;
         }
     }
