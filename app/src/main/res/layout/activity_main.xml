@@ -8,51 +8,43 @@
     android:orientation="vertical"
     tools:context=".MainView">
 
-    <LinearLayout
+
+    <ViewSwitcher
+        android:id="@+id/my_switcher"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="8dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="4dp">
-
-        <ViewSwitcher
-            android:id="@+id/my_switcher"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/phrase"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:onClick="textViewClicked"
-                android:text="@string/user_default_string"
-                android:textColor="#f4ffffff"
-                android:textSize="20sp"/>
-
-            <EditText
-                android:id="@+id/hidden_edit_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="type here">
-            </EditText>
-        </ViewSwitcher>
-
+        android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/author"
-            android:layout_width="wrap_content"
+            android:id="@+id/phrase"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
+            android:gravity="center_vertical"
+            android:onClick="textViewClicked"
+            android:text="@string/user_default_string"
             android:textColor="#f4ffffff"
-            android:textSize="12sp"
-            tools:text="Quote Source"/>
-    </LinearLayout>
+            android:textSize="20sp"/>
+
+        <EditText
+            android:id="@+id/hidden_edit_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="type here">
+        </EditText>
+    </ViewSwitcher>
+
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textColor="#f4ffffff"
+        android:textSize="12sp"
+        tools:text="Quote Source"/>
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:scaleType="centerCrop"
         android:src="@drawable/sword"/>
 

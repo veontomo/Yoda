@@ -7,7 +7,7 @@ import java.util.List;
  *
  */
 public interface MVPView {
-    void loadText(String text);
+    void loadTranslation(String text);
 
     void onTranslationFailure(final String s);
 

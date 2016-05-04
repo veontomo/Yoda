@@ -7,7 +7,7 @@ package com.veontomo.yoda;
 public abstract class Config {
     public static final String appName = "Yoda";
 
-    public static final boolean IS_PRODUCTION = true;
+    public static final boolean IS_PRODUCTION = false;
 
     /**
      *

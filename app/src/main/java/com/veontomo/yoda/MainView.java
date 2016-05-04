@@ -105,7 +105,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         q.quote = savedInstanceState.getString(PHRASE_TOKEN);
         q.author = savedInstanceState.getString(AUTHOR_TOKEN);
         setQuote(q);
-        loadText(savedInstanceState.getString(TRANSLATION_TOKEN));
+        loadTranslation(savedInstanceState.getString(TRANSLATION_TOKEN));
         if (savedInstanceState.getBoolean(MOVIE_BUTTON_TOKEN)) {
             onMovieClicked(null);
         } else {
@@ -139,7 +139,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
     @Override
-    public void loadText(String text) {
+    public void loadTranslation(String text) {
         if (mTranslation != null) {
             mTranslation.setText(text);
             mTranslation.setCompoundDrawablesWithIntrinsicBounds(R.drawable.yoda_square, 0, 0, 0);

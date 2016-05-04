@@ -47,7 +47,7 @@ public class MVPPresenter {
      * @param s
      */
     public void onTranslated(String s) {
-        mView.loadText(s);
+        mView.loadTranslation(s);
         mView.disableButton(false);
         mView.stopBladeAnimation();
 
