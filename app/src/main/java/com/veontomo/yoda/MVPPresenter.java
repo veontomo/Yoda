@@ -4,6 +4,10 @@ package com.veontomo.yoda;
  * Presenter for the activity according to MVP approach
  */
 public class MVPPresenter {
+
+    public static final String CATEGORY_MOVIES = "movies";
+    public static final String CATEGORY_FAMOUS = "famous";
+
     /**
      * A reference to the view
      */
@@ -22,8 +26,8 @@ public class MVPPresenter {
      * Apart from setting the fields {@link #mView}, {@link #mRetrieveModel} and {@link #mTranslateModel},
      * it configures the models by passing the instance of the presenter to the models.
      *
-     * @param view  view corresponding to the presenter
-     * @param retrieveModel model responsible for quote retrieval.
+     * @param view           view corresponding to the presenter
+     * @param retrieveModel  model responsible for quote retrieval.
      * @param translateModel model responsible for quote translation.
      */
     private MVPPresenter(final MVPView view, final MVPRetrieveModel retrieveModel, final MVPTranslateModel translateModel) {
@@ -95,10 +99,11 @@ public class MVPPresenter {
     }
 
     /**
-     *
+     * It is called when the response of the retrieval of a phrase fails.
      */
     public void onRetrieveResponseFailure(final String s) {
         mView.retrieveResponseFailure(s);
 
     }
+
 }

@@ -1,16 +1,11 @@
 package com.veontomo.yoda;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,26 +13,65 @@ import android.widget.ViewSwitcher;
 
 public class MainView extends AppCompatActivity implements MVPView {
     private static final String TAG = Config.appName;
+    /**
+     * a string key under which the content of the phrase field is to be saved
+     * when saving the activity state for further recreating
+     */
+    private static final String PHRASE_TOKEN = "phrase";
+
+    /**
+     * a string key under which the content of the translation field is to be saved
+     * when saving the activity state for further recreating
+     */
+    private static final String TRANSLATION_TOKEN = "translation";
+
+    /**
+     * a string key under which the content of the quote author field is to be saved
+     * when saving the activity state for further recreating
+     */
+    private static final String AUTHOR_TOKEN = "author";
+
+    /**
+     * a string key under which the status of the radio button corresponding to "movie" is to be saved
+     * when saving the activity state for further recreating
+     */
+    private static final String MOVIE_BUTTON_TOKEN = "radio_movie";
+
     private TextView mTranslation;
     private TextView mQuoteText;
     private TextView mQuoteAuthor;
     private ViewSwitcher switcher;
     private MVPPresenter mPresenter;
     private ImageView mButton;
+    private RadioButton mRadio;
+    private RadioButton mFamous;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
+        if (savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        }
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        init();
-
-
+    /**
+     * Restores the activity state from the bundle
+     *
+     * @param savedInstanceState
+     */
+    private void restoreState(@NonNull Bundle savedInstanceState) {
+        final Quote q = new Quote();
+        q.quote = savedInstanceState.getString(PHRASE_TOKEN);
+        q.author = savedInstanceState.getString(AUTHOR_TOKEN);
+        setQuote(q);
+        loadText(savedInstanceState.getString(TRANSLATION_TOKEN));
+        if (savedInstanceState.getBoolean(MOVIE_BUTTON_TOKEN)) {
+            onMovieClicked(null);
+        } else {
+            onFamousClicked(null);
+        }
     }
 
     /**
@@ -60,6 +94,8 @@ public class MainView extends AppCompatActivity implements MVPView {
         mQuoteAuthor = (TextView) findViewById(R.id.author);
         switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
         mButton = (ImageView) findViewById(R.id.retrieveBtn);
+        mRadio = (RadioButton) findViewById(R.id.radio_movie);
+        mFamous = (RadioButton) findViewById(R.id.radio_famous);
         mPresenter = MVPPresenter.create(this);
     }
 
@@ -81,7 +117,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
     @Override
-    public void setQuote(Quote quote) {
+    public void setQuote(final Quote quote) {
         mQuoteText.setText(quote.quote);
         mQuoteAuthor.setText(quote.author);
 
@@ -118,21 +154,23 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
 
-    public void onRadioButtonClicked(View view) {
-        // Is the button now checked?
-        boolean checked = ((RadioButton) view).isChecked();
+    public void onMovieClicked(View view) {
+        mPresenter.setCategory(MVPPresenter.CATEGORY_MOVIES);
+    }
 
-        // Check which radio button was clicked
-        switch (view.getId()) {
-            case R.id.radio_movie:
-                if (checked)
-                    mPresenter.setCategory(MVPRetrieveModel.CATEGORY_MOVIES);
-                break;
-            case R.id.radio_famous:
-                if (checked)
-                    mPresenter.setCategory(MVPRetrieveModel.CATEGORY_FAMOUS);
-                break;
-        }
+    public void onFamousClicked(View view) {
+        mPresenter.setCategory(MVPPresenter.CATEGORY_FAMOUS);
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putCharSequence(PHRASE_TOKEN, mQuoteText.getText());
+        savedInstanceState.putCharSequence(TRANSLATION_TOKEN, mTranslation.getText());
+        savedInstanceState.putCharSequence(AUTHOR_TOKEN, mQuoteAuthor.getText());
+        savedInstanceState.putBoolean(MOVIE_BUTTON_TOKEN, mRadio.isChecked());
+
+        super.onSaveInstanceState(savedInstanceState);
     }
 
 
