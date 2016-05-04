@@ -5,6 +5,7 @@ package com.veontomo.yoda;
  */
 public interface Cache<T> {
     void put(final T t);
+    T get(int pos);
 
     T getRandom();
 }

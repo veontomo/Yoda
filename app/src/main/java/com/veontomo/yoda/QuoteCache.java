@@ -1,14 +1,11 @@
 package com.veontomo.yoda;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 /**
  * Quote cache
- *
  */
 public class QuoteCache implements Cache<Quote> {
 
@@ -19,7 +16,6 @@ public class QuoteCache implements Cache<Quote> {
     private final int maxSize;
 
     private final List<Quote> items;
-
     /**
      * current size of the cache
      */
@@ -27,6 +23,7 @@ public class QuoteCache implements Cache<Quote> {
 
     /**
      * Constructor.
+     *
      * @param maxSize the maximal number of the items that the cache might contain
      */
     public QuoteCache(int maxSize) {
@@ -35,10 +32,13 @@ public class QuoteCache implements Cache<Quote> {
         size = 0;
     }
 
+    public int getSize() {
+        return size;
+    }
 
     @Override
     public void put(final Quote quote) {
-        if (items.size() >= maxSize){
+        if (items.size() >= maxSize) {
             items.remove(0);
             size--;
         }
@@ -47,13 +47,17 @@ public class QuoteCache implements Cache<Quote> {
     }
 
     @Override
+    public Quote get(int pos) {
+        return (pos < size) ? items.get(pos) : null;
+    }
+
+    @Override
     public Quote getRandom() {
         Random generator = new Random();
-        if (size <= 0){
+        if (size <= 0) {
             return null;
         }
         int pos = generator.nextInt(items.size());
-        Log.i(TAG, "getRandomFromCache: returning quote n." + pos + " from cache of size " + items.size() );
         return items.get(pos);
     }
 }
