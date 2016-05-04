@@ -1,6 +1,7 @@
 package com.veontomo.yoda;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
+
+import com.squareup.leakcanary.LeakCanary;
 
 public class MainView extends AppCompatActivity implements MVPView {
     private static final String TAG = Config.appName;
@@ -45,15 +48,51 @@ public class MainView extends AppCompatActivity implements MVPView {
     private ImageView mButton;
     private RadioButton mRadio;
     private RadioButton mFamous;
+    private Bundle mState = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        init();
-        if (savedInstanceState != null) {
-            restoreState(savedInstanceState);
+        if (!Config.IS_PRODUCTION) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectNetwork()   // or .detectAll() for all detectable problems
+                    .penaltyLog()
+                    .build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .penaltyDeath()
+                    .build());
+            LeakCanary.install(getApplication());
         }
+
+        setContentView(R.layout.activity_main);
+        if (savedInstanceState != null) {
+            mState = savedInstanceState;
+        }
+
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
+        if (mState != null) {
+            restoreState(mState);
+            mState = null;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        mPresenter.stop();
+        mPresenter = null;
+        super.onPause();
     }
 
     /**
@@ -156,10 +195,12 @@ public class MainView extends AppCompatActivity implements MVPView {
 
     public void onMovieClicked(View view) {
         mPresenter.setCategory(MVPPresenter.CATEGORY_MOVIES);
+        mRadio.setEnabled(true);
     }
 
     public void onFamousClicked(View view) {
         mPresenter.setCategory(MVPPresenter.CATEGORY_FAMOUS);
+        mFamous.setEnabled(true);
     }
 
 

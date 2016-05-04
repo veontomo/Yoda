@@ -1,5 +1,7 @@
 package com.veontomo.yoda;
 
+import android.util.Log;
+
 /**
  * Presenter for the activity according to MVP approach
  */
@@ -7,6 +9,7 @@ public class MVPPresenter {
 
     public static final String CATEGORY_MOVIES = "movies";
     public static final String CATEGORY_FAMOUS = "famous";
+    private static final String TAG = Config.appName;
 
     /**
      * A reference to the view
@@ -106,4 +109,11 @@ public class MVPPresenter {
 
     }
 
+    /**
+     * 
+     */
+    public void stop() {
+        Log.i(TAG, "stop: presenter"); 
+
+    }
 }
