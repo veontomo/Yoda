@@ -26,12 +26,7 @@ public class MVPRetrieveModel {
 
     private final Callback<Quote> mQuoteCallback;
 
-    private final List<Quote> cache;
-
-    /**
-     * max number of the elements that the cache might contain
-     */
-    private final int maxCacheSize = 10;
+    private final QuoteCache cache;
 
     /**
      * Category of the quote.
@@ -49,7 +44,7 @@ public class MVPRetrieveModel {
      */
     public MVPRetrieveModel() {
 
-        cache = new ArrayList<>();
+        cache = new QuoteCache(10);
 
         Retrofit retrofit2 = new Retrofit.Builder()
                 .baseUrl(Config.QUOTES_SERVICE_URL)
@@ -62,10 +57,11 @@ public class MVPRetrieveModel {
             public void onResponse(Call<Quote> call, Response<Quote> response) {
                 if (response.isSuccessful()) {
                     onQuoteReceived(response.body());
-                    store(response.body());
+                    cache.put(response.body());
                 } else {
-                    if (!cache.isEmpty()) {
-                        onQuoteReceived(getRandomFromCache());
+                    final Quote quote = cache.getRandom();
+                    if (quote != null) {
+                        onQuoteReceived(quote);
                     } else {
                         onRetrieveFailure("Something wrong I have retrieved.");
                     }
@@ -74,8 +70,9 @@ public class MVPRetrieveModel {
 
             @Override
             public void onFailure(Call<Quote> call, Throwable t) {
-                if (!cache.isEmpty()) {
-                    onQuoteReceived(getRandomFromCache());
+                final Quote quote = cache.getRandom();
+                if (quote != null) {
+                    onQuoteReceived(quote);
                 } else {
                     onRetrieveFailure(t.getMessage());
                 }
@@ -84,32 +81,6 @@ public class MVPRetrieveModel {
 
     }
 
-    /**
-     * Returns a random quote from the cache.
-     *
-     * @return
-     */
-    private Quote getRandomFromCache() {
-        Random generator = new Random();
-        int pos = generator.nextInt(cache.size());
-        Log.i(TAG, "getRandomFromCache: returning quote n." + pos + " from cache of size " + cache.size() );
-        return cache.get(pos);
-    }
-
-    /**
-     * Stores the quote in the cache.
-     * <p/>
-     * If the cache becomes bigger than specified limit, the first element of the cache is removed.
-     *
-     * @param quote quote to put in the cache
-     */
-    private void store(Quote quote) {
-        Log.i(TAG, "store: add quote to the cache");
-        if (cache.size() >= maxCacheSize) {
-            cache.remove(0);
-        }
-        cache.add(quote);
-    }
 
     private void onRetrieveFailure(final String s) {
         mPresenter.onRetrieveResponseFailure(s);
