@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -21,7 +23,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     private TextView mQuoteAuthor;
     private ViewSwitcher switcher;
     private MVPPresenter mPresenter;
-    private Button mButton;
+    private ImageView mButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         mQuoteText = (TextView) findViewById(R.id.phrase);
         mQuoteAuthor = (TextView) findViewById(R.id.author);
         switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
-        mButton = (Button) findViewById(R.id.retrieveBtn);
+        mButton = (ImageView) findViewById(R.id.retrieveBtn);
         mPresenter = MVPPresenter.create(this);
     }
 
@@ -65,6 +67,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     public void loadText(String text) {
         if (mTranslation != null) {
             mTranslation.setText(text);
+            mTranslation.setCompoundDrawablesWithIntrinsicBounds(R.drawable.yoda_square, 0, 0, 0);
         } else {
             Log.i(Config.appName, "Can not load");
         }
