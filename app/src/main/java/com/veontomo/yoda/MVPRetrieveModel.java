@@ -17,8 +17,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MVPRetrieveModel {
     private static final String TAG = Config.appName;
-    public static final String CATEGORY_MOVIES = "movies";
-    public static final String CATEGORY_FAMOUS = "famous";
 
     private MVPPresenter mPresenter;
 
@@ -32,7 +30,7 @@ public class MVPRetrieveModel {
      * Category of the quote.
      * By default it is set to "movies".
      */
-    private String mCategory = CATEGORY_MOVIES;
+    private String mCategory;
 
 
     public void setPresenter(final MVPPresenter presenter) {

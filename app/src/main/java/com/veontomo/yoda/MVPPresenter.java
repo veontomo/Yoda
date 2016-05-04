@@ -38,6 +38,7 @@ public class MVPPresenter {
         this.mRetrieveModel = retrieveModel;
         this.mTranslateModel = translateModel;
         this.mRetrieveModel.setPresenter(this);
+        this.mRetrieveModel.setCategory(CATEGORY_MOVIES);
         this.mTranslateModel.setPresenter(this);
     }
 
