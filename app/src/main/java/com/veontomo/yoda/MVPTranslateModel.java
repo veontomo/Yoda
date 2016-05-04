@@ -2,6 +2,8 @@ package com.veontomo.yoda;
 
 import android.util.Log;
 
+import java.util.HashMap;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -11,15 +13,24 @@ import retrofit2.Retrofit;
  * A model of the MVP architecture responsible for translations.
  */
 public class MVPTranslateModel {
-    private MVPPresenter mPresenter;
     private final YodaApi yodaService;
     private final Callback<String> translateExec;
+    private MVPPresenter mPresenter;
+    /**
+     * a phrase to translate
+     */
+    private String mPhrase;
 
-    public void setPresenter(final MVPPresenter presenter) {
-        this.mPresenter = presenter;
-    }
+    /**
+     * a cache storing the translations
+     */
+    private HashMap<String, String> cache;
+
+    private final int maxCacheSize = 10;
 
     public MVPTranslateModel() {
+        cache = new HashMap<>();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Config.YODA_SERVICE_URL)
                 .addConverterFactory(new ToStringConverterFactory())
@@ -31,6 +42,7 @@ public class MVPTranslateModel {
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
                     onTranslated(response.body());
+                    store(mPhrase, response.body());
                 } else {
                     onTranslationFailure(response.body());
                 }
@@ -44,6 +56,24 @@ public class MVPTranslateModel {
         };
     }
 
+    /**
+     * Putting the key-value pair into the cache.
+     *
+     * @param key
+     * @param value
+     */
+    private void store(String key, String value) {
+        if (cache.size() >= maxCacheSize){
+            String aKey = cache.entrySet().iterator().next().getKey();
+            cache.remove(aKey);
+        }
+        cache.put(key, value);
+
+    }
+
+    public void setPresenter(final MVPPresenter presenter) {
+        this.mPresenter = presenter;
+    }
 
     /**
      * This method gets called once the phrase has been translated.
@@ -52,6 +82,7 @@ public class MVPTranslateModel {
      */
     private void onTranslated(final String s) {
         mPresenter.onTranslated(s);
+
     }
 
     /**
@@ -67,7 +98,12 @@ public class MVPTranslateModel {
      * @param phrase a phrase to translate
      */
     public void translate(final String phrase) {
-        Call<String> call = yodaService.translate(phrase);
-        call.enqueue(translateExec);
+        this.mPhrase = phrase;
+        if (cache.containsKey(phrase)) {
+            onTranslated(cache.get(phrase));
+        } else {
+            Call<String> call = yodaService.translate(phrase);
+            call.enqueue(translateExec);
+        }
     }
 }
