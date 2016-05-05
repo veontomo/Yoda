@@ -95,7 +95,7 @@ public class MVPRetrieveModel {
      * Activates the retrieval of a quote.
      */
     public void retrieveQuote() {
-        Call<Quote> call = mQuoteRetrievalService.getByCategory("");
+        Call<Quote> call = mQuoteRetrievalService.getByCategory(getCategoryToRetrieve());
         call.enqueue(mQuoteCallback);
     }
 
