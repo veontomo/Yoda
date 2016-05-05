@@ -63,13 +63,13 @@
 
 
         <CheckBox
-            android:id="@+id/check_movie"
+            android:id="@+id/check_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:gravity="center"
-            android:onClick="onCategoryClicked"
+            android:onClick="onCategory1"
             android:text="@string/category_movie"
             android:textColor="#edfde90e"
             android:theme="@style/checkBoxStyle"/>
@@ -78,8 +78,8 @@
             android:id="@+id/retrieveBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/check_movie"
-            android:layout_toRightOf="@id/check_movie"
+            android:layout_toEndOf="@id/check_1"
+            android:layout_toRightOf="@id/check_1"
             android:gravity="center"
             android:onClick="retrieveQuote"
             android:paddingEnd="32dp"
@@ -89,13 +89,13 @@
             android:src="@drawable/sunstar_shadowstone"/>
 
         <CheckBox
-            android:id="@+id/check_famous"
+            android:id="@+id/check_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/retrieveBtn"
             android:layout_toRightOf="@id/retrieveBtn"
             android:gravity="center"
-            android:onClick="onCategoryClicked"
+            android:onClick="onCategory2"
             android:text="@string/category_famous"
             android:textColor="#edfde90e"
             android:theme="@style/checkBoxStyle"/>

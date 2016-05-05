@@ -7,8 +7,8 @@ import android.util.Log;
  */
 public class MVPPresenter {
 
-    public static final String CATEGORY_MOVIES = "movies";
-    public static final String CATEGORY_FAMOUS = "famous";
+    public static final short CATEGORY_1 = 1;
+    public static final short CATEGORY_2 = 2;
     private static final String TAG = Config.appName;
 
     /**
@@ -114,18 +114,16 @@ public class MVPPresenter {
      *
      * @param category
      */
-    public void toggleCategoryStatus(String category) {
+    public void setCategoryStatus(short category, boolean status) {
         switch (category) {
-            case CATEGORY_FAMOUS:
-                mRetrieveModel.toggleCategoryStatus(1);
+            case CATEGORY_1:
+                mRetrieveModel.setCategoryStatus(0, status);
                 break;
-            case CATEGORY_MOVIES:
-                mRetrieveModel.toggleCategoryStatus(0);
+            case CATEGORY_2:
+                mRetrieveModel.setCategoryStatus(1, status);
                 break;
             default:
                 Log.i(TAG, "toggleCategoryStatus: unknown category \"" + category + "\" is passed");
         }
-
-
     }
 }

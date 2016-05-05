@@ -38,13 +38,13 @@ public class MainView extends AppCompatActivity implements MVPView {
      * a string key under which the status of the check button corresponding to "movie" is to be saved
      * when saving the activity state for further recreating
      */
-    private static final String MOVIE_CHECK_TOKEN = "radio_movie";
+    private static final String CHECK_TOKEN_1 = "radio_movie";
 
     /**
      * a string key under which the status of the check button corresponding to "famous" is to be saved
      * when saving the activity state for further recreating
      */
-    private static final String FAMOUS_CHECK_TOKEN = "check_famous";
+    private static final String CHECK_TOKEN_2 = "check_famous";
 
     private TextView mTranslation;
     private TextView mQuoteText;
@@ -52,8 +52,8 @@ public class MainView extends AppCompatActivity implements MVPView {
     private ViewSwitcher switcher;
     private MVPPresenter mPresenter;
     private ImageView mButton;
-    private CheckBox mMovie;
-    private CheckBox mFamous;
+    private CheckBox mCheck1;
+    private CheckBox mCheck2;
     private Bundle mState = null;
 
     @Override
@@ -112,12 +112,11 @@ public class MainView extends AppCompatActivity implements MVPView {
         q.author = savedInstanceState.getString(AUTHOR_TOKEN);
         setQuote(q);
         loadTranslation(savedInstanceState.getString(TRANSLATION_TOKEN));
-        if (savedInstanceState.getBoolean(MOVIE_CHECK_TOKEN)) {
-//            onMovieClicked(null);
-        }
-        if (savedInstanceState.getBoolean(FAMOUS_CHECK_TOKEN)) {
-//            onFamousClicked(null);
-        }
+        mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, savedInstanceState.getBoolean(CHECK_TOKEN_1));
+        mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, savedInstanceState.getBoolean(CHECK_TOKEN_2));
+        mCheck1.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_1));
+        mCheck2.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_2));
+
     }
 
     /**
@@ -140,8 +139,8 @@ public class MainView extends AppCompatActivity implements MVPView {
         mQuoteAuthor = (TextView) findViewById(R.id.author);
         switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
         mButton = (ImageView) findViewById(R.id.retrieveBtn);
-        mMovie = (CheckBox) findViewById(R.id.check_movie);
-        mFamous = (CheckBox) findViewById(R.id.check_famous);
+        mCheck1 = (CheckBox) findViewById(R.id.check_1);
+        mCheck2 = (CheckBox) findViewById(R.id.check_2);
         mPresenter = MVPPresenter.create(this);
     }
 
@@ -200,29 +199,24 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
 
-    public void onCategoryClicked(View view) {
-        if (view == null) {
-            return;
-        }
-        final int id = view.getId();
-        switch (id) {
-            case R.id.check_famous:
-                mPresenter.toggleCategoryStatus(MVPPresenter.CATEGORY_MOVIES);
-                break;
-            case R.id.check_movie:
-                mPresenter.toggleCategoryStatus(MVPPresenter.CATEGORY_MOVIES);
-                break;
-            default:
-        }
+    public void onCategory1(View view) {
+        final CheckBox b = (CheckBox) view;
+        mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, b!= null && b.isChecked());
     }
+
+    public void onCategory2(View view) {
+        final CheckBox b = (CheckBox) view;
+        mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, b!= null && b.isChecked());
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putCharSequence(PHRASE_TOKEN, mQuoteText.getText());
         savedInstanceState.putCharSequence(AUTHOR_TOKEN, mQuoteAuthor.getText());
         savedInstanceState.putCharSequence(TRANSLATION_TOKEN, mTranslation.getText());
-        savedInstanceState.putBoolean(MOVIE_CHECK_TOKEN, mMovie.isChecked());
-        savedInstanceState.putBoolean(FAMOUS_CHECK_TOKEN, mFamous.isChecked());
+        savedInstanceState.putBoolean(CHECK_TOKEN_1, mCheck1.isChecked());
+        savedInstanceState.putBoolean(CHECK_TOKEN_2, mCheck2.isChecked());
         super.onSaveInstanceState(savedInstanceState);
     }
 
