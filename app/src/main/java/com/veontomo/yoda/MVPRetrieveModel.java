@@ -1,5 +1,7 @@
 package com.veontomo.yoda;
 
+import java.util.Random;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -12,6 +14,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MVPRetrieveModel {
     private static final String TAG = Config.appName;
 
+    public static final String CATEGORY_1 = "movie";
+    public static final String CATEGORY_2 = "famous";
+
     private MVPPresenter mPresenter;
 
     private final QuotesApi mQuoteRetrievalService;
@@ -21,11 +26,10 @@ public class MVPRetrieveModel {
     private final QuoteCache cache;
 
     /**
-     * Category of the quote.
-     * By default it is set to "movies".
+     * Array of category statuses.
+     * If a category is marked as "true", it means that a phrase of that category can be retrieved.
      */
-    private final String[] mCategories = new String[]{"movie", "famous"};
-    private boolean[] mCategoryStatuses = new boolean[]{true, false};
+    private final boolean[] mCategoryStatuses = new boolean[]{true, false};
 
     public void setPresenter(final MVPPresenter presenter) {
         this.mPresenter = presenter;
@@ -127,5 +131,33 @@ public class MVPRetrieveModel {
         if (pos < mCategoryStatuses.length) {
             mCategoryStatuses[pos] = !mCategoryStatuses[pos];
         }
+    }
+
+    /**
+     * Returns a category of a phrase to retrieve.
+     *
+     * Only categories whose statuses are "true" can be retrieved. In case when multiple categories
+     * have status "true", a random one is chosen.
+     *
+     * @return
+     */
+    public String getCategoryToRetrieve() {
+        if (mCategoryStatuses[0] && !mCategoryStatuses[1]){
+            return CATEGORY_1;
+        }
+        if (mCategoryStatuses[1] && !mCategoryStatuses[0]){
+            return CATEGORY_2;
+        }
+        return getRandomCategory();
+    }
+
+    /**
+     * Returns a random category: either {@link #CATEGORY_1} or {@link #CATEGORY_2}.
+     * @return
+     */
+    public String getRandomCategory() {
+        Random generator = new Random();
+        return (generator.nextInt(2) == 0) ? CATEGORY_1 : CATEGORY_2;
+
     }
 }
