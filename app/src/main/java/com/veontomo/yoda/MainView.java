@@ -74,7 +74,7 @@ public class MainView extends AppCompatActivity implements MVPView {
                     .penaltyLog()
                     .penaltyDeath()
                     .build());
-            LeakCanary.install(getApplication());
+//            LeakCanary.install(getApplication());
         }
 
         setContentView(R.layout.activity_main);
