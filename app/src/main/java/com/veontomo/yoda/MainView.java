@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,7 +52,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     private TextView mQuoteAuthor;
     private ViewSwitcher switcher;
     private MVPPresenter mPresenter;
-    private ImageView mButton;
+    private Button mButton;
     private CheckBox mCheck1;
     private CheckBox mCheck2;
     private Bundle mState = null;
@@ -138,7 +139,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         mQuoteText = (TextView) findViewById(R.id.phrase);
         mQuoteAuthor = (TextView) findViewById(R.id.author);
         switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
-        mButton = (ImageView) findViewById(R.id.retrieveBtn);
+        mButton = (Button) findViewById(R.id.retrieveBtn);
         mCheck1 = (CheckBox) findViewById(R.id.check_1);
         mCheck2 = (CheckBox) findViewById(R.id.check_2);
         mPresenter = MVPPresenter.create(this);
