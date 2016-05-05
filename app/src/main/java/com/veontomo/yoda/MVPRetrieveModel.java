@@ -1,11 +1,5 @@
 package com.veontomo.yoda;
 
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,8 +24,8 @@ public class MVPRetrieveModel {
      * Category of the quote.
      * By default it is set to "movies".
      */
-    private String mCategory;
-
+    private final String[] mCategories = new String[]{"movie", "famous"};
+    private boolean[] mCategoryStatuses = new boolean[]{true, false};
 
     public void setPresenter(final MVPPresenter presenter) {
         this.mPresenter = presenter;
@@ -97,19 +91,41 @@ public class MVPRetrieveModel {
      * Activates the retrieval of a quote.
      */
     public void retrieveQuote() {
-        Log.i(TAG, "retrieveQuote: start");
-        Call<Quote> call = mQuoteRetrievalService.getByCategory(mCategory);
+        Call<Quote> call = mQuoteRetrievalService.getByCategory("");
         call.enqueue(mQuoteCallback);
     }
 
     /**
-     * {@link #mCategory} setter
+     * Sets the status of a specific category.
      *
-     * @param category name of category
+     * @param pos    index of the category to be set
+     * @param status value of the status
      */
-    public void setCategory(String category) {
-        this.mCategory = category;
+    public void setCategoryStatus(int pos, boolean status) {
+        if (pos < mCategoryStatuses.length) {
+            mCategoryStatuses[pos] = status;
+        }
+    }
+
+    /**
+     * Gets the status of a category by category's index.
+     *
+     * @param pos index of the category to be set
+     */
+    public boolean getCategoryStatus(int pos) {
+        return (pos < mCategoryStatuses.length) && mCategoryStatuses[pos];
     }
 
 
+    /**
+     * Changes the status of a category.
+     * If the status of of a category is marked as "true", then a phrase of this category can be retrieved.
+     *
+     * @param pos index of the category
+     */
+    public void toggleCategoryStatus(int pos) {
+        if (pos < mCategoryStatuses.length) {
+            mCategoryStatuses[pos] = !mCategoryStatuses[pos];
+        }
+    }
 }

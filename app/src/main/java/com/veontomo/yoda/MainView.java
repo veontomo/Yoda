@@ -6,8 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -35,10 +35,16 @@ public class MainView extends AppCompatActivity implements MVPView {
     private static final String AUTHOR_TOKEN = "author";
 
     /**
-     * a string key under which the status of the radio button corresponding to "movie" is to be saved
+     * a string key under which the status of the check button corresponding to "movie" is to be saved
      * when saving the activity state for further recreating
      */
-    private static final String MOVIE_BUTTON_TOKEN = "radio_movie";
+    private static final String MOVIE_CHECK_TOKEN = "radio_movie";
+
+    /**
+     * a string key under which the status of the check button corresponding to "famous" is to be saved
+     * when saving the activity state for further recreating
+     */
+    private static final String FAMOUS_CHECK_TOKEN = "check_famous";
 
     private TextView mTranslation;
     private TextView mQuoteText;
@@ -46,8 +52,8 @@ public class MainView extends AppCompatActivity implements MVPView {
     private ViewSwitcher switcher;
     private MVPPresenter mPresenter;
     private ImageView mButton;
-    private RadioButton mRadio;
-    private RadioButton mFamous;
+    private CheckBox mMovie;
+    private CheckBox mFamous;
     private Bundle mState = null;
 
     @Override
@@ -106,10 +112,11 @@ public class MainView extends AppCompatActivity implements MVPView {
         q.author = savedInstanceState.getString(AUTHOR_TOKEN);
         setQuote(q);
         loadTranslation(savedInstanceState.getString(TRANSLATION_TOKEN));
-        if (savedInstanceState.getBoolean(MOVIE_BUTTON_TOKEN)) {
-            onMovieClicked(null);
-        } else {
-            onFamousClicked(null);
+        if (savedInstanceState.getBoolean(MOVIE_CHECK_TOKEN)) {
+//            onMovieClicked(null);
+        }
+        if (savedInstanceState.getBoolean(FAMOUS_CHECK_TOKEN)) {
+//            onFamousClicked(null);
         }
     }
 
@@ -133,8 +140,8 @@ public class MainView extends AppCompatActivity implements MVPView {
         mQuoteAuthor = (TextView) findViewById(R.id.author);
         switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
         mButton = (ImageView) findViewById(R.id.retrieveBtn);
-        mRadio = (RadioButton) findViewById(R.id.radio_movie);
-        mFamous = (RadioButton) findViewById(R.id.radio_famous);
+        mMovie = (CheckBox) findViewById(R.id.check_movie);
+        mFamous = (CheckBox) findViewById(R.id.check_famous);
         mPresenter = MVPPresenter.create(this);
     }
 
@@ -193,24 +200,29 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
 
-    public void onMovieClicked(View view) {
-        mPresenter.setCategory(MVPPresenter.CATEGORY_MOVIES);
-        mRadio.setEnabled(true);
+    public void onCategoryClicked(View view) {
+        if (view == null) {
+            return;
+        }
+        final int id = view.getId();
+        switch (id) {
+            case R.id.check_famous:
+                mPresenter.toggleCategoryStatus(MVPPresenter.CATEGORY_MOVIES);
+                break;
+            case R.id.check_movie:
+                mPresenter.toggleCategoryStatus(MVPPresenter.CATEGORY_MOVIES);
+                break;
+            default:
+        }
     }
-
-    public void onFamousClicked(View view) {
-        mPresenter.setCategory(MVPPresenter.CATEGORY_FAMOUS);
-        mFamous.setEnabled(true);
-    }
-
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putCharSequence(PHRASE_TOKEN, mQuoteText.getText());
-        savedInstanceState.putCharSequence(TRANSLATION_TOKEN, mTranslation.getText());
         savedInstanceState.putCharSequence(AUTHOR_TOKEN, mQuoteAuthor.getText());
-        savedInstanceState.putBoolean(MOVIE_BUTTON_TOKEN, mRadio.isChecked());
-
+        savedInstanceState.putCharSequence(TRANSLATION_TOKEN, mTranslation.getText());
+        savedInstanceState.putBoolean(MOVIE_CHECK_TOKEN, mMovie.isChecked());
+        savedInstanceState.putBoolean(FAMOUS_CHECK_TOKEN, mFamous.isChecked());
         super.onSaveInstanceState(savedInstanceState);
     }
 

@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="checkBoxStyle" parent="Base.Theme.AppCompat">
+        <item name="colorAccent">#edfde90e</item>
+        <item name="android:textColorSecondary">#edfde90e</item>
+    </style>
+
 </resources>

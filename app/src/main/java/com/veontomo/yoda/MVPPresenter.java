@@ -38,7 +38,6 @@ public class MVPPresenter {
         this.mRetrieveModel = retrieveModel;
         this.mTranslateModel = translateModel;
         this.mRetrieveModel.setPresenter(this);
-        this.mRetrieveModel.setCategory(CATEGORY_MOVIES);
         this.mTranslateModel.setPresenter(this);
     }
 
@@ -80,14 +79,6 @@ public class MVPPresenter {
         mView.startBladeAnimation();
     }
 
-    /**
-     * Sets the category
-     *
-     * @param category
-     */
-    public void setCategory(String category) {
-        mRetrieveModel.setCategory(category);
-    }
 
 
     /**
@@ -111,10 +102,30 @@ public class MVPPresenter {
     }
 
     /**
-     * 
+     *
      */
     public void stop() {
-        Log.i(TAG, "stop: presenter"); 
+        Log.i(TAG, "stop: presenter");
+
+    }
+
+    /**
+     * Passes the request to toggle the status of given category to {@link MVPRetrieveModel}.
+     *
+     * @param category
+     */
+    public void toggleCategoryStatus(String category) {
+        switch (category) {
+            case CATEGORY_FAMOUS:
+                mRetrieveModel.toggleCategoryStatus(1);
+                break;
+            case CATEGORY_MOVIES:
+                mRetrieveModel.toggleCategoryStatus(0);
+                break;
+            default:
+                Log.i(TAG, "toggleCategoryStatus: unknown category \"" + category + "\" is passed");
+        }
+
 
     }
 }

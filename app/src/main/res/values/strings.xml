@@ -1,9 +1,7 @@
 <resources>
-    <string name="app_name">Yoda</string>
-    <string name="translate_command">Go</string>
-    <string name="clean_command">Clean</string>
+    <string name="app_name">Thus Spoke Yoda</string>
     <string name="yoda_default_string">Patience you must have my young padawan.</string>
-    <string name="user_default_string">Ciao</string>
     <string name="category_movie">movie</string>
     <string name="category_famous">famous</string>
+    <string name="type_hint">type here your phrase or click the button if you feel lucky</string>
 </resources>
