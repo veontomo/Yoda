@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -51,6 +51,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     private TextView mQuoteText;
     private TextView mQuoteAuthor;
     private ViewSwitcher switcher;
+    private EditText mUserInput;
     private MVPPresenter mPresenter;
     private Button mButton;
     private CheckBox mCheck1;
@@ -121,13 +122,26 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
     /**
-     * A callback associated with the button that activates the quote retrieval.
+     * A callback associated with the button elaborates the user input.
+     * <p/>
+     * If the edit text field corresponding to the user input is not empty,
+     * then a translation of that string is initiated.
+     * Otherwise, a quote retrieval is initiated.
      *
      * @param view
      */
-    public void retrieveQuote(View view) {
+    public void elaborate(View view) {
         if (mPresenter != null) {
-            mPresenter.retrieveQuote();
+            final String userInput = mUserInput.getEditableText().toString();
+            if (userInput.isEmpty()) {
+                mPresenter.retrieveQuote();
+            } else {
+                mUserInput.setText(null);
+                final Quote q = new Quote();
+                q.quote = userInput;
+                mPresenter.onQuoteReceived(q);
+                switcher.showPrevious();
+            }
         }
     }
 
@@ -139,6 +153,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         mQuoteText = (TextView) findViewById(R.id.phrase);
         mQuoteAuthor = (TextView) findViewById(R.id.author);
         switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
+        mUserInput = (EditText) findViewById(R.id.hidden_edit_view);
         mButton = (Button) findViewById(R.id.retrieveBtn);
         mCheck1 = (CheckBox) findViewById(R.id.check_1);
         mCheck2 = (CheckBox) findViewById(R.id.check_2);
@@ -166,6 +181,8 @@ public class MainView extends AppCompatActivity implements MVPView {
     public void setQuote(final Quote quote) {
         mQuoteText.setText(quote.quote);
         mQuoteAuthor.setText(quote.author);
+        mButton.setText(getText(R.string.translate));
+        setCheckboxVisibility(View.VISIBLE);
 
     }
 
@@ -197,17 +214,24 @@ public class MainView extends AppCompatActivity implements MVPView {
 
     public void textViewClicked(View v) {
         switcher.showNext();
+        mButton.setText(getText(R.string.translate));
+        setCheckboxVisibility(View.INVISIBLE);
+    }
+
+    private void setCheckboxVisibility(int visibility) {
+        mCheck1.setVisibility(visibility);
+        mCheck2.setVisibility(visibility);
     }
 
 
     public void onCategory1(View view) {
         final CheckBox b = (CheckBox) view;
-        mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, b!= null && b.isChecked());
+        mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, b != null && b.isChecked());
     }
 
     public void onCategory2(View view) {
         final CheckBox b = (CheckBox) view;
-        mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, b!= null && b.isChecked());
+        mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, b != null && b.isChecked());
     }
 
 

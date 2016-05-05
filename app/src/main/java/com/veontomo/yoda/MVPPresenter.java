@@ -47,6 +47,7 @@ public class MVPPresenter {
      * @param s
      */
     public void onTranslated(String s) {
+
         mView.loadTranslation(s);
         mView.disableButton(false);
         mView.stopBladeAnimation();
@@ -67,7 +68,15 @@ public class MVPPresenter {
      */
     public void onQuoteReceived(final Quote quote) {
         mView.setQuote(quote);
-        mTranslateModel.translate(quote.quote);
+        translate(quote.quote);
+    }
+
+    /**
+     * Passes given string to the translation service.
+     * @param str
+     */
+    public void translate(final String str){
+        mTranslateModel.translate(str);
     }
 
     /**

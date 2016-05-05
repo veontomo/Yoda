@@ -4,4 +4,6 @@
     <string name="category_movie">movie</string>
     <string name="category_famous">famous</string>
     <string name="type_hint">type here your phrase or click the button if you feel lucky</string>
+    <string name="translate">Say like Yoda</string>
+    <string name="i_feel_lucky">I feel lucky</string>
 </resources>
