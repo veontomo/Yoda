@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Instrumental tests for the main activity.
- *
+ * <p/>
  * Useful article: https://github.com/codepath/android_guides/wiki/Unit-Testing-with-Robolectric
  */
 @RunWith(RobolectricGradleTestRunner.class)
@@ -60,15 +60,15 @@ public class MainViewTest {
     }
 
     @Test
-    public void firstCheckBoxesShouldBeDisplayed() {
+    public void firstCheckBoxesShouldBeVisible() {
         CheckBox box = (CheckBox) activity.findViewById(R.id.check_1);
-        assertNotNull("first check box should be present", box);
+        assertEquals("first check box should be visible", View.VISIBLE, box.getVisibility());
     }
 
     @Test
-    public void secondCheckBoxesShouldBeDisplayed() {
+    public void secondCheckBoxesShouldBeVisible() {
         CheckBox box = (CheckBox) activity.findViewById(R.id.check_2);
-        assertNotNull("second check box should be present", box);
+        assertEquals("second check box should be present", View.VISIBLE, box.getVisibility());
     }
 
 
@@ -94,6 +94,12 @@ public class MainViewTest {
     public void inputTextFieldShouldBeInvisible() {
         EditText tv = (EditText) activity.findViewById(R.id.hidden_edit_view);
         assertEquals("edit field for inserting a phrase should be invisible", View.GONE, tv.getVisibility());
+    }
+
+    @Test
+    public void translationTextFieldShouldBeVisible() {
+        TextView tv = (TextView) activity.findViewById(R.id.translation);
+        assertEquals("edit field for inserting a phrase should be invisible", View.VISIBLE, tv.getVisibility());
     }
 
     @Test
