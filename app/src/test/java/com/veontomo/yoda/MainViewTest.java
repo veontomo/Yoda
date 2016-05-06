@@ -148,4 +148,29 @@ public class MainViewTest {
         assertEquals("translation field should maintain its content", "some text", tv.getText());
     }
 
+    @Test
+    public void userInputFieldBecomesVisibleWhenPhraseIsClicked(){
+        TextView phrase = (TextView) activity.findViewById(R.id.phrase);
+        phrase.performClick();
+        TextView input = (TextView) activity.findViewById(R.id.hidden_edit_view);
+        assertEquals("input field should become visible", View.VISIBLE, input.getVisibility());
+    }
+
+    @Test
+    public void phraseFieldBecomesInvisibleWhenPhraseIsClicked(){
+        TextView phrase = (TextView) activity.findViewById(R.id.phrase);
+        phrase.performClick();
+        assertEquals("input field should become visible", View.GONE, phrase.getVisibility());
+    }
+
+    @Test
+    public void userInputFieldGetsFocusWhenPhraseIsClicked(){
+        TextView phrase = (TextView) activity.findViewById(R.id.phrase);
+        phrase.performClick();
+        TextView input = (TextView) activity.findViewById(R.id.hidden_edit_view);
+        assertTrue("input field should get focus when the phrase is clicked", input.isFocused());
+    }
+
+
+
 }
