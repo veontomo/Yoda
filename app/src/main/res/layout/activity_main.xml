@@ -71,6 +71,7 @@
             android:gravity="center"
             android:onClick="onCategory1"
             android:text="@string/category_movie"
+            android:checked="true"
             android:textColor="#edfde90e"
             android:theme="@style/checkBoxStyle"/>
 
