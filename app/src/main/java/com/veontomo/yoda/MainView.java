@@ -13,8 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import com.squareup.leakcanary.LeakCanary;
-
 public class MainView extends AppCompatActivity implements MVPView {
     private static final String TAG = Config.appName;
     /**
@@ -74,7 +72,6 @@ public class MainView extends AppCompatActivity implements MVPView {
                     .penaltyLog()
                     .penaltyDeath()
                     .build());
-//            LeakCanary.install(getApplication());
         }
 
         setContentView(R.layout.activity_main);

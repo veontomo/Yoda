@@ -1,6 +1,7 @@
 package com.veontomo.yoda;
 
 import android.app.Activity;
+import android.widget.Button;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,14 +17,13 @@ import static org.junit.Assert.assertTrue;
  *
  */
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(sdk = 18, constants = BuildConfig.class)
 public class MainViewTest {
     @Test
     public void shouldDisplayButton() {
         Activity activity = Robolectric.setupActivity(MainView.class);
-        assertNotNull(activity.findViewById(R.id.retrieveBtn));
-//        assertTrue(true);
-
+        Button btn = (Button) activity.findViewById(R.id.retrieveBtn);
+        assertNotNull(btn);
     }
 
 }
