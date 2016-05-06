@@ -46,30 +46,30 @@ public class MainView extends AppCompatActivity implements MVPView {
     private static final String CHECK_TOKEN_2 = "check_famous";
 
     /**
-     * a string key under which the status of the switcher is to be saved
+     * a string key under which the status of the mSwitcher is to be saved
      * when saving the activity state for further recreating
      */
     private static final String SWITCHER_TOKEN = "switcher";
 
     /**
-     * the switcher status if it displays the first view
+     * the mSwitcher status if it displays the first view
      */
-    private static final short SWITCHER_VIEW_1 = 1;
+    private static final short SWITCHER_STATUS_1 = 1;
 
     /**
-     * the switcher status if it displays the second view
+     * the mSwitcher status if it displays the second view
      */
-    private static final short SWITCHER_VIEW_2 = 2;
+    private static final short SWITCHER_STATUS_2 = 2;
 
     /**
-     * the switcher status in case of some error
+     * the mSwitcher status in case of some error
      */
-    private static final short SWITCHER_VIEW_ERROR = -1;
+    private static final short SWITCHER_STATUS_ERROR = -1;
 
     private TextView mTranslation;
     private TextView mQuoteText;
     private TextView mQuoteAuthor;
-    private ViewSwitcher switcher;
+    private ViewSwitcher mSwitcher;
     private EditText mUserInput;
     private MVPPresenter mPresenter;
     private Button mButton;
@@ -160,7 +160,7 @@ public class MainView extends AppCompatActivity implements MVPView {
                 final Quote q = new Quote();
                 q.quote = userInput;
                 mPresenter.onQuoteReceived(q);
-                switcher.showPrevious();
+                mSwitcher.showPrevious();
             }
         }
     }
@@ -172,7 +172,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         mTranslation = (TextView) findViewById(R.id.translation);
         mQuoteText = (TextView) findViewById(R.id.phrase);
         mQuoteAuthor = (TextView) findViewById(R.id.author);
-        switcher = (ViewSwitcher) findViewById(R.id.my_switcher);
+        mSwitcher = (ViewSwitcher) findViewById(R.id.my_switcher);
         mUserInput = (EditText) findViewById(R.id.hidden_edit_view);
         mButton = (Button) findViewById(R.id.retrieveBtn);
         mCheck1 = (CheckBox) findViewById(R.id.check_1);
@@ -199,10 +199,10 @@ public class MainView extends AppCompatActivity implements MVPView {
 
     @Override
     public void setQuote(final Quote quote) {
-        setSwitcher(SWITCHER_VIEW_1);
+        setSwitcher(SWITCHER_STATUS_1);
         mQuoteText.setText(quote.quote);
         mQuoteAuthor.setText(quote.author);
-        mButton.setText(getText(R.string.translate));
+        mButton.setText(getText(R.string.i_feel_lucky));
         setCheckboxVisibility(View.VISIBLE);
 
     }
@@ -234,7 +234,7 @@ public class MainView extends AppCompatActivity implements MVPView {
 
 
     public void textViewClicked(View v) {
-        switcher.showNext();
+        mSwitcher.showNext();
         mButton.setText(getText(R.string.translate));
         setCheckboxVisibility(View.INVISIBLE);
         mUserInput.requestFocus();
@@ -271,46 +271,46 @@ public class MainView extends AppCompatActivity implements MVPView {
     /**
      * Returns
      * <ul>
-     * <li> {@link #SWITCHER_VIEW_1} if the switcher displays {@link #mQuoteText},</li>
-     * <li> {@link #SWITCHER_VIEW_2} if it displays {@link #mUserInput},</li>
-     * <li> {@link #SWITCHER_VIEW_ERROR}, if either switcher is not defined or for any other reason</li>
+     * <li> {@link #SWITCHER_STATUS_1} if the mSwitcher displays {@link #mQuoteText},</li>
+     * <li> {@link #SWITCHER_STATUS_2} if it displays {@link #mUserInput},</li>
+     * <li> {@link #SWITCHER_STATUS_ERROR}, if either mSwitcher is not defined or for any other reason</li>
      * </ul>
      *
      * @return
      */
     private short getSwitcherStatus() {
-        if (switcher == null) {
-            return SWITCHER_VIEW_ERROR;
+        if (mSwitcher == null) {
+            return SWITCHER_STATUS_ERROR;
         }
-        final int id = switcher.getCurrentView().getId();
+        final int id = mSwitcher.getCurrentView().getId();
         if (id == mQuoteText.getId()) {
-            return SWITCHER_VIEW_1;
+            return SWITCHER_STATUS_1;
         }
         if (id == mUserInput.getId()) {
-            return SWITCHER_VIEW_2;
+            return SWITCHER_STATUS_2;
         }
-        return SWITCHER_VIEW_ERROR;
+        return SWITCHER_STATUS_ERROR;
     }
 
 
     /**
-     * Makes the switcher  display one of its child views:
+     * Makes the mSwitcher  display one of its child views:
      * <ul>
-     * <li> if the status is {@link #SWITCHER_VIEW_1}, the first child is displayed </li>
-     * <li> if the status is {@link #SWITCHER_VIEW_2}, the second child is displayed </li>
+     * <li> if the status is {@link #SWITCHER_STATUS_1}, the first child is displayed </li>
+     * <li> if the status is {@link #SWITCHER_STATUS_2}, the second child is displayed </li>
      * <li> otherwise nothing is done.</li>
      * </ul>
      *
-     * @param status either {@link #SWITCHER_VIEW_1} or {@link #SWITCHER_VIEW_2}
+     * @param status either {@link #SWITCHER_STATUS_1} or {@link #SWITCHER_STATUS_2}
      */
     private void setSwitcher(short status) {
-        if (switcher == null) {
+        if (mSwitcher == null) {
             return;
         }
-        if (status == SWITCHER_VIEW_1) {
-            switcher.setDisplayedChild(0);
-        } else if (status == SWITCHER_VIEW_2) {
-            switcher.setDisplayedChild(1);
+        if (status == SWITCHER_STATUS_1) {
+            mSwitcher.setDisplayedChild(0);
+        } else if (status == SWITCHER_STATUS_2) {
+            mSwitcher.setDisplayedChild(1);
         }
     }
 
