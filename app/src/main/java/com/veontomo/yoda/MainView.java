@@ -199,6 +199,7 @@ public class MainView extends AppCompatActivity implements MVPView {
 
     @Override
     public void setQuote(final Quote quote) {
+        setSwitcher(SWITCHER_VIEW_1);
         mQuoteText.setText(quote.quote);
         mQuoteAuthor.setText(quote.author);
         mButton.setText(getText(R.string.translate));
