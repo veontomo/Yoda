@@ -163,7 +163,7 @@ public class MainView extends AppCompatActivity implements MVPView {
             mTranslation.setText(text);
             mTranslation.setCompoundDrawablesWithIntrinsicBounds(R.drawable.yoda_square, 0, 0, 0);
         } else {
-            Log.i(Config.appName, "Can not load");
+            Log.i(Config.appName, "Can not load since the translation text view is null.");
         }
     }
 
