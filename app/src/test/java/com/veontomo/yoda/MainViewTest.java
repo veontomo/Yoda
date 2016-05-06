@@ -47,6 +47,10 @@ public class MainViewTest {
                 .get();
     }
 
+    /*
+     * tests that define what should be displayed on the screen
+     */
+
     @Test
     public void buttonShouldBeDisplayed() {
         Button btn = (Button) activity.findViewById(R.id.retrieveBtn);
@@ -70,7 +74,6 @@ public class MainViewTest {
         CheckBox box = (CheckBox) activity.findViewById(R.id.check_2);
         assertEquals("second check box should be present", View.VISIBLE, box.getVisibility());
     }
-
 
     @Test
     public void firstCheckBoxesShouldBeChecked() {
@@ -101,6 +104,10 @@ public class MainViewTest {
         TextView tv = (TextView) activity.findViewById(R.id.translation);
         assertEquals("edit field for inserting a phrase should be invisible", View.VISIBLE, tv.getVisibility());
     }
+
+    /*
+     * tests that define behaviour after activity recreation (i.e. in case of the device rotation)
+     */
 
     @Test
     public void firstCheckBoxRemainsCheckedAfterRecreation() {
@@ -139,6 +146,8 @@ public class MainViewTest {
         assertFalse("the second  checkbox must remain unchecked after screen rotation", box.isChecked());
     }
 
+
+
     @Test
     public void translationFieldShouldDisplayTextAfterRecreation() {
         TextView tv = (TextView) activity.findViewById(R.id.translation);
@@ -148,8 +157,12 @@ public class MainViewTest {
         assertEquals("translation field should maintain its content", "some text", tv.getText());
     }
 
+    /*
+    tests that define behaviour of the elements inside of the switcher
+     */
+
     @Test
-    public void userInputFieldBecomesVisibleWhenPhraseIsClicked(){
+    public void userInputFieldBecomesVisibleWhenPhraseIsClicked() {
         TextView phrase = (TextView) activity.findViewById(R.id.phrase);
         phrase.performClick();
         TextView input = (TextView) activity.findViewById(R.id.hidden_edit_view);
@@ -157,20 +170,28 @@ public class MainViewTest {
     }
 
     @Test
-    public void phraseFieldBecomesInvisibleWhenPhraseIsClicked(){
+    public void phraseFieldBecomesInvisibleWhenPhraseIsClicked() {
         TextView phrase = (TextView) activity.findViewById(R.id.phrase);
         phrase.performClick();
         assertEquals("input field should become visible", View.GONE, phrase.getVisibility());
     }
 
     @Test
-    public void userInputFieldGetsFocusWhenPhraseIsClicked(){
+    public void userInputFieldGetsFocusWhenPhraseIsClicked() {
         TextView phrase = (TextView) activity.findViewById(R.id.phrase);
         phrase.performClick();
         TextView input = (TextView) activity.findViewById(R.id.hidden_edit_view);
         assertTrue("input field should get focus when the phrase is clicked", input.isFocused());
     }
 
+    @Test
+    public void userInputFieldShouldRemainVisibleAfterRecreation(){
+        TextView phrase = (TextView) activity.findViewById(R.id.phrase);
+        phrase.performClick();
+        activity.recreate();
+        TextView input = (TextView) activity.findViewById(R.id.hidden_edit_view);
+        assertEquals("input field should remain visible after recreation", View.VISIBLE, input.getVisibility());
+    }
 
 
 }

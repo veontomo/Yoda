@@ -45,6 +45,27 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     private static final String CHECK_TOKEN_2 = "check_famous";
 
+    /**
+     * a string key under which the status of the switcher is to be saved
+     * when saving the activity state for further recreating
+     */
+    private static final String SWITCHER_TOKEN = "switcher";
+
+    /**
+     * the switcher status if it displays the first view
+     */
+    private static final short SWITCHER_VIEW_1 = 1;
+
+    /**
+     * the switcher status if it displays the second view
+     */
+    private static final short SWITCHER_VIEW_2 = 2;
+
+    /**
+     * the switcher status in case of some error
+     */
+    private static final short SWITCHER_VIEW_ERROR = -1;
+
     private TextView mTranslation;
     private TextView mQuoteText;
     private TextView mQuoteAuthor;
@@ -111,10 +132,12 @@ public class MainView extends AppCompatActivity implements MVPView {
         q.author = savedInstanceState.getString(AUTHOR_TOKEN);
         setQuote(q);
         loadTranslation(savedInstanceState.getString(TRANSLATION_TOKEN));
+        setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, savedInstanceState.getBoolean(CHECK_TOKEN_1));
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, savedInstanceState.getBoolean(CHECK_TOKEN_2));
         mCheck1.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_1));
         mCheck2.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_2));
+
 
     }
 
@@ -240,7 +263,54 @@ public class MainView extends AppCompatActivity implements MVPView {
         savedInstanceState.putCharSequence(TRANSLATION_TOKEN, mTranslation.getText());
         savedInstanceState.putBoolean(CHECK_TOKEN_1, mCheck1.isChecked());
         savedInstanceState.putBoolean(CHECK_TOKEN_2, mCheck2.isChecked());
+        savedInstanceState.putShort(SWITCHER_TOKEN, getSwitcherStatus());
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    /**
+     * Returns
+     * <ul>
+     * <li> {@link #SWITCHER_VIEW_1} if the switcher displays {@link #mQuoteText},</li>
+     * <li> {@link #SWITCHER_VIEW_2} if it displays {@link #mUserInput},</li>
+     * <li> {@link #SWITCHER_VIEW_ERROR}, if either switcher is not defined or for any other reason</li>
+     * </ul>
+     *
+     * @return
+     */
+    private short getSwitcherStatus() {
+        if (switcher == null) {
+            return SWITCHER_VIEW_ERROR;
+        }
+        final int id = switcher.getCurrentView().getId();
+        if (id == mQuoteText.getId()) {
+            return SWITCHER_VIEW_1;
+        }
+        if (id == mUserInput.getId()) {
+            return SWITCHER_VIEW_2;
+        }
+        return SWITCHER_VIEW_ERROR;
+    }
+
+
+    /**
+     * Makes the switcher  display one of its child views:
+     * <ul>
+     * <li> if the status is {@link #SWITCHER_VIEW_1}, the first child is displayed </li>
+     * <li> if the status is {@link #SWITCHER_VIEW_2}, the second child is displayed </li>
+     * <li> otherwise nothing is done.</li>
+     * </ul>
+     *
+     * @param status either {@link #SWITCHER_VIEW_1} or {@link #SWITCHER_VIEW_2}
+     */
+    private void setSwitcher(short status) {
+        if (switcher == null) {
+            return;
+        }
+        if (status == SWITCHER_VIEW_1) {
+            switcher.setDisplayedChild(0);
+        } else if (status == SWITCHER_VIEW_2) {
+            switcher.setDisplayedChild(1);
+        }
     }
 
 
