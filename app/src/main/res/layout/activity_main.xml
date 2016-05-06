@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/black"
     android:orientation="vertical"
     tools:context=".MainView">
 
@@ -12,93 +12,81 @@
     <ViewSwitcher
         android:id="@+id/my_switcher"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/phrase"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:onClick="textViewClicked"
-            android:text="@string/type_hint"
-            android:textColor="#f4ffffff"
-            android:textSize="20sp"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/phrase"
+                style="@style/phrase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="textViewClicked"
+                android:text="@string/type_hint"/>
+
+            <TextView
+                android:id="@+id/author"
+                style="@style/author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Quote Source"/>
+        </LinearLayout>
 
         <EditText
             android:id="@+id/hidden_edit_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/type_hint"
-            android:textColor="#f4e6c81f">
+            android:textColor="@color/yellow"
+            android:theme="@style/phraseInput">
         </EditText>
     </ViewSwitcher>
 
 
     <TextView
-        android:id="@+id/author"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:textColor="#f4ffffff"
-        android:textSize="12sp"
-        tools:text="Quote Source"/>
-
-
-    <TextView
         android:id="@+id/translation"
+        style="@style/translation"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
         android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:padding="4dp"
-        android:text="@string/yoda_default_string"
-        android:textColor="#f4ffffff"
-        android:textSize="20sp"/>
+        android:text="@string/yoda_default_string"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="horizontal"
-        >
-
+        android:paddingBottom="16dp">
 
         <CheckBox
             android:id="@+id/check_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:checked="true"
             android:onClick="onCategory1"
             android:text="@string/category_movie"
-            android:checked="true"
-            android:textColor="#edfde90e"
             android:theme="@style/checkBoxStyle"/>
 
         <Button
             android:id="@+id/retrieveBtn"
+            style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/buttonshape"
-            android:gravity="center"
             android:onClick="elaborate"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
-            android:text="@string/i_feel_lucky"
-            android:textColor="#000000"
-            android:textSize="18sp"/>
+            android:text="@string/i_feel_lucky"/>
 
 
         <CheckBox
             android:id="@+id/check_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:onClick="onCategory2"
             android:text="@string/category_famous"
-            android:textColor="#edfde90e"
             android:theme="@style/checkBoxStyle"/>
 
     </LinearLayout>
