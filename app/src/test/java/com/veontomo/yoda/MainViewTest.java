@@ -173,7 +173,7 @@ public class MainViewTest {
     public void phraseFieldBecomesInvisibleWhenPhraseIsClicked() {
         TextView phrase = (TextView) activity.findViewById(R.id.phrase);
         phrase.performClick();
-        assertEquals("input field should become visible", View.GONE, phrase.getVisibility());
+        assertEquals("input field should become invisible", View.GONE, phrase.getVisibility());
     }
 
     @Test

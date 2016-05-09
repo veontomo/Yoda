@@ -23,6 +23,10 @@ public class MVPPresenter {
 
     private final MVPTranslateModel mTranslateModel;
 
+    private final QuoteCache mCache;
+
+    private Quote mCurrentQuote;
+
     /**
      * A private constructor.
      * <p/>
@@ -39,47 +43,8 @@ public class MVPPresenter {
         this.mTranslateModel = translateModel;
         this.mRetrieveModel.setPresenter(this);
         this.mTranslateModel.setPresenter(this);
+        this.mCache = new QuoteCache(10);
     }
-
-    /**
-     * This method is called once the model has translated the phrase.
-     *
-     * @param s
-     */
-    public void onTranslated(String s) {
-        mView.loadTranslation(s);
-        mView.disableButton(false);
-        mView.stopBladeAnimation();
-
-    }
-
-    /**
-     * This method is called if the translation was not successful.
-     */
-    public void onTranslationFailure(final String s) {
-        mView.onTranslationFailure(s);
-        mView.disableButton(false);
-        mView.stopBladeAnimation();
-    }
-
-    /**
-     * This method is called when the quote us received
-     */
-    public void onQuoteReceived(final Quote quote) {
-        mView.setQuote(quote);
-        mTranslateModel.translate(quote);
-    }
-
-    /**
-     * Starts the retrieval of a quote.
-     */
-    public void retrieveQuote() {
-        mView.disableButton(true);
-        mRetrieveModel.retrieveQuote();
-        mView.startBladeAnimation();
-    }
-
-
 
     /**
      * Creates a presenter with properly set view and model objects.
@@ -94,9 +59,67 @@ public class MVPPresenter {
     }
 
     /**
+     * This method is called once the model has translated the phrase.
+     *
+     * @param s
+     */
+    public void showTranslation(final String quote, String s) {
+        mView.loadTranslation(s);
+        mView.disableButton(false);
+        if (this.mCurrentQuote != null && this.mCurrentQuote.quote != null && this.mCurrentQuote.quote.equals(quote)) {
+            mCache.put(this.mCurrentQuote, s);
+        } else {
+            Log.i(TAG, "showTranslation: stored quote content does not coincides with received string " + quote);
+        }
+    }
+
+    /**
+     * This method is called if the translation of given text is not successful.
+     * @param txt text to be translated
+     * @param msg a message describing the failure
+     */
+    public void onTranslationFailure(final String txt, final String msg) {
+        mView.onTranslationFailure(msg);
+        mView.disableButton(false);
+    }
+
+    /**
+     * This method is called when the quote us received
+     */
+    public void onQuoteReceived(final Quote quote) {
+        mView.setQuote(quote);
+        translate(quote);
+    }
+
+    /**
+     * Stores the given quote in {@link #mCurrentQuote} and passes the quote content to the translation service.
+     *
+     * @param quote
+     */
+    public void translate(final Quote quote) {
+        this.mCurrentQuote = quote;
+        mTranslateModel.translate(quote.quote);
+    }
+
+    public void translate(String userInput) {
+        final Quote q  = new Quote();
+        q.quote = userInput;
+        translate(q);
+
+    }
+
+    /**
+     * Starts the retrieval of a quote.
+     */
+    public void retrieveQuote() {
+        mView.disableButton(true);
+        mRetrieveModel.retrieveQuote();
+    }
+
+    /**
      * It is called when the response of the retrieval of a phrase fails.
      */
-    public void onRetrieveResponseFailure(final String s) {
+    public void showQuoteRetrievalFailure(final String s) {
         mView.retrieveResponseFailure(s);
 
     }
@@ -127,4 +150,36 @@ public class MVPPresenter {
         }
     }
 
+    /**
+     * Displays a message that a quote has been retrieved, but the response from the corresponding service is not successful.
+     *
+     * @param quote
+     */
+    public void showQuoteProblem(final Quote quote) {
+        mView.showQuoteProblem(quote);
+
+    }
+
+    /**
+     * Displays a message that the response for the translation has been received, but it has not been successful.
+     *
+     * @param str a text to translate
+     * @param translation
+     */
+    public void showTranslationProblem(final String str, final String translation) {
+        if (this.mCurrentQuote != null && this.mCurrentQuote.quote != null && this.mCurrentQuote.quote.equals(str)) {
+            mView.showTranslationProblem(this.mCurrentQuote, translation);
+        } else {
+            Log.i(TAG, "showTranslation: stored quote content does not coincides with received string " + str);
+        }
+    }
+
+
+    public String[] serializeCache() {
+        return mCache.serialize();
+    }
+
+    public void loadIntoCache(String[] data) {
+        mCache.load(data);
+    }
 }

@@ -23,8 +23,6 @@ public class MVPRetrieveModel {
 
     private final Callback<Quote> mQuoteCallback;
 
-    private final QuoteCache cache;
-
     /**
      * Array of category statuses.
      * If a category is marked as "true", it means that a phrase of that category can be retrieved.
@@ -39,56 +37,28 @@ public class MVPRetrieveModel {
      * Constructor.
      */
     public MVPRetrieveModel() {
-
-        cache = new QuoteCache(10);
-
-        Retrofit retrofit2 = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Config.QUOTES_SERVICE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        mQuoteRetrievalService = retrofit2.create(QuotesApi.class);
+        mQuoteRetrievalService = retrofit.create(QuotesApi.class);
 
         mQuoteCallback = new Callback<Quote>() {
             @Override
             public void onResponse(Call<Quote> call, Response<Quote> response) {
                 if (response.isSuccessful()) {
-                    onQuoteReceived(response.body());
-                    cache.put(response.body());
+                    mPresenter.onQuoteReceived(response.body());
                 } else {
-                    final Quote quote = cache.getRandom();
-                    if (quote != null) {
-                        onQuoteReceived(quote);
-                    } else {
-                        onRetrieveFailure("Something wrong I have retrieved.");
-                    }
+                    mPresenter.showQuoteProblem(response.body());
                 }
             }
 
             @Override
             public void onFailure(Call<Quote> call, Throwable t) {
-                final Quote quote = cache.getRandom();
-                if (quote != null) {
-                    onQuoteReceived(quote);
-                } else {
-                    onRetrieveFailure(t.getMessage());
-                }
+                mPresenter.showQuoteRetrievalFailure(t.getMessage());
             }
         };
 
-    }
-
-
-    private void onRetrieveFailure(final String s) {
-        mPresenter.onRetrieveResponseFailure(s);
-    }
-
-    /**
-     * This method is called once a quote is received from the service
-     *
-     * @param quote
-     */
-    private void onQuoteReceived(final Quote quote) {
-        mPresenter.onQuoteReceived(quote);
     }
 
     /**
@@ -135,17 +105,17 @@ public class MVPRetrieveModel {
 
     /**
      * Returns a category of a phrase to retrieve.
-     *
+     * <p/>
      * Only categories whose statuses are "true" can be retrieved. In case when multiple categories
      * have status "true", a random one is chosen.
      *
      * @return
      */
     public String getCategoryToRetrieve() {
-        if (mCategoryStatuses[0] && !mCategoryStatuses[1]){
+        if (mCategoryStatuses[0] && !mCategoryStatuses[1]) {
             return CATEGORY_1;
         }
-        if (mCategoryStatuses[1] && !mCategoryStatuses[0]){
+        if (mCategoryStatuses[1] && !mCategoryStatuses[0]) {
             return CATEGORY_2;
         }
         return getRandomCategory();
@@ -153,6 +123,7 @@ public class MVPRetrieveModel {
 
     /**
      * Returns a random category: either {@link #CATEGORY_1} or {@link #CATEGORY_2}.
+     *
      * @return
      */
     public String getRandomCategory() {
