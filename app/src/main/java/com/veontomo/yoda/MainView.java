@@ -66,6 +66,12 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     private static final short SWITCHER_STATUS_ERROR = -1;
 
+    /**
+     * a string key under which the cache is to be saved
+     * when saving the activity state for further recreating
+     */
+    private static final String CACHE_TOKEN = "cache";
+
     private TextView mTranslation;
     private TextView mQuoteText;
     private TextView mQuoteAuthor;
@@ -117,7 +123,6 @@ public class MainView extends AppCompatActivity implements MVPView {
     @Override
     public void onPause() {
         mPresenter.stop();
-        mPresenter = null;
         super.onPause();
     }
 
@@ -156,10 +161,8 @@ public class MainView extends AppCompatActivity implements MVPView {
             if (userInput.isEmpty()) {
                 mPresenter.retrieveQuote();
             } else {
+                mPresenter.translate(userInput);
                 mUserInput.setText(null);
-                final Quote q = new Quote();
-                q.quote = userInput;
-                mPresenter.onQuoteReceived(q);
                 mSwitcher.showPrevious();
             }
         }
@@ -218,18 +221,18 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
     @Override
-    public void startBladeAnimation() {
-        Log.i(TAG, "startBladeAnimation: animation start");
-    }
-
-    @Override
-    public void stopBladeAnimation() {
-        Log.i(TAG, "stopBladeAnimation: animation stop");
-    }
-
-    @Override
     public void retrieveResponseFailure(final String s) {
         Toast.makeText(MainView.this, s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showQuoteProblem(final Quote quote) {
+        Log.i(TAG, "showQuoteProblem: some problem with " + quote.toString());
+    }
+
+    @Override
+    public void showTranslationProblem(Quote quote, String translation) {
+        Log.i(TAG, "showTranslationProblem: a problem with translation of the quote " + quote.toString() + ", received: " + translation);
     }
 
 
@@ -265,6 +268,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         savedInstanceState.putBoolean(CHECK_TOKEN_1, mCheck1.isChecked());
         savedInstanceState.putBoolean(CHECK_TOKEN_2, mCheck2.isChecked());
         savedInstanceState.putShort(SWITCHER_TOKEN, getSwitcherStatus());
+        savedInstanceState.putStringArray(CACHE_TOKEN, mPresenter.getCacheAsArray());
         super.onSaveInstanceState(savedInstanceState);
     }
 

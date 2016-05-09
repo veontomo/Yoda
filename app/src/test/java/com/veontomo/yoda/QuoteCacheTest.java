@@ -23,8 +23,8 @@ public class QuoteCacheTest {
         QuoteCache cache = new QuoteCache(2);
         Quote q1 = new Quote();
         Quote q2 = new Quote();
-        cache.put(q1);
-        cache.put(q2);
+        cache.put(q1, "");
+        cache.put(q2, "");
         assertEquals(q1, cache.get(0));
         assertEquals(q2, cache.get(1));
     }
@@ -38,27 +38,27 @@ public class QuoteCacheTest {
     @Test
     public void testGetSizeReturnsOneForSingleElementCache(){
         QuoteCache cache = new QuoteCache(5);
-        cache.put(new Quote());
+        cache.put(new Quote(), "");
         assertEquals(1, cache.getSize());
     }
 
     @Test
     public void testGetSizeReturnsThreeForThreeElementCacheWithMaxCapacityThree(){
         QuoteCache cache = new QuoteCache(3);
-        cache.put(new Quote());
-        cache.put(new Quote());
-        cache.put(new Quote());
+        cache.put(new Quote(), "");
+        cache.put(new Quote(), "");
+        cache.put(new Quote(), "");
         assertEquals(3, cache.getSize());
     }
 
     @Test
     public void testGetSizeReturns3WhenPutting5ElementsIntoCacheWithCapacity3(){
         QuoteCache cache = new QuoteCache(3);
-        cache.put(new Quote());
-        cache.put(new Quote());
-        cache.put(new Quote());
-        cache.put(new Quote());
-        cache.put(new Quote());
+        cache.put(new Quote(), "translation");
+        cache.put(new Quote(), "translation");
+        cache.put(new Quote(), "translation");
+        cache.put(new Quote(), "translation");
+        cache.put(new Quote(), "translation");
         assertEquals(3, cache.getSize());
     }
 
@@ -72,16 +72,16 @@ public class QuoteCacheTest {
     @Test
     public void testGetRandomReturnsNotNullFromSingleElementCache() {
         QuoteCache cache = new QuoteCache(1);
-        cache.put(new Quote());
+        cache.put(new Quote(), "");
         assertNotNull(cache.getRandom());
     }
 
     @Test
     public void testGetRandomReturnsNotNullFromThreeElementCache() {
         QuoteCache cache = new QuoteCache(3);
-        cache.put(new Quote());
-        cache.put(new Quote());
-        cache.put(new Quote());
+        cache.put(new Quote(), "");
+        cache.put(new Quote(), "");
+        cache.put(new Quote(), "");
         assertNotNull(cache.getRandom());
     }
 
@@ -92,7 +92,7 @@ public class QuoteCacheTest {
         q.author = "A.Uthor";
         q.category = "favorite";
         q.quote = "Never mind";
-        cache.put(q);
+        cache.put(q, "");
         Quote q2 = cache.getRandom();
         assertEquals("A.Uthor", q2.author);
         assertEquals("favorite", q2.category);

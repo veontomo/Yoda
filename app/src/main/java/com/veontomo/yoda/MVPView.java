@@ -19,9 +19,9 @@ public interface MVPView {
      */
     void disableButton(boolean b);
 
-    void startBladeAnimation();
-
-    void stopBladeAnimation();
-
     void retrieveResponseFailure(final String s);
+
+    void showQuoteProblem(final Quote body);
+
+    void showTranslationProblem(Quote quote, String translation);
 }

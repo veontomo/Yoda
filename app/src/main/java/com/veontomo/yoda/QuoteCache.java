@@ -1,13 +1,17 @@
 package com.veontomo.yoda;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
  * Quote cache
  */
-public class QuoteCache implements Cache<Quote> {
+public class QuoteCache implements Cache<Quote, String> {
 
     private static final String TAG = Config.appName;
     /**
@@ -15,7 +19,8 @@ public class QuoteCache implements Cache<Quote> {
      */
     private final int maxSize;
 
-    private final List<Quote> items;
+    private final LinkedHashMap<Quote, String> items;
+
     /**
      * current size of the cache
      */
@@ -28,7 +33,7 @@ public class QuoteCache implements Cache<Quote> {
      */
     public QuoteCache(int maxSize) {
         this.maxSize = maxSize;
-        items = new ArrayList<>();
+        items = new LinkedHashMap<>();
         size = 0;
     }
 
@@ -37,18 +42,18 @@ public class QuoteCache implements Cache<Quote> {
     }
 
     @Override
-    public void put(final Quote quote) {
+    public void put(final Quote quote, final String str) {
         if (items.size() >= maxSize) {
             items.remove(0);
             size--;
         }
-        items.add(quote);
+        items.put(quote, str);
         size++;
     }
 
     @Override
     public Quote get(int pos) {
-        return (pos < size) ? items.get(pos) : null;
+        return (pos < size) ? new ArrayList<Quote>(items.keySet()).get(pos) : null;
     }
 
     @Override
@@ -58,6 +63,20 @@ public class QuoteCache implements Cache<Quote> {
             return null;
         }
         int pos = generator.nextInt(items.size());
-        return items.get(pos);
+        return get(pos);
     }
+
+    @Override
+    public String[] serialize() {
+        String[] data = new String[size * 2];
+        int i = 0;
+        for (Map.Entry<Quote, String> entry : items.entrySet()) {
+            data[i] = entry.getKey().serialize();
+            data[i + 1] = entry.getValue();
+        }
+        return data;
+    }
+
+
+
 }
