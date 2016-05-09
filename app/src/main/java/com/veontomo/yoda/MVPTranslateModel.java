@@ -19,12 +19,12 @@ public class MVPTranslateModel {
     /**
      * a phrase to translate
      */
-    private String mPhrase;
+    private Quote mQuote;
 
     /**
      * a cache storing the translations
      */
-    private HashMap<String, String> cache;
+    private HashMap<Quote, String> cache;
 
     private final int maxCacheSize = 10;
 
@@ -42,7 +42,7 @@ public class MVPTranslateModel {
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
                     onTranslated(response.body());
-                    store(mPhrase, response.body());
+                    store(mQuote, response.body());
                 } else {
                     onTranslationFailure(response.body());
                 }
@@ -62,9 +62,9 @@ public class MVPTranslateModel {
      * @param key
      * @param value
      */
-    private void store(String key, String value) {
+    private void store(Quote key, String value) {
         if (cache.size() >= maxCacheSize){
-            String aKey = cache.entrySet().iterator().next().getKey();
+            Quote aKey = cache.entrySet().iterator().next().getKey();
             cache.remove(aKey);
         }
         cache.put(key, value);
@@ -93,17 +93,19 @@ public class MVPTranslateModel {
     }
 
     /**
-     * Request for the service to translate a given phrase.
+     * Request for the service to translate a given quote.
      *
-     * @param phrase a phrase to translate
+     * @param quote a quote to translate
      */
-    public void translate(final String phrase) {
-        this.mPhrase = phrase;
-        if (cache.containsKey(phrase)) {
-            onTranslated(cache.get(phrase));
+    public void translate(final Quote quote) {
+        this.mQuote = quote;
+        if (cache.containsKey(quote)) {
+            onTranslated(cache.get(quote));
         } else {
-            Call<String> call = yodaService.translate(phrase);
+            Call<String> call = yodaService.translate(quote.quote);
             call.enqueue(translateExec);
         }
     }
+
+
 }

@@ -51,6 +51,7 @@
     <TextView
         android:id="@+id/translation"
         style="@style/translation"
+        android:drawableLeft="@drawable/yoda_square"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

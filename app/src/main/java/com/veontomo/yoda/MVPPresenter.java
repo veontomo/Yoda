@@ -67,15 +67,7 @@ public class MVPPresenter {
      */
     public void onQuoteReceived(final Quote quote) {
         mView.setQuote(quote);
-        translate(quote.quote);
-    }
-
-    /**
-     * Passes given string to the translation service.
-     * @param str
-     */
-    public void translate(final String str){
-        mTranslateModel.translate(str);
+        mTranslateModel.translate(quote);
     }
 
     /**
@@ -134,4 +126,5 @@ public class MVPPresenter {
                 Log.i(TAG, "toggleCategoryStatus: unknown category \"" + category + "\" is passed");
         }
     }
+
 }

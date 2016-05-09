@@ -65,6 +65,17 @@ public class MainView extends AppCompatActivity implements MVPView {
      * the mSwitcher status in case of some error
      */
     private static final short SWITCHER_STATUS_ERROR = -1;
+    /**
+     * a string key under which the previously requested phrases are to be saved
+     * when saving the activity state for further recreating
+     */
+    private static final String CACHE_PHRASES_TOKEN = "cache_phrases";
+
+    /**
+     * a string key under which the previously retrieved translations are to be saved
+     * when saving the activity state for further recreating
+     */
+    private static final String CACHE_TRANSLATIONS_TOKEN = "cache_translations";
 
     private TextView mTranslation;
     private TextView mQuoteText;
