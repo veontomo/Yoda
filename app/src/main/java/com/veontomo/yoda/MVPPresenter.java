@@ -1,6 +1,5 @@
 package com.veontomo.yoda;
 
-import android.os.Parcelable;
 import android.util.Log;
 
 /**
@@ -24,7 +23,7 @@ public class MVPPresenter {
 
     private final MVPTranslateModel mTranslateModel;
 
-    private final QuoteCache cache;
+    private final QuoteCache mCache;
 
     private Quote mCurrentQuote;
 
@@ -44,7 +43,7 @@ public class MVPPresenter {
         this.mTranslateModel = translateModel;
         this.mRetrieveModel.setPresenter(this);
         this.mTranslateModel.setPresenter(this);
-        this.cache = new QuoteCache(10);
+        this.mCache = new QuoteCache(10);
     }
 
     /**
@@ -68,7 +67,7 @@ public class MVPPresenter {
         mView.loadTranslation(s);
         mView.disableButton(false);
         if (this.mCurrentQuote != null && this.mCurrentQuote.quote != null && this.mCurrentQuote.quote.equals(quote)) {
-            cache.put(this.mCurrentQuote, s);
+            mCache.put(this.mCurrentQuote, s);
         } else {
             Log.i(TAG, "showTranslation: stored quote content does not coincides with received string " + quote);
         }
@@ -175,7 +174,11 @@ public class MVPPresenter {
     }
 
 
-    public String[] getCacheAsArray() {
-        return cache.serialize();
+    public String[] serializeCache() {
+        return mCache.serialize();
+    }
+
+    public void loadIntoCache(String[] data) {
+        mCache.load(data);
     }
 }

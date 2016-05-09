@@ -12,4 +12,6 @@ public interface Cache<T, K> {
     T getRandom();
 
     String[] serialize();
+
+    void load(final String[] data);
 }

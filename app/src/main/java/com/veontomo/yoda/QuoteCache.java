@@ -1,7 +1,6 @@
 package com.veontomo.yoda;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -22,9 +21,9 @@ public class QuoteCache implements Cache<Quote, String> {
     private final LinkedHashMap<Quote, String> items;
 
     /**
-     * current size of the cache
+     * current mSize of the cache
      */
-    private int size;
+    private int mSize;
 
     /**
      * Constructor.
@@ -34,32 +33,32 @@ public class QuoteCache implements Cache<Quote, String> {
     public QuoteCache(int maxSize) {
         this.maxSize = maxSize;
         items = new LinkedHashMap<>();
-        size = 0;
+        mSize = 0;
     }
 
     public int getSize() {
-        return size;
+        return mSize;
     }
 
     @Override
     public void put(final Quote quote, final String str) {
         if (items.size() >= maxSize) {
             items.remove(0);
-            size--;
+            mSize--;
         }
         items.put(quote, str);
-        size++;
+        mSize++;
     }
 
     @Override
     public Quote get(int pos) {
-        return (pos < size) ? new ArrayList<Quote>(items.keySet()).get(pos) : null;
+        return (pos < mSize) ? new ArrayList<>(items.keySet()).get(pos) : null;
     }
 
     @Override
     public Quote getRandom() {
         Random generator = new Random();
-        if (size <= 0) {
+        if (mSize <= 0) {
             return null;
         }
         int pos = generator.nextInt(items.size());
@@ -68,15 +67,37 @@ public class QuoteCache implements Cache<Quote, String> {
 
     @Override
     public String[] serialize() {
-        String[] data = new String[size * 2];
+        String[] data = new String[mSize * 2];
         int i = 0;
         for (Map.Entry<Quote, String> entry : items.entrySet()) {
             data[i] = entry.getKey().serialize();
             data[i + 1] = entry.getValue();
+            i = i + 2;
         }
         return data;
     }
 
+    /**
+     * Loads a new content into the cache.
+     *
+     * @param data
+     */
+    @Override
+    public void load(final String[] data) {
+        final int size = data.length;
+        items.clear();
+        mSize = 0;
+        Quote key;
+        String value;
+        for (int i = 0; i < size; i = i + 2) {
+            key = Quote.deserialize(data[i]);
+            if (key != null) {
+                value = data[i + 1];
+                items.put(key, value);
+                mSize++;
+            }
+        }
+    }
 
 
 }
