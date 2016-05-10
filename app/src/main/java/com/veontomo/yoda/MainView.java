@@ -117,9 +117,7 @@ public class MainView extends AppCompatActivity implements MVPView {
             mState = savedInstanceState;
         }
 
-
     }
-
 
     @Override
     public void onResume() {
@@ -143,6 +141,7 @@ public class MainView extends AppCompatActivity implements MVPView {
      * @param savedInstanceState
      */
     private void restoreState(@NonNull Bundle savedInstanceState) {
+        Log.i(TAG, "restoreState: view");
         final Quote q = new Quote();
         q.quote = savedInstanceState.getString(PHRASE_TOKEN);
         q.author = savedInstanceState.getString(AUTHOR_TOKEN);
@@ -151,7 +150,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, savedInstanceState.getBoolean(CHECK_TOKEN_1));
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, savedInstanceState.getBoolean(CHECK_TOKEN_2));
-        mPresenter.loadIntoCache(savedInstanceState.getStringArray(CACHE_TOKEN));
+        mPresenter.loadCacheBundle(savedInstanceState.getParcelable(CACHE_TOKEN));
         mCheck1.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_1));
         mCheck2.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_2));
 
@@ -274,13 +273,14 @@ public class MainView extends AppCompatActivity implements MVPView {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.i(TAG, "onSaveInstanceState: ");
         savedInstanceState.putCharSequence(PHRASE_TOKEN, mQuoteText.getText());
         savedInstanceState.putCharSequence(AUTHOR_TOKEN, mQuoteAuthor.getText());
         savedInstanceState.putCharSequence(TRANSLATION_TOKEN, mTranslation.getText());
         savedInstanceState.putBoolean(CHECK_TOKEN_1, mCheck1.isChecked());
         savedInstanceState.putBoolean(CHECK_TOKEN_2, mCheck2.isChecked());
         savedInstanceState.putShort(SWITCHER_TOKEN, getSwitcherStatus());
-        savedInstanceState.putStringArray(CACHE_TOKEN, mPresenter.serializeCache());
+        savedInstanceState.putBundle(CACHE_TOKEN, mPresenter.getCacheParcelable());
         super.onSaveInstanceState(savedInstanceState);
     }
 

@@ -1,9 +1,12 @@
 package com.veontomo.yoda;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
@@ -38,9 +41,11 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     }
 
     protected QuoteCache(Parcel in) {
+        Log.i(TAG, "QuoteCache: initally, parcel contains " + in.dataSize() );
         this.maxSize = in.readInt();
         this.mSize = in.readInt();
         this.mItems = new LinkedHashMap<>();
+        Log.i(TAG, "QuoteCache: parcel contains " + in.dataSize() );
     }
 
     public static final Creator<QuoteCache> CREATOR = new Creator<QuoteCache>() {
@@ -118,6 +123,16 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
         }
     }
 
+    @Override
+    public void loadBundle(Parcelable cache) {
+        Log.i(TAG, "loadBundle: parcelable cache");
+        final QuoteCache c = (QuoteCache) cache;
+        if (c != null){
+            mItems.clear();
+            // TODO
+        }
+    }
+
 
     /**
      * Describe the kinds of special objects contained in this Parcelable's
@@ -142,5 +157,9 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(maxSize);
         dest.writeInt(mSize);
+        for (Quote q : mItems.keySet()) {
+            dest.writeParcelable(q, 0);
+            dest.writeString(mItems.get(q));
+        }
     }
 }

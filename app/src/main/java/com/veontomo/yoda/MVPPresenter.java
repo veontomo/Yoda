@@ -1,5 +1,8 @@
 package com.veontomo.yoda;
 
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 /**
@@ -75,6 +78,7 @@ public class MVPPresenter {
 
     /**
      * This method is called if the translation of given text is not successful.
+     *
      * @param txt text to be translated
      * @param msg a message describing the failure
      */
@@ -102,7 +106,7 @@ public class MVPPresenter {
     }
 
     public void translate(String userInput) {
-        final Quote q  = new Quote();
+        final Quote q = new Quote();
         q.quote = userInput;
         translate(q);
 
@@ -163,7 +167,7 @@ public class MVPPresenter {
     /**
      * Displays a message that the response for the translation has been received, but it has not been successful.
      *
-     * @param str a text to translate
+     * @param str         a text to translate
      * @param translation
      */
     public void showTranslationProblem(final String str, final String translation) {
@@ -175,11 +179,20 @@ public class MVPPresenter {
     }
 
 
-    public String[] serializeCache() {
-        return mCache.serialize();
+    public void loadCacheBundle(Bundle b) {
+        Log.i(TAG, "loadCacheBundle: loading cache parcelable");
+        if (b != null) {
+            Log.i(TAG, "loadCacheBundle: is not null");
+            mCache.loadBundle(b.getParcelable("cache"));
+        }
     }
 
-    public void loadIntoCache(String[] data) {
-        mCache.load(data);
+    public Bundle getCacheParcelable() {
+        Log.i(TAG, "getCacheParcelable: the presenter starts returning a parcelabale");
+        Bundle b = new Bundle();
+        b.putParcelable("cache", mCache);
+        return b;
+
+
     }
 }
