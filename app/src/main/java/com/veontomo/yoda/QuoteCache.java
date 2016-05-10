@@ -1,6 +1,7 @@
 package com.veontomo.yoda;
 
-import android.util.Log;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -10,7 +11,7 @@ import java.util.Random;
 /**
  * Quote cache
  */
-public class QuoteCache implements Cache<Quote, String> {
+public class QuoteCache implements Cache<Quote, String>, Parcelable {
 
     private static final String TAG = Config.appName;
     /**
@@ -18,7 +19,7 @@ public class QuoteCache implements Cache<Quote, String> {
      */
     private final int maxSize;
 
-    private final LinkedHashMap<Quote, String> items;
+    private final LinkedHashMap<Quote, String> mItems;
 
     /**
      * current mSize of the cache
@@ -32,9 +33,27 @@ public class QuoteCache implements Cache<Quote, String> {
      */
     public QuoteCache(int maxSize) {
         this.maxSize = maxSize;
-        items = new LinkedHashMap<>();
-        mSize = 0;
+        this.mItems = new LinkedHashMap<>();
+        this.mSize = 0;
     }
+
+    protected QuoteCache(Parcel in) {
+        this.maxSize = in.readInt();
+        this.mSize = in.readInt();
+        this.mItems = new LinkedHashMap<>();
+    }
+
+    public static final Creator<QuoteCache> CREATOR = new Creator<QuoteCache>() {
+        @Override
+        public QuoteCache createFromParcel(Parcel in) {
+            return new QuoteCache(in);
+        }
+
+        @Override
+        public QuoteCache[] newArray(int size) {
+            return new QuoteCache[size];
+        }
+    };
 
     public int getSize() {
         return mSize;
@@ -42,17 +61,17 @@ public class QuoteCache implements Cache<Quote, String> {
 
     @Override
     public void put(final Quote quote, final String str) {
-        if (items.size() >= maxSize) {
-            items.remove(0);
+        if (mItems.size() >= maxSize) {
+            mItems.remove(0);
             mSize--;
         }
-        items.put(quote, str);
+        mItems.put(quote, str);
         mSize++;
     }
 
     @Override
     public Quote get(int pos) {
-        return (pos < mSize) ? new ArrayList<>(items.keySet()).get(pos) : null;
+        return (pos < mSize) ? new ArrayList<>(mItems.keySet()).get(pos) : null;
     }
 
     @Override
@@ -61,7 +80,7 @@ public class QuoteCache implements Cache<Quote, String> {
         if (mSize <= 0) {
             return null;
         }
-        int pos = generator.nextInt(items.size());
+        int pos = generator.nextInt(mItems.size());
         return get(pos);
     }
 
@@ -69,7 +88,7 @@ public class QuoteCache implements Cache<Quote, String> {
     public String[] serialize() {
         String[] data = new String[mSize * 2];
         int i = 0;
-        for (Map.Entry<Quote, String> entry : items.entrySet()) {
+        for (Map.Entry<Quote, String> entry : mItems.entrySet()) {
             data[i] = entry.getKey().serialize();
             data[i + 1] = entry.getValue();
             i = i + 2;
@@ -85,7 +104,7 @@ public class QuoteCache implements Cache<Quote, String> {
     @Override
     public void load(final String[] data) {
         final int size = data.length;
-        items.clear();
+        mItems.clear();
         mSize = 0;
         Quote key;
         String value;
@@ -93,11 +112,35 @@ public class QuoteCache implements Cache<Quote, String> {
             key = Quote.deserialize(data[i]);
             if (key != null) {
                 value = data[i + 1];
-                items.put(key, value);
+                mItems.put(key, value);
                 mSize++;
             }
         }
     }
 
 
+    /**
+     * Describe the kinds of special objects contained in this Parcelable's
+     * marshalled representation.
+     *
+     * @return a bitmask indicating the set of special object types marshalled
+     * by the Parcelable.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(maxSize);
+        dest.writeInt(mSize);
+    }
 }
