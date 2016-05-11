@@ -61,17 +61,18 @@ public class MVPPresenter {
     }
 
     /**
-     * This method is called once the model has translated the phrase.
+     * Show the translation and in case of success, stores it in the cache.
      *
-     * @param s
+     * @param in  string to be tranlated
+     * @param out translation of the above string
      */
-    public void showTranslation(final String quote, String s) {
-        mView.loadTranslation(s);
+    public void showTranslation(final String in, final String out) {
+        mView.loadTranslation(out);
         mView.disableButton(false);
-        if (this.mCurrentQuote != null && this.mCurrentQuote.quote != null && this.mCurrentQuote.quote.equals(quote)) {
-            mCache.put(this.mCurrentQuote, s);
+        if (mCurrentQuote != null && mCurrentQuote.quote != null && mCurrentQuote.quote.equals(in)) {
+            mCache.put(mCurrentQuote, out);
         } else {
-            Log.i(TAG, "showTranslation: stored quote content does not coincides with received string " + quote);
+            Log.i(TAG, "showTranslation: stored quote content \"" + mCurrentQuote.quote + "\" does not coincides with received string \"" + in + "\".");
         }
     }
 
@@ -87,11 +88,19 @@ public class MVPPresenter {
     }
 
     /**
-     * This method is called when the quote us received
+     * Passes the received quote to the view and then translate it.
+     * <p/>
+     * Before sending the quote to the translation service, control first if the quote translation
+     * is present in the cache.
      */
     public void onQuoteReceived(final Quote quote) {
         mView.setQuote(quote);
-        translate(quote);
+        if (mCache.contains(quote)) {
+            final String translation = mCache.get(quote);
+            showTranslation(quote.quote, translation);
+        } else {
+            translate(quote);
+        }
     }
 
     /**
@@ -123,7 +132,12 @@ public class MVPPresenter {
      * It is called when the response of the retrieval of a phrase fails.
      */
     public void showQuoteRetrievalFailure(final String s) {
-        mView.retrieveResponseFailure(s);
+        if (mCache.getSize() > 0) {
+            final Quote q = mCache.getRandom();
+            onQuoteReceived(q);
+        } else {
+            mView.retrieveResponseFailure(s);
+        }
 
     }
 
@@ -159,6 +173,7 @@ public class MVPPresenter {
      * @param quote
      */
     public void showQuoteProblem(final Quote quote) {
+        Log.i(TAG, "showQuoteProblem: ");
         mView.showQuoteProblem(quote);
 
     }
@@ -205,5 +220,13 @@ public class MVPPresenter {
         Bundle b = new Bundle();
         b.putParcelable(CACHE_TOKEN, mCache);
         return b;
+    }
+
+    /**
+     * {@link #mCurrentQuote} setter
+     * @param q
+     */
+    public void setCurrentQuote(final Quote q) {
+        this.mCurrentQuote = q;
     }
 }

@@ -96,6 +96,22 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
         return getKey(pos);
     }
 
+    @Override
+    public boolean contains(final Quote key) {
+        return mItems.containsKey(key);
+    }
+
+    /**
+     * Returns cached value
+     *
+     * @param key
+     * @return value corresponding to the key
+     */
+    @Override
+    public String get(Quote key) {
+        return mItems.get(key);
+    }
+
 
     /**
      * Loads the items stored in given cache into {@link #mItems}.

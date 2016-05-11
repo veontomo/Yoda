@@ -3,7 +3,6 @@ package com.veontomo.yoda;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +19,7 @@ public class MainView extends AppCompatActivity implements MVPView {
      * a string key under which the content of the phrase field is to be saved
      * when saving the activity state for further recreating
      */
-    private static final String PHRASE_TOKEN = "phrase";
+    private static final String QUOTE_TOKEN = "phrase";
 
     /**
      * a string key under which the content of the translation field is to be saved
@@ -145,9 +144,8 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     private void restoreState(@NonNull Bundle savedInstanceState) {
         Log.i(TAG, "restoreState: view");
-        final Quote q = new Quote();
-        q.quote = savedInstanceState.getString(PHRASE_TOKEN);
-        q.author = savedInstanceState.getString(AUTHOR_TOKEN);
+        final Quote q = savedInstanceState.getParcelable(QUOTE_TOKEN);
+        mPresenter.setCurrentQuote(q);
         setQuote(q);
         loadTranslation(savedInstanceState.getString(TRANSLATION_TOKEN));
         setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
@@ -161,8 +159,12 @@ public class MainView extends AppCompatActivity implements MVPView {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         Log.i(TAG, "onSaveInstanceState: ");
-        savedInstanceState.putCharSequence(PHRASE_TOKEN, mQuoteText.getText());
-        savedInstanceState.putCharSequence(AUTHOR_TOKEN, mQuoteAuthor.getText());
+
+        final Quote q = new Quote();
+        q.quote = mQuoteText.getText().toString();
+        q.author = mQuoteAuthor.getText().toString();
+
+        savedInstanceState.putParcelable(QUOTE_TOKEN, q);
         savedInstanceState.putCharSequence(TRANSLATION_TOKEN, mTranslation.getText());
         savedInstanceState.putBoolean(CHECK_TOKEN_1, mCheck1.isChecked());
         savedInstanceState.putBoolean(CHECK_TOKEN_2, mCheck2.isChecked());
