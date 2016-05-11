@@ -10,6 +10,7 @@ import android.util.Log;
  */
 public class MVPPresenter {
 
+    private final static String CACHE_TOKEN = "cache";
     public static final short CATEGORY_1 = 1;
     public static final short CATEGORY_2 = 2;
     private static final String TAG = Config.appName;
@@ -183,14 +184,14 @@ public class MVPPresenter {
         Log.i(TAG, "loadCacheBundle: loading cache parcelable");
         if (b != null) {
             Log.i(TAG, "loadCacheBundle: is not null");
-            mCache.loadBundle(b.getParcelable("cache"));
+            mCache.loadBundle(b.getParcelable(CACHE_TOKEN));
         }
     }
 
     public Bundle getCacheParcelable() {
         Log.i(TAG, "getCacheParcelable: the presenter starts returning a parcelabale");
         Bundle b = new Bundle();
-        b.putParcelable("cache", mCache);
+        b.putParcelable(CACHE_TOKEN, mCache);
         return b;
 
 

@@ -1,14 +1,11 @@
 package com.veontomo.yoda;
 
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -41,11 +38,16 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     }
 
     protected QuoteCache(Parcel in) {
-        Log.i(TAG, "QuoteCache: initally, parcel contains " + in.dataSize() );
         this.maxSize = in.readInt();
         this.mSize = in.readInt();
         this.mItems = new LinkedHashMap<>();
-        Log.i(TAG, "QuoteCache: parcel contains " + in.dataSize() );
+        Quote q;
+        String s;
+        for (int i = 0; i < mSize; i++) {
+            q = in.readParcelable(null);
+            s = in.readString();
+            this.mItems.put(q, s);
+        }
     }
 
     public static final Creator<QuoteCache> CREATOR = new Creator<QuoteCache>() {
@@ -75,8 +77,13 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     }
 
     @Override
-    public Quote get(int pos) {
+    public Quote getKey(int pos) {
         return (pos < mSize) ? new ArrayList<>(mItems.keySet()).get(pos) : null;
+    }
+
+    @Override
+    public String getValue(int pos) {
+        return (pos < mSize) ? new ArrayList<>(mItems.values()).get(pos) : null;
     }
 
     @Override
@@ -86,50 +93,30 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
             return null;
         }
         int pos = generator.nextInt(mItems.size());
-        return get(pos);
+        return getKey(pos);
     }
 
-    @Override
-    public String[] serialize() {
-        String[] data = new String[mSize * 2];
-        int i = 0;
-        for (Map.Entry<Quote, String> entry : mItems.entrySet()) {
-            data[i] = entry.getKey().serialize();
-            data[i + 1] = entry.getValue();
-            i = i + 2;
-        }
-        return data;
-    }
 
     /**
-     * Loads a new content into the cache.
+     * Loads the items stored in given cache into {@link #mItems}.
      *
-     * @param data
+     * If the given cache contains more elements than the current one might contain, then extra
+     * elements are to be ignored.
+     * @param cache
      */
     @Override
-    public void load(final String[] data) {
-        final int size = data.length;
-        mItems.clear();
-        mSize = 0;
-        Quote key;
-        String value;
-        for (int i = 0; i < size; i = i + 2) {
-            key = Quote.deserialize(data[i]);
-            if (key != null) {
-                value = data[i + 1];
-                mItems.put(key, value);
-                mSize++;
-            }
-        }
-    }
-
-    @Override
     public void loadBundle(Parcelable cache) {
-        Log.i(TAG, "loadBundle: parcelable cache");
         final QuoteCache c = (QuoteCache) cache;
-        if (c != null){
+        if (c != null) {
+            int cSize = c.getSize();
+            if (cSize > maxSize) {
+                cSize = maxSize;
+            }
             mItems.clear();
-            // TODO
+            for (int i = 0; i < cSize; i++) {
+                mItems.put(c.getKey(i), c.getValue(i));
+            }
+            mSize = cSize;
         }
     }
 

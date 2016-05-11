@@ -14,8 +14,8 @@ public class QuoteCacheTest {
     @Test
     public void getElementsFromEmptyCache() {
         QuoteCache cache = new QuoteCache(2);
-        assertNull(cache.get(0));
-        assertNull(cache.get(1));
+        assertNull(cache.getKey(0));
+        assertNull(cache.getKey(1));
     }
 
     @Test
@@ -25,8 +25,8 @@ public class QuoteCacheTest {
         Quote q2 = new Quote();
         cache.put(q1, "");
         cache.put(q2, "");
-        assertEquals(q1, cache.get(0));
-        assertEquals(q2, cache.get(1));
+        assertEquals(q1, cache.getKey(0));
+        assertEquals(q2, cache.getKey(1));
     }
 
     @Test

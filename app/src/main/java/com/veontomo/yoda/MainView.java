@@ -150,7 +150,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, savedInstanceState.getBoolean(CHECK_TOKEN_1));
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, savedInstanceState.getBoolean(CHECK_TOKEN_2));
-        mPresenter.loadCacheBundle(savedInstanceState.getParcelable(CACHE_TOKEN));
+        mPresenter.loadCacheBundle(savedInstanceState.getBundle(CACHE_TOKEN));
         mCheck1.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_1));
         mCheck2.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_2));
 
