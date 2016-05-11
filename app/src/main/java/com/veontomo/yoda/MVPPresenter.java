@@ -69,7 +69,11 @@ public class MVPPresenter {
     public void showTranslation(final String in, final String out) {
         mView.loadTranslation(out);
         mView.disableButton(false);
-        if (mCurrentQuote != null && mCurrentQuote.quote != null && mCurrentQuote.quote.equals(in)) {
+        if (mCurrentQuote == null) {
+            Log.i(TAG, "showTranslation: current quote is not set");
+            return;
+        }
+        if (mCurrentQuote.quote != null && mCurrentQuote.quote.equals(in)) {
             mCache.put(mCurrentQuote, out);
         } else {
             Log.i(TAG, "showTranslation: stored quote content \"" + mCurrentQuote.quote + "\" does not coincides with received string \"" + in + "\".");
@@ -224,6 +228,7 @@ public class MVPPresenter {
 
     /**
      * {@link #mCurrentQuote} setter
+     *
      * @param q
      */
     public void setCurrentQuote(final Quote q) {
