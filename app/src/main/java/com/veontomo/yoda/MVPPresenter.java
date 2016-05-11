@@ -1,8 +1,6 @@
 package com.veontomo.yoda;
 
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 
 /**
@@ -180,20 +178,32 @@ public class MVPPresenter {
     }
 
 
-    public void loadCacheBundle(Bundle b) {
-        Log.i(TAG, "loadCacheBundle: loading cache parcelable");
+    /**
+     * Restores the cache from given bundle.
+     * <p/>
+     * It is supposed that the cache has previously been saved into a bundle.
+     *
+     * @param b a bundle to restore the cache from
+     */
+    public void loadCacheAsBundle(Bundle b) {
+        Log.i(TAG, "loadCacheAsBundle: loading cache parcelable.");
+        Log.i(TAG, "loadCacheAsBundle: current cache size " + mCache.getSize());
         if (b != null) {
-            Log.i(TAG, "loadCacheBundle: is not null");
+            Log.i(TAG, "loadCacheAsBundle: loading...");
             mCache.loadBundle(b.getParcelable(CACHE_TOKEN));
         }
+        Log.i(TAG, "loadCacheAsBundle: cache size " + mCache.getSize());
     }
 
-    public Bundle getCacheParcelable() {
-        Log.i(TAG, "getCacheParcelable: the presenter starts returning a parcelabale");
+    /**
+     * Returns the cache put into a bundle
+     *
+     * @return a bundle into with the cache inside
+     */
+    public Bundle getCacheAsBundle() {
+        Log.i(TAG, "getCacheAsBundle: the presenter starts returning a parcelable");
         Bundle b = new Bundle();
         b.putParcelable(CACHE_TOKEN, mCache);
         return b;
-
-
     }
 }

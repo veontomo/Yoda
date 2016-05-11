@@ -3,6 +3,7 @@ package com.veontomo.yoda;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -136,9 +137,11 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
     /**
-     * Restores the activity state from the bundle
+     * Restores the activity state from a bundle.
+     * <p/>
+     * It is supposed that the bundle has previously been created by {@link #onSaveInstanceState(Bundle)}.
      *
-     * @param savedInstanceState
+     * @param savedInstanceState a bundle containing the view's state
      */
     private void restoreState(@NonNull Bundle savedInstanceState) {
         Log.i(TAG, "restoreState: view");
@@ -150,11 +153,22 @@ public class MainView extends AppCompatActivity implements MVPView {
         setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, savedInstanceState.getBoolean(CHECK_TOKEN_1));
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, savedInstanceState.getBoolean(CHECK_TOKEN_2));
-        mPresenter.loadCacheBundle(savedInstanceState.getBundle(CACHE_TOKEN));
+        mPresenter.loadCacheAsBundle(savedInstanceState.getBundle(CACHE_TOKEN));
         mCheck1.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_1));
         mCheck2.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_2));
+    }
 
-
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.i(TAG, "onSaveInstanceState: ");
+        savedInstanceState.putCharSequence(PHRASE_TOKEN, mQuoteText.getText());
+        savedInstanceState.putCharSequence(AUTHOR_TOKEN, mQuoteAuthor.getText());
+        savedInstanceState.putCharSequence(TRANSLATION_TOKEN, mTranslation.getText());
+        savedInstanceState.putBoolean(CHECK_TOKEN_1, mCheck1.isChecked());
+        savedInstanceState.putBoolean(CHECK_TOKEN_2, mCheck2.isChecked());
+        savedInstanceState.putShort(SWITCHER_TOKEN, getSwitcherStatus());
+        savedInstanceState.putBundle(CACHE_TOKEN, mPresenter.getCacheAsBundle());
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     /**
@@ -270,19 +284,6 @@ public class MainView extends AppCompatActivity implements MVPView {
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, b != null && b.isChecked());
     }
 
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        Log.i(TAG, "onSaveInstanceState: ");
-        savedInstanceState.putCharSequence(PHRASE_TOKEN, mQuoteText.getText());
-        savedInstanceState.putCharSequence(AUTHOR_TOKEN, mQuoteAuthor.getText());
-        savedInstanceState.putCharSequence(TRANSLATION_TOKEN, mTranslation.getText());
-        savedInstanceState.putBoolean(CHECK_TOKEN_1, mCheck1.isChecked());
-        savedInstanceState.putBoolean(CHECK_TOKEN_2, mCheck2.isChecked());
-        savedInstanceState.putShort(SWITCHER_TOKEN, getSwitcherStatus());
-        savedInstanceState.putBundle(CACHE_TOKEN, mPresenter.getCacheParcelable());
-        super.onSaveInstanceState(savedInstanceState);
-    }
 
     /**
      * Returns

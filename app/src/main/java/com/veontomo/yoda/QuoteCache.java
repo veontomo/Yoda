@@ -22,7 +22,7 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     private final LinkedHashMap<Quote, String> mItems;
 
     /**
-     * current mSize of the cache
+     * current size of the cache
      */
     private int mSize;
 
