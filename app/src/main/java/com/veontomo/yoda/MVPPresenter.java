@@ -234,4 +234,13 @@ public class MVPPresenter {
     public void setCurrentQuote(final Quote q) {
         this.mCurrentQuote = q;
     }
+
+    /**
+     * {@link #mCurrentQuote} getter
+     *
+     * @return
+     */
+    public Quote getCurrentQuote() {
+        return mCurrentQuote;
+    }
 }

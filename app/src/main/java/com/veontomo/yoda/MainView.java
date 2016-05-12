@@ -145,10 +145,10 @@ public class MainView extends AppCompatActivity implements MVPView {
     private void restoreState(@NonNull Bundle savedInstanceState) {
         Log.i(TAG, "restoreState: view");
         final Quote q = savedInstanceState.getParcelable(QUOTE_TOKEN);
-        mPresenter.setCurrentQuote(q);
         setQuote(q);
         loadTranslation(savedInstanceState.getString(TRANSLATION_TOKEN));
         setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
+        mPresenter.setCurrentQuote(q);
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, savedInstanceState.getBoolean(CHECK_TOKEN_1));
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, savedInstanceState.getBoolean(CHECK_TOKEN_2));
         mPresenter.loadCacheAsBundle(savedInstanceState.getBundle(CACHE_TOKEN));
@@ -159,17 +159,12 @@ public class MainView extends AppCompatActivity implements MVPView {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         Log.i(TAG, "onSaveInstanceState: ");
-
-        final Quote q = new Quote();
-        q.quote = mQuoteText.getText().toString();
-        q.author = mQuoteAuthor.getText().toString();
-
-        savedInstanceState.putParcelable(QUOTE_TOKEN, q);
         savedInstanceState.putCharSequence(TRANSLATION_TOKEN, mTranslation.getText());
         savedInstanceState.putBoolean(CHECK_TOKEN_1, mCheck1.isChecked());
         savedInstanceState.putBoolean(CHECK_TOKEN_2, mCheck2.isChecked());
         savedInstanceState.putShort(SWITCHER_TOKEN, getSwitcherStatus());
         savedInstanceState.putBundle(CACHE_TOKEN, mPresenter.getCacheAsBundle());
+        savedInstanceState.putParcelable(QUOTE_TOKEN, mPresenter.getCurrentQuote());
         super.onSaveInstanceState(savedInstanceState);
     }
 
