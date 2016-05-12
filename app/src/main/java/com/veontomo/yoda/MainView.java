@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -152,7 +153,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         Log.i(TAG, "restoreState: view");
         final Quote q = savedInstanceState.getParcelable(QUOTE_TOKEN);
         setQuote(q);
-        showTranslation(savedInstanceState.getString(TRANSLATION_TOKEN));
+        onTranslationReady(savedInstanceState.getString(TRANSLATION_TOKEN));
         setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
         mPresenter.setCurrentQuote(q);
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, savedInstanceState.getBoolean(CHECK_TOKEN_1));
@@ -210,56 +211,84 @@ public class MainView extends AppCompatActivity implements MVPView {
         mCheck2 = (CheckBox) findViewById(R.id.check_2);
         mPresenter = MVPPresenter.create(this);
 
-        final Drawable translationSuccess, translationFailure;
+        mSpanSuccess = createImageSpan(R.drawable.yoda_square);
+        mSpanFailure = createImageSpan(R.drawable.panda_square);
+    }
 
+    /**
+     * Creates an image span from a drawable with the given id.
+     *
+     * @param id an id of a drawable
+     * @return ImageSpan or null
+     */
+    @Nullable
+    private ImageSpan createImageSpan(int id) {
+        final Drawable drawable;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            translationSuccess = getResources().getDrawable(R.drawable.yoda_square, null);
-            translationFailure = getResources().getDrawable(R.drawable.panda_square, null);
+            drawable = getResources().getDrawable(id, null);
         } else {
-            translationSuccess = getResources().getDrawable(R.drawable.yoda_square);
-            translationFailure = getResources().getDrawable(R.drawable.panda_square);
+            drawable = getResources().getDrawable(id);
         }
-        if (translationSuccess != null) {
-            translationSuccess.setBounds(0, 0, translationSuccess.getIntrinsicWidth(), translationSuccess.getIntrinsicHeight());
-            mSpanSuccess = new ImageSpan(translationSuccess, ImageSpan.ALIGN_BASELINE);
+        if (drawable != null) {
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            return new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
         }
-        if (translationFailure != null) {
-            translationFailure.setBounds(0, 0, translationFailure.getIntrinsicWidth(), translationFailure.getIntrinsicHeight());
-            mSpanFailure = new ImageSpan(translationFailure, ImageSpan.ALIGN_BASELINE);
-        }
+        return null;
 
     }
 
+    /**
+     * Prepends the success image to the given text and then displays it in the translation field.
+     * After that, enables the button.
+     *
+     * @param s
+     */
     @Override
-    public void showTranslation(String text) {
-        if (mTranslation == null) {
-            Log.i(Config.appName, "Can not load since the translation text view is null.");
-            return;
-        }
-        final SpannableString ss = new SpannableString("  " + text);
-        if (mSpanSuccess != null) {
-            ss.setSpan(mSpanSuccess, 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            mTranslation.setText(ss);
-        } else {
-            mTranslation.setText(text);
-        }
-
+    public void onTranslationReady(final String s) {
+        showTranslation(s, mSpanFailure);
+        disableButton(false);
     }
 
 
+    /**
+     * Prepends the failure image to the given text and then displays it in the translation field.
+     * After that, enables the button.
+     *
+     * @param s
+     */
     @Override
     public void onTranslationFailure(final String s) {
+        showTranslation(s, mSpanFailure);
+        disableButton(false);
+    }
+
+    /**
+     * Prepends the failure image to the Yoda default text and then displays it in the translation field.
+     * After that, enables the button.
+     *
+     * @param quote
+     * @param translation
+     */
+    @Override
+    public void showTranslationProblem(final Quote quote, final String translation) {
+        showTranslation(getResources().getString(R.string.yoda_default_string), mSpanFailure);
+        disableButton(false);
+    }
+
+    private void showTranslation(final String txt, final ImageSpan image) {
         if (mTranslation == null) {
             Log.i(Config.appName, "Can not load since the translation text view is null.");
             return;
         }
-        final SpannableString ss = new SpannableString("  " + s);
+        final SpannableString ss = new SpannableString("  " + txt);
         if (mSpanSuccess != null) {
-            ss.setSpan(mSpanFailure, 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            ss.setSpan(image, 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             mTranslation.setText(ss);
         } else {
-            mTranslation.setText(s);
+            mTranslation.setText(txt);
         }
+
+
     }
 
     @Override
@@ -290,23 +319,6 @@ public class MainView extends AppCompatActivity implements MVPView {
     @Override
     public void showQuoteProblem(final Quote quote) {
         Log.i(TAG, "showQuoteProblem: some problem with " + quote.toString());
-    }
-
-    @Override
-    public void showTranslationProblem(Quote quote, String translation) {
-        Log.i(TAG, "showTranslationProblem: a problem with translation of the quote " + quote.toString() + ", received: " + translation);
-        if (mTranslation == null) {
-            Log.i(Config.appName, "Can not load since the translation text view is null.");
-            return;
-        }
-        final String txt = getResources().getString(R.string.yoda_default_string);
-        final SpannableString ss = new SpannableString(txt);
-        if (mSpanSuccess != null) {
-            ss.setSpan(mSpanFailure, 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            mTranslation.setText(ss);
-        } else {
-            mTranslation.setText(txt);
-        }
     }
 
 

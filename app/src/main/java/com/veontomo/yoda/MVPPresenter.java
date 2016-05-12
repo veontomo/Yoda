@@ -67,16 +67,16 @@ public class MVPPresenter {
      * @param out translation of the above string
      */
     public void showTranslation(final String in, final String out) {
-        mView.showTranslation(out);
+        mView.onTranslationReady(out);
         mView.disableButton(false);
         if (mCurrentQuote == null) {
-            Log.i(TAG, "showTranslation: current quote is not set");
+            Log.i(TAG, "onTranslationReady: current quote is not set");
             return;
         }
         if (mCurrentQuote.quote != null && mCurrentQuote.quote.equals(in)) {
             mCache.put(mCurrentQuote, out);
         } else {
-            Log.i(TAG, "showTranslation: stored quote content \"" + mCurrentQuote.quote + "\" does not coincides with received string \"" + in + "\".");
+            Log.i(TAG, "onTranslationReady: stored quote content \"" + mCurrentQuote.quote + "\" does not coincides with received string \"" + in + "\".");
         }
     }
 
@@ -192,7 +192,7 @@ public class MVPPresenter {
         if (this.mCurrentQuote != null && this.mCurrentQuote.quote != null && this.mCurrentQuote.quote.equals(str)) {
             mView.showTranslationProblem(this.mCurrentQuote, translation);
         } else {
-            Log.i(TAG, "showTranslation: stored quote content does not coincides with received string " + str);
+            Log.i(TAG, "onTranslationReady: stored quote content does not coincides with received string " + str);
         }
     }
 
