@@ -1,9 +1,13 @@
 package com.veontomo.yoda;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -93,6 +97,8 @@ public class MainView extends AppCompatActivity implements MVPView {
     private CheckBox mCheck1;
     private CheckBox mCheck2;
     private Bundle mState = null;
+    private ImageSpan mSpanSuccess;
+    private ImageSpan mSpanFailure;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +152,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         Log.i(TAG, "restoreState: view");
         final Quote q = savedInstanceState.getParcelable(QUOTE_TOKEN);
         setQuote(q);
-        loadTranslation(savedInstanceState.getString(TRANSLATION_TOKEN));
+        showTranslation(savedInstanceState.getString(TRANSLATION_TOKEN));
         setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
         mPresenter.setCurrentQuote(q);
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, savedInstanceState.getBoolean(CHECK_TOKEN_1));
@@ -203,23 +209,57 @@ public class MainView extends AppCompatActivity implements MVPView {
         mCheck1 = (CheckBox) findViewById(R.id.check_1);
         mCheck2 = (CheckBox) findViewById(R.id.check_2);
         mPresenter = MVPPresenter.create(this);
+
+        final Drawable translationSuccess, translationFailure;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            translationSuccess = getResources().getDrawable(R.drawable.yoda_square, null);
+            translationFailure = getResources().getDrawable(R.drawable.panda_square, null);
+        } else {
+            translationSuccess = getResources().getDrawable(R.drawable.yoda_square);
+            translationFailure = getResources().getDrawable(R.drawable.panda_square);
+        }
+        if (translationSuccess != null) {
+            translationSuccess.setBounds(0, 0, translationSuccess.getIntrinsicWidth(), translationSuccess.getIntrinsicHeight());
+            mSpanSuccess = new ImageSpan(translationSuccess, ImageSpan.ALIGN_BASELINE);
+        }
+        if (translationFailure != null) {
+            translationFailure.setBounds(0, 0, translationFailure.getIntrinsicWidth(), translationFailure.getIntrinsicHeight());
+            mSpanFailure = new ImageSpan(translationFailure, ImageSpan.ALIGN_BASELINE);
+        }
+
     }
 
     @Override
-    public void loadTranslation(String text) {
-        if (mTranslation != null) {
-            mTranslation.setText(text);
-            mTranslation.setCompoundDrawablesWithIntrinsicBounds(R.drawable.yoda_square, 0, 0, 0);
-        } else {
+    public void showTranslation(String text) {
+        if (mTranslation == null) {
             Log.i(Config.appName, "Can not load since the translation text view is null.");
+            return;
         }
+        final SpannableString ss = new SpannableString("  " + text);
+        if (mSpanSuccess != null) {
+            ss.setSpan(mSpanSuccess, 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            mTranslation.setText(ss);
+        } else {
+            mTranslation.setText(text);
+        }
+
     }
 
 
     @Override
     public void onTranslationFailure(final String s) {
-        mTranslation.setText(getString(R.string.yoda_default_string));
-        Toast.makeText(this, s, Toast.LENGTH_LONG).show();
+        if (mTranslation == null) {
+            Log.i(Config.appName, "Can not load since the translation text view is null.");
+            return;
+        }
+        final SpannableString ss = new SpannableString("  " + s);
+        if (mSpanSuccess != null) {
+            ss.setSpan(mSpanFailure, 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            mTranslation.setText(ss);
+        } else {
+            mTranslation.setText(s);
+        }
     }
 
     @Override
@@ -255,6 +295,18 @@ public class MainView extends AppCompatActivity implements MVPView {
     @Override
     public void showTranslationProblem(Quote quote, String translation) {
         Log.i(TAG, "showTranslationProblem: a problem with translation of the quote " + quote.toString() + ", received: " + translation);
+        if (mTranslation == null) {
+            Log.i(Config.appName, "Can not load since the translation text view is null.");
+            return;
+        }
+        final String txt = getResources().getString(R.string.yoda_default_string);
+        final SpannableString ss = new SpannableString(txt);
+        if (mSpanSuccess != null) {
+            ss.setSpan(mSpanFailure, 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            mTranslation.setText(ss);
+        } else {
+            mTranslation.setText(txt);
+        }
     }
 
 

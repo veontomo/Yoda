@@ -67,7 +67,7 @@ public class MVPPresenter {
      * @param out translation of the above string
      */
     public void showTranslation(final String in, final String out) {
-        mView.loadTranslation(out);
+        mView.showTranslation(out);
         mView.disableButton(false);
         if (mCurrentQuote == null) {
             Log.i(TAG, "showTranslation: current quote is not set");
