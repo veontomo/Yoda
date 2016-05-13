@@ -275,6 +275,12 @@ public class MainView extends AppCompatActivity implements MVPView {
         disableButton(false);
     }
 
+    /**
+     * Prepends a given image span to a given string and displays the obtained object in the
+     * translation field.
+     * @param txt
+     * @param image
+     */
     private void showTranslation(final String txt, final ImageSpan image) {
         if (mTranslation == null) {
             Log.i(Config.appName, "Can not load since the translation text view is null.");
@@ -287,8 +293,6 @@ public class MainView extends AppCompatActivity implements MVPView {
         } else {
             mTranslation.setText(txt);
         }
-
-
     }
 
     @Override
