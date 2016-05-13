@@ -49,13 +49,13 @@ public class MVPRetrieveModel {
                 if (response.isSuccessful()) {
                     mPresenter.onQuoteReceived(response.body());
                 } else {
-                    mPresenter.showQuoteProblem(response.body());
+                    mPresenter.onQuoteProblem(response.body());
                 }
             }
 
             @Override
             public void onFailure(Call<Quote> call, Throwable t) {
-                mPresenter.showQuoteRetrievalFailure(t.getMessage());
+                mPresenter.onQuoteFailure(t.getMessage());
             }
         };
 

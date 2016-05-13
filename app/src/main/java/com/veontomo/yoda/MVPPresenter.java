@@ -66,7 +66,7 @@ public class MVPPresenter {
      * @param in  string to be tranlated
      * @param out translation of the above string
      */
-    public void showTranslation(final String in, final String out) {
+    public void onTranslationReceived(final String in, final String out) {
         mView.onTranslationReady(out);
         mView.disableButton(false);
         if (mCurrentQuote == null) {
@@ -92,6 +92,20 @@ public class MVPPresenter {
     }
 
     /**
+     * Displays a message that the response for the translation has been received, but it has not been successful.
+     *
+     * @param str         a text to translate
+     * @param translation
+     */
+    public void onTranslationProblem(final String str, final String translation) {
+        if (this.mCurrentQuote != null && this.mCurrentQuote.quote != null && this.mCurrentQuote.quote.equals(str)) {
+            mView.showTranslationProblem(this.mCurrentQuote, translation);
+        } else {
+            Log.i(TAG, "onTranslationReady: stored quote content does not coincides with received string " + str);
+        }
+    }
+
+    /**
      * Passes the received quote to the view and then translate it.
      * <p/>
      * Before sending the quote to the translation service, control first if the quote translation
@@ -101,10 +115,36 @@ public class MVPPresenter {
         mView.setQuote(quote);
         if (mCache.contains(quote)) {
             final String translation = mCache.get(quote);
-            showTranslation(quote.quote, translation);
+            onTranslationReceived(quote.quote, translation);
         } else {
             translate(quote);
         }
+    }
+
+    /**
+     * Picks up a random item from the cache and passes it to the translation service.
+     * <p/>
+     * In case the case is empty, passes the given string to the {@link MVPView#retrieveResponseFailure(String)} method.
+     */
+    public void onQuoteFailure(final String s) {
+        if (mCache.getSize() > 0) {
+            final Quote q = mCache.getRandom();
+            onQuoteReceived(q);
+        } else {
+            mView.retrieveResponseFailure(s);
+            mView.disableButton(false);
+        }
+    }
+
+    /**
+     * Displays a message that a quote has been retrieved, but the response from the corresponding service is not successful.
+     *
+     * @param quote
+     */
+    public void onQuoteProblem(final Quote quote) {
+        Log.i(TAG, "onQuoteProblem: ");
+        mView.onQuoteProblem(quote);
+        mView.disableButton(false);
     }
 
     /**
@@ -132,18 +172,6 @@ public class MVPPresenter {
         mRetrieveModel.retrieveQuote();
     }
 
-    /**
-     * It is called when the response of the retrieval of a phrase fails.
-     */
-    public void showQuoteRetrievalFailure(final String s) {
-        if (mCache.getSize() > 0) {
-            final Quote q = mCache.getRandom();
-            onQuoteReceived(q);
-        } else {
-            mView.retrieveResponseFailure(s);
-        }
-
-    }
 
     /**
      *
@@ -168,31 +196,6 @@ public class MVPPresenter {
                 break;
             default:
                 Log.i(TAG, "toggleCategoryStatus: unknown category \"" + category + "\" is passed");
-        }
-    }
-
-    /**
-     * Displays a message that a quote has been retrieved, but the response from the corresponding service is not successful.
-     *
-     * @param quote
-     */
-    public void showQuoteProblem(final Quote quote) {
-        Log.i(TAG, "showQuoteProblem: ");
-        mView.showQuoteProblem(quote);
-
-    }
-
-    /**
-     * Displays a message that the response for the translation has been received, but it has not been successful.
-     *
-     * @param str         a text to translate
-     * @param translation
-     */
-    public void showTranslationProblem(final String str, final String translation) {
-        if (this.mCurrentQuote != null && this.mCurrentQuote.quote != null && this.mCurrentQuote.quote.equals(str)) {
-            mView.showTranslationProblem(this.mCurrentQuote, translation);
-        } else {
-            Log.i(TAG, "onTranslationReady: stored quote content does not coincides with received string " + str);
         }
     }
 

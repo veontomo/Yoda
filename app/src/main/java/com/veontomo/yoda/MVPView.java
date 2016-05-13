@@ -21,7 +21,7 @@ public interface MVPView {
 
     void retrieveResponseFailure(final String s);
 
-    void showQuoteProblem(final Quote body);
+    void onQuoteProblem(final Quote body);
 
     void showTranslationProblem(Quote quote, String translation);
 }

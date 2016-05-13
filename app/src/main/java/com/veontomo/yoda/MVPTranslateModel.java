@@ -1,7 +1,5 @@
 package com.veontomo.yoda;
 
-import android.util.Log;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,9 +29,9 @@ public class MVPTranslateModel {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
-                    mPresenter.showTranslation(mPhrase, response.body());
+                    mPresenter.onTranslationReceived(mPhrase, response.body());
                 } else {
-                    mPresenter.showTranslationProblem(mPhrase, response.body());
+                    mPresenter.onTranslationProblem(mPhrase, response.body());
                 }
             }
 

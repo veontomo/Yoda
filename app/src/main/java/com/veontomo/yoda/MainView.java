@@ -245,7 +245,7 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     @Override
     public void onTranslationReady(final String s) {
-        showTranslation(s, mSpanFailure);
+        showTranslation(s, mSpanSuccess);
         disableButton(false);
     }
 
@@ -321,8 +321,8 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
     @Override
-    public void showQuoteProblem(final Quote quote) {
-        Log.i(TAG, "showQuoteProblem: some problem with " + quote.toString());
+    public void onQuoteProblem(final Quote quote) {
+        Log.i(TAG, "onQuoteProblem: some problem with " + quote.toString());
     }
 
 
