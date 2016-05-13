@@ -153,13 +153,13 @@ public class MainView extends AppCompatActivity implements MVPView {
         Log.i(TAG, "restoreState: view");
         final Quote q = savedInstanceState.getParcelable(QUOTE_TOKEN);
         setQuote(q);
+        Log.i(TAG, "restoreState: translation: " + savedInstanceState.getCharSequence(TRANSLATION_TOKEN));
         onTranslationReady(savedInstanceState.getString(TRANSLATION_TOKEN));
         setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
         mPresenter.setCurrentQuote(q);
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, savedInstanceState.getBoolean(CHECK_TOKEN_1));
         mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, savedInstanceState.getBoolean(CHECK_TOKEN_2));
         mPresenter.loadCacheAsBundle(savedInstanceState.getBundle(CACHE_TOKEN));
-        onTranslationReady((String) savedInstanceState.getCharSequence(TRANSLATION_TOKEN));
         mCheck1.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_1));
         mCheck2.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_2));
     }
@@ -167,7 +167,8 @@ public class MainView extends AppCompatActivity implements MVPView {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         Log.i(TAG, "onSaveInstanceState: ");
-        savedInstanceState.putCharSequence(TRANSLATION_TOKEN, mTranslation.getText());
+        Log.i(TAG, "onSaveInstanceState: mTranslation text " + mTranslation.getText());
+        savedInstanceState.putString(TRANSLATION_TOKEN, mTranslation.getText().toString());
         savedInstanceState.putBoolean(CHECK_TOKEN_1, mCheck1.isChecked());
         savedInstanceState.putBoolean(CHECK_TOKEN_2, mCheck2.isChecked());
         savedInstanceState.putShort(SWITCHER_TOKEN, getSwitcherStatus());
@@ -177,7 +178,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
     /**
-     * A callback associated with the button elaborates the user input.
+     * A callback associated with the button that elaborates the user input.
      * <p/>
      * If the edit text field corresponding to the user input is not empty,
      * then a translation of that string is initiated.
@@ -279,6 +280,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     /**
      * Prepends a given image span to a given string and displays the obtained object in the
      * translation field.
+     *
      * @param txt
      * @param image
      */
