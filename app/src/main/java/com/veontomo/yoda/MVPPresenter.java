@@ -8,8 +8,8 @@ import android.util.Log;
  */
 public class MVPPresenter {
 
-    private final static String CACHE_TOKEN = "cache";
     private static final String TAG = Config.appName;
+    private final static String CACHE_TOKEN = "cache";
 
     /**
      * A reference to the view
@@ -26,6 +26,13 @@ public class MVPPresenter {
     private final QuoteCache mCache;
 
     private Quote mCurrentQuote;
+
+
+    private short mTranslationStatus = TRANSLATION_OK;
+
+    public static final short TRANSLATION_OK = 1;
+    public static final short TRANSLATION_PROBLEM = 2;
+    public static final short TRANSLATION_FAILURE = 3;
 
     /**
      * A private constructor.
@@ -57,16 +64,34 @@ public class MVPPresenter {
     }
 
     /**
+     * {@link #mTranslationStatus} getter
+     *
+     * @return translation status
+     */
+    public short getTranslationStatus() {
+        return mTranslationStatus;
+    }
+
+    /**
+     * {@link #mTranslationStatus} setter
+     *
+     * @param status
+     */
+    public void setTranslationStatus(short status) {
+        mTranslationStatus = status;
+    }
+
+    /**
      * Show the translation and in case of success, stores it in the cache.
      *
      * @param in  string to be translated
      * @param out translation of the above string
      */
     public void onTranslationReceived(final String in, final String out) {
+        mTranslationStatus = TRANSLATION_OK;
         mView.onTranslationReady(out);
         mView.disableButton(false);
         if (mCurrentQuote == null) {
-            Log.i(TAG, "onTranslationReady: current quote is not set");
             return;
         }
         if (mCurrentQuote.quote != null && mCurrentQuote.quote.equals(in)) {
@@ -77,12 +102,14 @@ public class MVPPresenter {
     }
 
     /**
-     * This method is called if the translation of given text is not successful.
+     * Sets the translation status to be {@link #TRANSLATION_FAILURE},  calls the view
+     * methods to display the message and enables the button.
      *
      * @param txt text to be translated
      * @param msg a message describing the failure
      */
     public void onTranslationFailure(final String txt, final String msg) {
+        mTranslationStatus = TRANSLATION_FAILURE;
         mView.onTranslationFailure(msg);
         mView.disableButton(false);
     }
@@ -94,6 +121,7 @@ public class MVPPresenter {
      * @param translation
      */
     public void onTranslationProblem(final String str, final String translation) {
+        mTranslationStatus = TRANSLATION_PROBLEM;
         if (this.mCurrentQuote != null && this.mCurrentQuote.quote != null && this.mCurrentQuote.quote.equals(str)) {
             mView.showTranslationProblem(this.mCurrentQuote, translation);
         } else {
@@ -138,7 +166,6 @@ public class MVPPresenter {
      * @param quote
      */
     public void onQuoteProblem(final Quote quote) {
-        Log.i(TAG, "onQuoteProblem: ");
         mView.onQuoteProblem(quote);
         mView.disableButton(false);
     }
@@ -196,13 +223,9 @@ public class MVPPresenter {
      * @param b a bundle to restore the cache from
      */
     public void loadCacheAsBundle(Bundle b) {
-        Log.i(TAG, "loadCacheAsBundle: loading cache parcelable.");
-        Log.i(TAG, "loadCacheAsBundle: current cache size " + mCache.getSize());
         if (b != null) {
-            Log.i(TAG, "loadCacheAsBundle: loading...");
             mCache.loadBundle(b.getParcelable(CACHE_TOKEN));
         }
-        Log.i(TAG, "loadCacheAsBundle: cache size " + mCache.getSize());
     }
 
     /**
@@ -211,7 +234,6 @@ public class MVPPresenter {
      * @return a bundle into with the cache inside
      */
     public Bundle getCacheAsBundle() {
-        Log.i(TAG, "getCacheAsBundle: the presenter starts returning a parcelable");
         Bundle b = new Bundle();
         b.putParcelable(CACHE_TOKEN, mCache);
         return b;

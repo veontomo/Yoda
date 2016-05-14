@@ -65,6 +65,12 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     private static final String CACHE_TOKEN = "cache";
 
+    /**
+     * a string key under which the translation status is to be saved
+     * when saving the activity state for further recreating
+     */
+    private static final String TRANSLATION_STATUS_TOKEN = "translation_status";
+
     private TextView mTranslation;
     private TextView mQuoteText;
     private TextView mQuoteAuthor;
@@ -127,25 +133,23 @@ public class MainView extends AppCompatActivity implements MVPView {
      * @param savedInstanceState a bundle containing the view's state
      */
     private void restoreState(@NonNull Bundle savedInstanceState) {
-        Log.i(TAG, "restoreState: view");
         final Quote q = savedInstanceState.getParcelable(QUOTE_TOKEN);
-        setQuote(q);
-        Log.i(TAG, "restoreState: translation: " + savedInstanceState.getCharSequence(TRANSLATION_TOKEN));
-        onTranslationReady(savedInstanceState.getString(TRANSLATION_TOKEN));
-        setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
         mPresenter.setCurrentQuote(q);
         mPresenter.loadCacheAsBundle(savedInstanceState.getBundle(CACHE_TOKEN));
         mPresenter.setCategoryStatuses(savedInstanceState.getBooleanArray(CHECK_TOKEN));
+        mPresenter.setTranslationStatus(savedInstanceState.getShort(TRANSLATION_STATUS_TOKEN));
+        onTranslationReady(savedInstanceState.getString(TRANSLATION_TOKEN));
+        setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
+        setQuote(q);
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        Log.i(TAG, "onSaveInstanceState: ");
-        Log.i(TAG, "onSaveInstanceState: mTranslation text " + mTranslation.getText());
         savedInstanceState.putString(TRANSLATION_TOKEN, mTranslation.getText().toString().trim());
         savedInstanceState.putBooleanArray(CHECK_TOKEN, new boolean[]{mCheck1.isChecked(), mCheck2.isChecked()});
         savedInstanceState.putShort(SWITCHER_TOKEN, getSwitcherStatus());
         savedInstanceState.putBundle(CACHE_TOKEN, mPresenter.getCacheAsBundle());
+        savedInstanceState.putShort(TRANSLATION_STATUS_TOKEN, mPresenter.getTranslationStatus());
         savedInstanceState.putParcelable(QUOTE_TOKEN, mPresenter.getCurrentQuote());
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -219,7 +223,7 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     @Override
     public void onTranslationReady(final String s) {
-        showTranslation(s, mSpanSuccess);
+        showTranslation(s);
         disableButton(false);
     }
 
@@ -232,7 +236,7 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     @Override
     public void onTranslationFailure(final String s) {
-        showTranslation(s, mSpanFailure);
+        showTranslation(s);
         disableButton(false);
     }
 
@@ -240,12 +244,12 @@ public class MainView extends AppCompatActivity implements MVPView {
      * Prepends the failure image to the Yoda default text and then displays it in the translation field.
      * After that, enables the button.
      *
-     * @param quote a quote translation of which has caused the problem
+     * @param quote   a quote translation of which has caused the problem
      * @param message string received as a translation of the quote
      */
     @Override
     public void showTranslationProblem(final Quote quote, final String message) {
-        showTranslation(getResources().getString(R.string.yoda_default_string), mSpanFailure);
+        showTranslation(getResources().getString(R.string.yoda_default_string));
         disableButton(false);
     }
 
@@ -268,19 +272,29 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
     /**
-     * Prepends a given image span to a given string and displays the obtained object in the
+     * Prepends an image span to a given string and displays the obtained object in the
      * translation field.
+     * <p/>
+     * What image span should be used is decided based on the value of {@link MVPPresenter#mTranslationStatus}.
      *
      * @param txt a string that should be displayed in the translation field
-     * @param image an image to be appended to the text
      */
-    private void showTranslation(final String txt, final ImageSpan image) {
+    private void showTranslation(final String txt) {
         if (mTranslation == null) {
             Log.i(Config.appName, "Can not load since the translation text view is null.");
             return;
         }
         final SpannableString ss = new SpannableString("  " + txt);
-        if (mSpanSuccess != null) {
+        final short status = mPresenter.getTranslationStatus();
+        final ImageSpan image;
+        if (status == MVPPresenter.TRANSLATION_OK) {
+            image = mSpanSuccess;
+        } else if (status == MVPPresenter.TRANSLATION_FAILURE || status == MVPPresenter.TRANSLATION_PROBLEM) {
+            image = mSpanFailure;
+        } else {
+            image = null;
+        }
+        if (image != null) {
             ss.setSpan(image, 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             mTranslation.setText(ss);
         } else {
