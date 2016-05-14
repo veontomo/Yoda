@@ -9,8 +9,6 @@ import android.util.Log;
 public class MVPPresenter {
 
     private final static String CACHE_TOKEN = "cache";
-    public static final short CATEGORY_1 = 1;
-    public static final short CATEGORY_2 = 2;
     private static final String TAG = Config.appName;
 
     /**
@@ -51,19 +49,17 @@ public class MVPPresenter {
     /**
      * Creates a presenter with properly set view and model objects.
      *
-     * @param view
-     * @return
+     * @param view a view related to the presenter
+     * @return a presenter
      */
     public static MVPPresenter create(final MVPView view) {
-        MVPPresenter presenter = new MVPPresenter(view, new MVPRetrieveModel(), new MVPTranslateModel());
-        return presenter;
-
+        return new MVPPresenter(view, new MVPRetrieveModel(), new MVPTranslateModel());
     }
 
     /**
      * Show the translation and in case of success, stores it in the cache.
      *
-     * @param in  string to be tranlated
+     * @param in  string to be translated
      * @param out translation of the above string
      */
     public void onTranslationReceived(final String in, final String out) {
@@ -152,7 +148,7 @@ public class MVPPresenter {
      *
      * @param quote
      */
-    public void translate(final Quote quote) {
+    private void translate(final Quote quote) {
         this.mCurrentQuote = quote;
         mTranslateModel.translate(quote.quote);
     }
@@ -182,21 +178,13 @@ public class MVPPresenter {
     }
 
     /**
-     * Passes the request to toggle the status of given category to {@link MVPRetrieveModel}.
+     * Passes the statuses of the category checkboxes to the retrieval service.
      *
-     * @param category
+     * @param categoryStatuses
      */
-    public void setCategoryStatus(short category, boolean status) {
-        switch (category) {
-            case CATEGORY_1:
-                mRetrieveModel.setCategoryStatus(0, status);
-                break;
-            case CATEGORY_2:
-                mRetrieveModel.setCategoryStatus(1, status);
-                break;
-            default:
-                Log.i(TAG, "toggleCategoryStatus: unknown category \"" + category + "\" is passed");
-        }
+    public void setCategoryStatuses(final boolean[] categoryStatuses) {
+        mRetrieveModel.setCategoryStatuses(categoryStatuses);
+        mView.setCategories(categoryStatuses);
     }
 
 
@@ -246,4 +234,5 @@ public class MVPPresenter {
     public Quote getCurrentQuote() {
         return mCurrentQuote;
     }
+
 }

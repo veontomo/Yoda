@@ -24,86 +24,39 @@ public class MVPRetrieveModelTest {
     }
 
     @Test
-    public void testSetCategoryStatusToTrueIfIndexIsZero() {
-        model.setCategoryStatus(0, true);
+    public void testSetCategoryStatusesToTrueTrue() {
+        model.setCategoryStatuses(new boolean[]{true, true});
         assertTrue(model.getCategoryStatus(0));
-    }
-
-    @Test
-    public void testSetCategoryStatusToFalseIfIndexIsZero() {
-        model.setCategoryStatus(0, false);
-        assertFalse(model.getCategoryStatus(0));
-    }
-
-    @Test
-    public void testSetCategoryStatusToTrueIfIndexIsOne() {
-        model.setCategoryStatus(1, true);
         assertTrue(model.getCategoryStatus(1));
     }
 
     @Test
-    public void testSetCategoryStatusToFalseIfIndexIsOne() {
-        model.setCategoryStatus(1, false);
-        assertFalse(model.getCategoryStatus(1));
-    }
-
-    @Test
-    public void testToggleCategoryStatusFromTrueToFalseIfIndexIs0() {
-        model.setCategoryStatus(0, true);
-        model.toggleCategoryStatus(0);
+    public void testSetCategoryStatusToFalseTrue() {
+        model.setCategoryStatuses(new boolean[]{false, true});
         assertFalse(model.getCategoryStatus(0));
-    }
-
-    @Test
-    public void testToggleCategoryStatusFromFalseToTrueIfIndexIs0() {
-        model.setCategoryStatus(0, false);
-        model.toggleCategoryStatus(0);
-        assertTrue(model.getCategoryStatus(0));
-    }
-
-    @Test
-    public void testToggleCategoryStatusFromTrueToFalseIfIndexIs1() {
-        model.setCategoryStatus(1, true);
-        model.toggleCategoryStatus(1);
-        assertFalse(model.getCategoryStatus(1));
-    }
-
-    @Test
-    public void testToggleCategoryStatusFromFalseToTrueIfIndexIs1() {
-        model.setCategoryStatus(1, false);
-        model.toggleCategoryStatus(1);
         assertTrue(model.getCategoryStatus(1));
     }
 
     @Test
-    public void testGetCategoryReturnsMovieIfOnlyItsStatusIsTrue() {
-        model.setCategoryStatus(0, true);
-        model.setCategoryStatus(1, false);
-        assertEquals("movie", model.getCategoryToRetrieve());
+    public void testSetCategoryStatusToTrueFalse() {
+        model.setCategoryStatuses(new boolean[]{true, false});
+        assertTrue(model.getCategoryStatus(0));
+        assertFalse(model.getCategoryStatus(1));
     }
 
     @Test
-    public void testGetCategoryReturnsFamousIfOnlyItsStatusIsTrue() {
-        model.setCategoryStatus(1, true);
-        model.setCategoryStatus(0, false);
-        assertEquals("famous", model.getCategoryToRetrieve());
+    public void testSetCategoryStatusToFalseFalse() {
+        model.setCategoryStatuses(new boolean[]{false, false});
+        assertFalse(model.getCategoryStatus(0));
+        assertFalse(model.getCategoryStatus(1));
     }
 
 
-    @Test
-    public void testGetCategoryReturnsRandomIfBothStatusesAreTrue() {
-        MVPRetrieveModel spy = Mockito.spy(model);
-        spy.setCategoryStatus(0, true);
-        spy.setCategoryStatus(1, true);
-        spy.getCategoryToRetrieve();
-        verify(spy, times(1)).getRandomCategory();
-    }
 
     @Test
     public void testGetCategoryReturnsRandomIfBothStatusesAreFalse() {
         MVPRetrieveModel spy = Mockito.spy(model);
-        spy.setCategoryStatus(0, false);
-        spy.setCategoryStatus(1, false);
+        model.setCategoryStatuses(new boolean[]{false, false});
         spy.getCategoryToRetrieve();
         verify(spy, times(1)).getRandomCategory();
     }

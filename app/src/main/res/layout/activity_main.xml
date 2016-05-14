@@ -68,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:onClick="onCategory1"
+            android:onClick="onCategoryStatusChange"
             android:text="@string/category_movie"
             android:theme="@style/checkBoxStyle"/>
 
@@ -85,7 +85,7 @@
             android:id="@+id/check_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onCategory2"
+            android:onClick="onCategoryStatusChange"
             android:text="@string/category_famous"
             android:theme="@style/checkBoxStyle"/>
 

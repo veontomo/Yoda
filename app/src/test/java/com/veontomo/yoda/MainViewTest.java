@@ -154,7 +154,7 @@ public class MainViewTest {
         tv.setText("some text");
         activity.recreate();
         tv = (TextView) activity.findViewById(R.id.translation);
-        assertEquals("translation field should maintain its content", "some text", tv.getText());
+        assertEquals("translation field should maintain its content", "some text", tv.getText().toString().trim());
     }
 
     /*

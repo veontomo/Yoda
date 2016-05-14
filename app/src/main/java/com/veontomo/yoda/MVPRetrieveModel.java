@@ -70,18 +70,6 @@ public class MVPRetrieveModel {
     }
 
     /**
-     * Sets the status of a specific category.
-     *
-     * @param pos    index of the category to be set
-     * @param status value of the status
-     */
-    public void setCategoryStatus(int pos, boolean status) {
-        if (pos < mCategoryStatuses.length) {
-            mCategoryStatuses[pos] = status;
-        }
-    }
-
-    /**
      * Gets the status of a category by category's index.
      *
      * @param pos index of the category to be set
@@ -90,18 +78,6 @@ public class MVPRetrieveModel {
         return (pos < mCategoryStatuses.length) && mCategoryStatuses[pos];
     }
 
-
-    /**
-     * Changes the status of a category.
-     * If the status of of a category is marked as "true", then a phrase of this category can be retrieved.
-     *
-     * @param pos index of the category
-     */
-    public void toggleCategoryStatus(int pos) {
-        if (pos < mCategoryStatuses.length) {
-            mCategoryStatuses[pos] = !mCategoryStatuses[pos];
-        }
-    }
 
     /**
      * Returns a category of a phrase to retrieve.
@@ -130,5 +106,12 @@ public class MVPRetrieveModel {
         Random generator = new Random();
         return (generator.nextInt(2) == 0) ? CATEGORY_1 : CATEGORY_2;
 
+    }
+
+    public void setCategoryStatuses(boolean[] categoryStatuses) {
+        final int categories = mCategoryStatuses.length;
+        for (int i = 0; i < categories; i++){
+            mCategoryStatuses[i] = categoryStatuses[i];
+        }
     }
 }

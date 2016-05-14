@@ -33,22 +33,10 @@ public class MainView extends AppCompatActivity implements MVPView {
     private static final String TRANSLATION_TOKEN = "translation";
 
     /**
-     * a string key under which the content of the quote author field is to be saved
-     * when saving the activity state for further recreating
+     * a string key under which the statuses of the check boxes corresponding to categories
+     * are to be saved when saving the activity state for further recreating
      */
-    private static final String AUTHOR_TOKEN = "author";
-
-    /**
-     * a string key under which the status of the check button corresponding to "movie" is to be saved
-     * when saving the activity state for further recreating
-     */
-    private static final String CHECK_TOKEN_1 = "radio_movie";
-
-    /**
-     * a string key under which the status of the check button corresponding to "famous" is to be saved
-     * when saving the activity state for further recreating
-     */
-    private static final String CHECK_TOKEN_2 = "check_famous";
+    private static final String CHECK_TOKEN = "categories";
 
     /**
      * a string key under which the status of the mSwitcher is to be saved
@@ -70,17 +58,6 @@ public class MainView extends AppCompatActivity implements MVPView {
      * the mSwitcher status in case of some error
      */
     private static final short SWITCHER_STATUS_ERROR = -1;
-    /**
-     * a string key under which the previously requested phrases are to be saved
-     * when saving the activity state for further recreating
-     */
-    private static final String CACHE_PHRASES_TOKEN = "cache_phrases";
-
-    /**
-     * a string key under which the previously retrieved translations are to be saved
-     * when saving the activity state for further recreating
-     */
-    private static final String CACHE_TRANSLATIONS_TOKEN = "cache_translations";
 
     /**
      * a string key under which the cache is to be saved
@@ -157,20 +134,16 @@ public class MainView extends AppCompatActivity implements MVPView {
         onTranslationReady(savedInstanceState.getString(TRANSLATION_TOKEN));
         setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
         mPresenter.setCurrentQuote(q);
-        mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, savedInstanceState.getBoolean(CHECK_TOKEN_1));
-        mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, savedInstanceState.getBoolean(CHECK_TOKEN_2));
         mPresenter.loadCacheAsBundle(savedInstanceState.getBundle(CACHE_TOKEN));
-        mCheck1.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_1));
-        mCheck2.setChecked(savedInstanceState.getBoolean(CHECK_TOKEN_2));
+        mPresenter.setCategoryStatuses(savedInstanceState.getBooleanArray(CHECK_TOKEN));
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         Log.i(TAG, "onSaveInstanceState: ");
         Log.i(TAG, "onSaveInstanceState: mTranslation text " + mTranslation.getText());
-        savedInstanceState.putString(TRANSLATION_TOKEN, mTranslation.getText().toString());
-        savedInstanceState.putBoolean(CHECK_TOKEN_1, mCheck1.isChecked());
-        savedInstanceState.putBoolean(CHECK_TOKEN_2, mCheck2.isChecked());
+        savedInstanceState.putString(TRANSLATION_TOKEN, mTranslation.getText().toString().trim());
+        savedInstanceState.putBooleanArray(CHECK_TOKEN, new boolean[]{mCheck1.isChecked(), mCheck2.isChecked()});
         savedInstanceState.putShort(SWITCHER_TOKEN, getSwitcherStatus());
         savedInstanceState.putBundle(CACHE_TOKEN, mPresenter.getCacheAsBundle());
         savedInstanceState.putParcelable(QUOTE_TOKEN, mPresenter.getCurrentQuote());
@@ -184,7 +157,7 @@ public class MainView extends AppCompatActivity implements MVPView {
      * then a translation of that string is initiated.
      * Otherwise, a quote retrieval is initiated.
      *
-     * @param view
+     * @param view view a click on which triggers execution of this method
      */
     public void elaborate(View view) {
         if (mPresenter != null) {
@@ -236,14 +209,13 @@ public class MainView extends AppCompatActivity implements MVPView {
             return new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE);
         }
         return null;
-
     }
 
     /**
      * Prepends the success image to the given text and then displays it in the translation field.
      * After that, enables the button.
      *
-     * @param s
+     * @param s a string to be display in the translation field
      */
     @Override
     public void onTranslationReady(final String s) {
@@ -256,7 +228,7 @@ public class MainView extends AppCompatActivity implements MVPView {
      * Prepends the failure image to the given text and then displays it in the translation field.
      * After that, enables the button.
      *
-     * @param s
+     * @param s a string to be display in the translation field
      */
     @Override
     public void onTranslationFailure(final String s) {
@@ -268,21 +240,39 @@ public class MainView extends AppCompatActivity implements MVPView {
      * Prepends the failure image to the Yoda default text and then displays it in the translation field.
      * After that, enables the button.
      *
-     * @param quote
-     * @param translation
+     * @param quote a quote translation of which has caused the problem
+     * @param message string received as a translation of the quote
      */
     @Override
-    public void showTranslationProblem(final Quote quote, final String translation) {
+    public void showTranslationProblem(final Quote quote, final String message) {
         showTranslation(getResources().getString(R.string.yoda_default_string), mSpanFailure);
         disableButton(false);
+    }
+
+    /**
+     * Sets the statuses of the view checkboxes.
+     * <p/>
+     * The array must contain exactly two elements.
+     * Otherwise, the method does nothing.
+     *
+     * @param statuses array containing statuses of two checkboxes.
+     */
+    @Override
+    public void setCategories(final boolean[] statuses) {
+        Log.i(TAG, "setCategories: setting the statuses");
+        if (statuses != null && statuses.length == 2) {
+            Log.i(TAG, "setCategories: status array is valid");
+            mCheck1.setEnabled(statuses[0]);
+            mCheck2.setEnabled(statuses[1]);
+        }
     }
 
     /**
      * Prepends a given image span to a given string and displays the obtained object in the
      * translation field.
      *
-     * @param txt
-     * @param image
+     * @param txt a string that should be displayed in the translation field
+     * @param image an image to be appended to the text
      */
     private void showTranslation(final String txt, final ImageSpan image) {
         if (mTranslation == null) {
@@ -301,12 +291,14 @@ public class MainView extends AppCompatActivity implements MVPView {
     @Override
     public void setQuote(final Quote quote) {
         setSwitcher(SWITCHER_STATUS_1);
-        mQuoteText.setText(quote.quote);
-        mQuoteAuthor.setText(quote.author);
-        mButton.setText(getText(R.string.i_feel_lucky));
+        if (quote != null) {
+            mQuoteText.setText(quote.quote);
+            mQuoteAuthor.setText(quote.author);
+            mButton.setText(getText(R.string.i_feel_lucky));
+        }
         setCheckboxVisibility(View.VISIBLE);
-
     }
+
 
     /**
      * Disables the button that activates  phrase retrieval
@@ -342,16 +334,14 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
 
-    public void onCategory1(View view) {
-        final CheckBox b = (CheckBox) view;
-        mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_1, b != null && b.isChecked());
+    /**
+     * Passes to the presenter array of statuses of the checkboxes.
+     *
+     * @param view a click on this view triggers the execution of this method
+     */
+    public void onCategoryStatusChange(View view) {
+        mPresenter.setCategoryStatuses(new boolean[]{mCheck1.isChecked(), mCheck2.isChecked()});
     }
-
-    public void onCategory2(View view) {
-        final CheckBox b = (CheckBox) view;
-        mPresenter.setCategoryStatus(MVPPresenter.CATEGORY_2, b != null && b.isChecked());
-    }
-
 
     /**
      * Returns
@@ -361,7 +351,7 @@ public class MainView extends AppCompatActivity implements MVPView {
      * <li> {@link #SWITCHER_STATUS_ERROR}, if either mSwitcher is not defined or for any other reason</li>
      * </ul>
      *
-     * @return
+     * @return {@link #SWITCHER_STATUS_1} or {@link #SWITCHER_STATUS_2} or {@link #SWITCHER_STATUS_ERROR}
      */
     private short getSwitcherStatus() {
         if (mSwitcher == null) {
