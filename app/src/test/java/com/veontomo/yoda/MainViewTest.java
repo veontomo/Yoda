@@ -147,7 +147,6 @@ public class MainViewTest {
     }
 
 
-
     @Test
     public void translationFieldShouldDisplayTextAfterRecreation() {
         TextView tv = (TextView) activity.findViewById(R.id.translation);
@@ -155,6 +154,20 @@ public class MainViewTest {
         activity.recreate();
         tv = (TextView) activity.findViewById(R.id.translation);
         assertEquals("translation field should maintain its content", "some text", tv.getText().toString().trim());
+    }
+
+    @Test
+    public void firstCheckBoxShouldBeEnabledAfterRecreation() {
+        activity.recreate();
+        CheckBox box = (CheckBox) activity.findViewById(R.id.check_1);
+        assertTrue("the first checkbox should be enable after screen rotation", box.isEnabled());
+    }
+
+    @Test
+    public void secondCheckBoxShouldBeEnabledAfterRecreation() {
+        activity.recreate();
+        CheckBox box = (CheckBox) activity.findViewById(R.id.check_2);
+        assertTrue("the second checkbox should be enable after screen rotation", box.isEnabled());
     }
 
     /*
@@ -185,7 +198,7 @@ public class MainViewTest {
     }
 
     @Test
-    public void userInputFieldShouldRemainVisibleAfterRecreation(){
+    public void userInputFieldShouldRemainVisibleAfterRecreation() {
         TextView phrase = (TextView) activity.findViewById(R.id.phrase);
         phrase.performClick();
         activity.recreate();

@@ -266,8 +266,8 @@ public class MainView extends AppCompatActivity implements MVPView {
         Log.i(TAG, "setCategories: setting the statuses");
         if (statuses != null && statuses.length == 2) {
             Log.i(TAG, "setCategories: status array is valid");
-            mCheck1.setEnabled(statuses[0]);
-            mCheck2.setEnabled(statuses[1]);
+            mCheck1.setChecked(statuses[0]);
+            mCheck2.setChecked(statuses[1]);
         }
     }
 
@@ -349,7 +349,7 @@ public class MainView extends AppCompatActivity implements MVPView {
 
 
     /**
-     * Passes to the presenter array of statuses of the checkboxes.
+     * Passes the statuses of the checkboxes to the presenter.
      *
      * @param view a click on this view triggers the execution of this method
      */
