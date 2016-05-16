@@ -25,7 +25,7 @@ public interface MVPView {
 
     void onQuoteProblem(final Quote body);
 
-    void showTranslationProblem(Quote quote, String translation);
+    void onTranslationProblem(Quote quote, String translation);
 
     /**
      * Sets the statuses of the view checkboxes

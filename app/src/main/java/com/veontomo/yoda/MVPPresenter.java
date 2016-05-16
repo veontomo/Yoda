@@ -135,7 +135,7 @@ public class MVPPresenter {
     public void onTranslationProblem(final String str, final String translation) {
         mTranslationStatus = TRANSLATION_PROBLEM;
         if (this.mCurrentQuote != null && this.mCurrentQuote.quote != null && this.mCurrentQuote.quote.equals(str)) {
-            mView.showTranslationProblem(this.mCurrentQuote, translation);
+            mView.onTranslationProblem(this.mCurrentQuote, translation);
         } else {
             Log.i(TAG, "onTranslationReady: stored quote content does not coincides with received string " + str);
         }

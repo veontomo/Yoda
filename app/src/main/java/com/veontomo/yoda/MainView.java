@@ -232,7 +232,8 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     @Override
     public void onTranslationFailure(final String s) {
-        showTranslation(s);
+        showTranslation(getResources().getString(R.string.yoda_translate_failure_string));
+        showMessage(s);
         disableButton(false);
     }
 
@@ -244,8 +245,8 @@ public class MainView extends AppCompatActivity implements MVPView {
      * @param message string received as a translation of the quote
      */
     @Override
-    public void showTranslationProblem(final Quote quote, final String message) {
-        showTranslation(getResources().getString(R.string.yoda_default_string));
+    public void onTranslationProblem(final Quote quote, final String message) {
+        showTranslation(getResources().getString(R.string.yoda_translate_problem_string));
         disableButton(false);
     }
 
