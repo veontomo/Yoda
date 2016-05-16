@@ -30,4 +30,6 @@ public interface MVPView {
      * @param statuses
      */
     void setCategories(final boolean[] statuses);
+
+    void enableUserInput(boolean status);
 }

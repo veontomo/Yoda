@@ -27,6 +27,18 @@ public class MVPPresenter {
 
     private Quote mCurrentQuote;
 
+    private short mStatus;
+
+    /**
+     * a code corresponding to a state in which the switcher's text field is active
+     */
+    public final short SWITCHER_STATUS_1 = 1;
+
+    /**
+     * a code corresponding to a state in which the switcher's edit field is active
+     */
+    public final short SWITCHER_STATUS_2 = 2;
+
 
     private short mTranslationStatus = TRANSLATION_OK;
 
@@ -257,4 +269,30 @@ public class MVPPresenter {
         return mCurrentQuote;
     }
 
+    /**
+     * Enables/Disables the user input field in the switcher.
+     * @param status  true - to enable, false - to disable
+     *
+     */
+    public void enableUserInput(boolean status) {
+        mStatus = status ? SWITCHER_STATUS_2 : SWITCHER_STATUS_1;
+        mView.enableUserInput(status);
+    }
+
+
+    /**
+     * {@link #mStatus} getter
+     * @return
+     */
+    public short getSwitcherStatus(){
+        return mStatus;
+    }
+
+    /**
+     * Whether the user input field is active
+     * @return
+     */
+    public boolean isUserInputActive() {
+        return mStatus == SWITCHER_STATUS_2;
+    }
 }

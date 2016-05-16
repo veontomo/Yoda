@@ -166,13 +166,17 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     public void elaborate(View view) {
         if (mPresenter != null) {
-            final String userInput = mUserInput.getEditableText().toString();
-            if (userInput.isEmpty()) {
-                mPresenter.retrieveQuote();
+            if (mPresenter.isUserInputActive()) {
+                mPresenter.enableUserInput(false);
+                final String userInput = mUserInput.getEditableText().toString();
+                if (userInput.isEmpty()) {
+                    mPresenter.retrieveQuote();
+                } else {
+                    mUserInput.setText(null);
+                    mPresenter.translate(userInput);
+                }
             } else {
-                mPresenter.translate(userInput);
-                mUserInput.setText(null);
-                mSwitcher.showPrevious();
+                mPresenter.retrieveQuote();
             }
         }
     }
@@ -338,6 +342,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     public void textViewClicked(View v) {
         Log.i(TAG, "textViewClicked: start: mPhrase: " + mQuoteText.getVisibility() + ", mUserInput: " + mUserInput.getVisibility());
         mSwitcher.showNext();
+        mPresenter.enableUserInput(true);
         mButton.setText(getText(R.string.translate));
         setCheckboxVisibility(View.INVISIBLE);
         mUserInput.requestFocus();
@@ -398,12 +403,19 @@ public class MainView extends AppCompatActivity implements MVPView {
         if (mSwitcher == null) {
             return;
         }
-        Log.i(TAG, "setSwitcher: set status to "  + status);
+        Log.i(TAG, "setSwitcher: set status to " + status);
         if (status == SWITCHER_STATUS_1) {
             mSwitcher.setDisplayedChild(0);
         } else if (status == SWITCHER_STATUS_2) {
             mSwitcher.setDisplayedChild(1);
         }
+    }
+
+    /**
+     * Enable/disable the user input in the switcher
+     */
+    public void enableUserInput(boolean status){
+        mSwitcher.setDisplayedChild(status ? 1 : 0);
     }
 
 
