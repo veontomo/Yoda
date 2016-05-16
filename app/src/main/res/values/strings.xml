@@ -3,7 +3,7 @@
     <string name="yoda_default_string">Patience you must have my young padawan.</string>
     <string name="category_movie">movie</string>
     <string name="category_famous">famous</string>
-    <string name="type_hint">type here your phrase or click the button if you feel lucky</string>
+    <string name="type_hint">Here type or  button click if you feel lucky</string>
     <string name="translate">Say like Yoda</string>
     <string name="i_feel_lucky">I feel lucky</string>
     <string name="no_presenter_error">Happend, something strange has...</string>
