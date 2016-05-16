@@ -340,13 +340,15 @@ public class MainView extends AppCompatActivity implements MVPView {
 
 
     public void textViewClicked(View v) {
-        Log.i(TAG, "textViewClicked: start: mPhrase: " + mQuoteText.getVisibility() + ", mUserInput: " + mUserInput.getVisibility());
         mSwitcher.showNext();
         mPresenter.enableUserInput(true);
         mButton.setText(getText(R.string.translate));
         setCheckboxVisibility(View.INVISIBLE);
+        final String txt = mQuoteText.getText().toString();
+        if (!"".equals(txt)){
+            mUserInput.setText(txt);
+        }
         mUserInput.requestFocus();
-        Log.i(TAG, "textViewClicked: end: mPhrase: " + mQuoteText.getVisibility() + ", mUserInput: " + mUserInput.getVisibility());
     }
 
     private void setCheckboxVisibility(int visibility) {

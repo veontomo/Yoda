@@ -195,6 +195,7 @@ public class MVPPresenter {
     public void translate(String userInput) {
         final Quote q = new Quote();
         q.quote = userInput;
+        mView.setQuote(q);
         translate(q);
 
     }
