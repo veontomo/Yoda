@@ -280,15 +280,6 @@ public class MVPPresenter {
         mView.enableUserInput(status);
     }
 
-
-    /**
-     * {@link #mStatus} getter
-     * @return
-     */
-    public short getSwitcherStatus(){
-        return mStatus;
-    }
-
     /**
      * Whether the user input field is active
      * @return

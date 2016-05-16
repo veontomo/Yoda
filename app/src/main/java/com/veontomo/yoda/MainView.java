@@ -44,20 +44,6 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     private static final String SWITCHER_TOKEN = "switcher";
 
-    /**
-     * the mSwitcher status if it displays the first view
-     */
-    private static final short SWITCHER_STATUS_1 = 1;
-
-    /**
-     * the mSwitcher status if it displays the second view
-     */
-    private static final short SWITCHER_STATUS_2 = 2;
-
-    /**
-     * the mSwitcher status in case of some error
-     */
-    private static final short SWITCHER_STATUS_ERROR = -1;
 
     /**
      * a string key under which the cache is to be saved
@@ -138,17 +124,16 @@ public class MainView extends AppCompatActivity implements MVPView {
         mPresenter.loadCacheAsBundle(savedInstanceState.getBundle(CACHE_TOKEN));
         mPresenter.setCategoryStatuses(savedInstanceState.getBooleanArray(CHECK_TOKEN));
         mPresenter.setTranslationStatus(savedInstanceState.getShort(TRANSLATION_STATUS_TOKEN));
+        mPresenter.enableUserInput(savedInstanceState.getBoolean(SWITCHER_TOKEN));
         onTranslationReady(savedInstanceState.getString(TRANSLATION_TOKEN));
-        setSwitcher(savedInstanceState.getShort(SWITCHER_TOKEN));
         setQuote(q);
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        Log.i(TAG, "onSaveInstanceState: switcher status " + getSwitcherStatus());
         savedInstanceState.putString(TRANSLATION_TOKEN, mTranslation.getText().toString().trim());
         savedInstanceState.putBooleanArray(CHECK_TOKEN, new boolean[]{mCheck1.isChecked(), mCheck2.isChecked()});
-        savedInstanceState.putShort(SWITCHER_TOKEN, getSwitcherStatus());
+        savedInstanceState.putBoolean(SWITCHER_TOKEN, mPresenter.isUserInputActive());
         savedInstanceState.putBundle(CACHE_TOKEN, mPresenter.getCacheAsBundle());
         savedInstanceState.putShort(TRANSLATION_STATUS_TOKEN, mPresenter.getTranslationStatus());
         savedInstanceState.putParcelable(QUOTE_TOKEN, mPresenter.getCurrentQuote());
@@ -165,20 +150,26 @@ public class MainView extends AppCompatActivity implements MVPView {
      * @param view view a click on which triggers execution of this method
      */
     public void elaborate(View view) {
-        if (mPresenter != null) {
-            if (mPresenter.isUserInputActive()) {
-                mPresenter.enableUserInput(false);
-                final String userInput = mUserInput.getEditableText().toString();
-                if (userInput.isEmpty()) {
-                    mPresenter.retrieveQuote();
-                } else {
-                    mUserInput.setText(null);
-                    mPresenter.translate(userInput);
-                }
-            } else {
-                mPresenter.retrieveQuote();
-            }
+        if (mPresenter == null) {
+            showMessage(getResources().getString(R.string.no_presenter_error));
         }
+        if (mPresenter.isUserInputActive()) {
+            mPresenter.enableUserInput(false);
+            final String userInput = mUserInput.getEditableText().toString();
+            if (userInput.isEmpty()) {
+                mPresenter.retrieveQuote();
+            } else {
+                mUserInput.setText(null);
+                mPresenter.translate(userInput);
+            }
+        } else {
+            mPresenter.retrieveQuote();
+        }
+    }
+
+    @Override
+    public void showMessage(final String txt) {
+        Toast.makeText(getApplicationContext(), txt, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -312,7 +303,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         if (quote != null) {
             mQuoteText.setText(quote.quote);
             mQuoteAuthor.setText(quote.author);
-            mButton.setText(getText(R.string.i_feel_lucky));
+
         }
         setCheckboxVisibility(View.VISIBLE);
     }
@@ -342,10 +333,9 @@ public class MainView extends AppCompatActivity implements MVPView {
     public void textViewClicked(View v) {
         mSwitcher.showNext();
         mPresenter.enableUserInput(true);
-        mButton.setText(getText(R.string.translate));
         setCheckboxVisibility(View.INVISIBLE);
         final String txt = mQuoteText.getText().toString();
-        if (!"".equals(txt)){
+        if (!"".equals(txt)) {
             mUserInput.setText(txt);
         }
         mUserInput.requestFocus();
@@ -367,57 +357,18 @@ public class MainView extends AppCompatActivity implements MVPView {
     }
 
     /**
-     * Returns
-     * <ul>
-     * <li> {@link #SWITCHER_STATUS_1} if the mSwitcher displays {@link #mQuoteText},</li>
-     * <li> {@link #SWITCHER_STATUS_2} if it displays {@link #mUserInput},</li>
-     * <li> {@link #SWITCHER_STATUS_ERROR}, if either mSwitcher is not defined or for any other reason</li>
-     * </ul>
-     *
-     * @return {@link #SWITCHER_STATUS_1} or {@link #SWITCHER_STATUS_2} or {@link #SWITCHER_STATUS_ERROR}
+     * Enable/disable the user input in the switcher and adust the
+     * button text.
+     * @param status true to enable, false to disable
      */
-    private short getSwitcherStatus() {
-        if (mSwitcher == null) {
-            return SWITCHER_STATUS_ERROR;
-        }
-        final int id = mSwitcher.getCurrentView().getId();
-        if (id == mQuoteText.getId()) {
-            return SWITCHER_STATUS_1;
-        }
-        if (id == mUserInput.getId()) {
-            return SWITCHER_STATUS_2;
-        }
-        return SWITCHER_STATUS_ERROR;
-    }
-
-
-    /**
-     * Makes the mSwitcher  display one of its child views:
-     * <ul>
-     * <li> if the status is {@link #SWITCHER_STATUS_1}, the first child is displayed </li>
-     * <li> if the status is {@link #SWITCHER_STATUS_2}, the second child is displayed </li>
-     * <li> otherwise nothing is done.</li>
-     * </ul>
-     *
-     * @param status either {@link #SWITCHER_STATUS_1} or {@link #SWITCHER_STATUS_2}
-     */
-    private void setSwitcher(short status) {
-        if (mSwitcher == null) {
-            return;
-        }
-        Log.i(TAG, "setSwitcher: set status to " + status);
-        if (status == SWITCHER_STATUS_1) {
-            mSwitcher.setDisplayedChild(0);
-        } else if (status == SWITCHER_STATUS_2) {
+    public void enableUserInput(boolean status) {
+        if (status) {
             mSwitcher.setDisplayedChild(1);
+            mButton.setText(getText(R.string.translate));
+        } else {
+            mSwitcher.setDisplayedChild(0);
+            mButton.setText(getText(R.string.i_feel_lucky));
         }
-    }
-
-    /**
-     * Enable/disable the user input in the switcher
-     */
-    public void enableUserInput(boolean status){
-        mSwitcher.setDisplayedChild(status ? 1 : 0);
     }
 
 
