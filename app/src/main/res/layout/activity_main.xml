@@ -47,48 +47,78 @@
         </EditText>
     </ViewSwitcher>
 
-
-    <TextView
-        android:id="@+id/translation"
-        style="@style/translation"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="@string/yoda_default_string"/>
+        android:layout_weight="2">
+
+        <TextView
+            android:id="@+id/translation"
+            style="@style/translation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/yoda_default_string"/>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="16dp">
+        android:paddingBottom="8dp">
 
-        <CheckBox
-            android:id="@+id/check_1"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:onClick="onCategoryStatusChange"
-            android:text="@string/category_movie"
-            android:theme="@style/checkBoxStyle"/>
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:id="@+id/check_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:onClick="onCategoryStatusChange"
+                android:theme="@style/checkBoxStyle"/>
+
+            <TextView
+                style="@style/checkbox_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/category_movie"/>
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/retrieveBtn"
             style="@style/buttonStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="elaborate"
             android:text="@string/i_feel_lucky"/>
 
-
-        <CheckBox
-            android:id="@+id/check_2"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="onCategoryStatusChange"
-            android:text="@string/category_famous"
-            android:theme="@style/checkBoxStyle"/>
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
+            <CheckBox
+                android:id="@+id/check_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onCategoryStatusChange"
+                android:theme="@style/checkBoxStyle"/>
+
+            <TextView
+                style="@style/checkbox_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/category_famous"/>
+        </LinearLayout>
     </LinearLayout>
 
 
