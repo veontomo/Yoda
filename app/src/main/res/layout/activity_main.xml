@@ -38,7 +38,7 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/hidden_edit_view"
+            android:id="@+id/input_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/type_hint"

@@ -95,7 +95,7 @@ public class MainViewTest {
 
     @Test
     public void inputTextFieldShouldBeInvisible() {
-        EditText tv = (EditText) activity.findViewById(R.id.hidden_edit_view);
+        EditText tv = (EditText) activity.findViewById(R.id.input_view);
         assertEquals("edit field for inserting a phrase should be invisible", View.GONE, tv.getVisibility());
     }
 
@@ -178,7 +178,7 @@ public class MainViewTest {
     public void userInputFieldBecomesVisibleWhenPhraseIsClicked() {
         TextView phrase = (TextView) activity.findViewById(R.id.phrase);
         phrase.performClick();
-        TextView input = (TextView) activity.findViewById(R.id.hidden_edit_view);
+        TextView input = (TextView) activity.findViewById(R.id.input_view);
         assertEquals("input field should become visible", View.VISIBLE, input.getVisibility());
     }
 
@@ -193,7 +193,7 @@ public class MainViewTest {
     public void userInputFieldGetsFocusWhenPhraseIsClicked() {
         TextView phrase = (TextView) activity.findViewById(R.id.phrase);
         phrase.performClick();
-        TextView input = (TextView) activity.findViewById(R.id.hidden_edit_view);
+        TextView input = (TextView) activity.findViewById(R.id.input_view);
         assertTrue("input field should get focus when the phrase is clicked", input.isFocused());
     }
 
@@ -202,7 +202,7 @@ public class MainViewTest {
         TextView phrase = (TextView) activity.findViewById(R.id.phrase);
         phrase.performClick();
         activity.recreate();
-        TextView input = (TextView) activity.findViewById(R.id.hidden_edit_view);
+        TextView input = (TextView) activity.findViewById(R.id.input_view);
         assertEquals("input field should remain visible after recreation", View.VISIBLE, input.getVisibility());
     }
 

@@ -145,6 +145,7 @@ public class MainView extends AppCompatActivity implements MVPView {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.i(TAG, "onSaveInstanceState: switcher status " + getSwitcherStatus());
         savedInstanceState.putString(TRANSLATION_TOKEN, mTranslation.getText().toString().trim());
         savedInstanceState.putBooleanArray(CHECK_TOKEN, new boolean[]{mCheck1.isChecked(), mCheck2.isChecked()});
         savedInstanceState.putShort(SWITCHER_TOKEN, getSwitcherStatus());
@@ -184,7 +185,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         mQuoteText = (TextView) findViewById(R.id.phrase);
         mQuoteAuthor = (TextView) findViewById(R.id.author);
         mSwitcher = (ViewSwitcher) findViewById(R.id.my_switcher);
-        mUserInput = (EditText) findViewById(R.id.hidden_edit_view);
+        mUserInput = (EditText) findViewById(R.id.input_view);
         mButton = (Button) findViewById(R.id.retrieveBtn);
         mCheck1 = (CheckBox) findViewById(R.id.check_1);
         mCheck2 = (CheckBox) findViewById(R.id.check_2);
@@ -304,7 +305,6 @@ public class MainView extends AppCompatActivity implements MVPView {
 
     @Override
     public void setQuote(final Quote quote) {
-        setSwitcher(SWITCHER_STATUS_1);
         if (quote != null) {
             mQuoteText.setText(quote.quote);
             mQuoteAuthor.setText(quote.author);
@@ -336,10 +336,12 @@ public class MainView extends AppCompatActivity implements MVPView {
 
 
     public void textViewClicked(View v) {
+        Log.i(TAG, "textViewClicked: start: mPhrase: " + mQuoteText.getVisibility() + ", mUserInput: " + mUserInput.getVisibility());
         mSwitcher.showNext();
         mButton.setText(getText(R.string.translate));
         setCheckboxVisibility(View.INVISIBLE);
         mUserInput.requestFocus();
+        Log.i(TAG, "textViewClicked: end: mPhrase: " + mQuoteText.getVisibility() + ", mUserInput: " + mUserInput.getVisibility());
     }
 
     private void setCheckboxVisibility(int visibility) {
@@ -396,6 +398,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         if (mSwitcher == null) {
             return;
         }
+        Log.i(TAG, "setSwitcher: set status to "  + status);
         if (status == SWITCHER_STATUS_1) {
             mSwitcher.setDisplayedChild(0);
         } else if (status == SWITCHER_STATUS_2) {
