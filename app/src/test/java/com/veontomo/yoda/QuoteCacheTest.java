@@ -32,14 +32,14 @@ public class QuoteCacheTest {
     @Test
     public void testGetSizeReturnsZeroForEmptyCache(){
         QuoteCache cache = new QuoteCache(5);
-        assertEquals(0, cache.getSize());
+        assertEquals(0, cache.size());
     }
 
     @Test
     public void testGetSizeReturnsOneForSingleElementCache(){
         QuoteCache cache = new QuoteCache(5);
         cache.put(new Quote(), "");
-        assertEquals(1, cache.getSize());
+        assertEquals(1, cache.size());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class QuoteCacheTest {
         cache.put(new Quote(), "");
         cache.put(new Quote(), "");
         cache.put(new Quote(), "");
-        assertEquals(3, cache.getSize());
+        assertEquals(3, cache.size());
     }
 
     @Test
@@ -59,7 +59,7 @@ public class QuoteCacheTest {
         cache.put(new Quote(), "translation");
         cache.put(new Quote(), "translation");
         cache.put(new Quote(), "translation");
-        assertEquals(3, cache.getSize());
+        assertEquals(3, cache.size());
     }
 
 

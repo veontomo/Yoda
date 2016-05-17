@@ -2,10 +2,10 @@ package com.veontomo.yoda;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -22,11 +22,6 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     private final LinkedHashMap<Quote, String> mItems;
 
     /**
-     * current size of the cache
-     */
-    private int mSize;
-
-    /**
      * Constructor.
      *
      * @param maxSize the maximal number of the items that the cache might contain
@@ -34,16 +29,15 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     public QuoteCache(int maxSize) {
         this.maxSize = maxSize;
         this.mItems = new LinkedHashMap<>();
-        this.mSize = 0;
     }
 
     protected QuoteCache(Parcel in) {
         this.maxSize = in.readInt();
-        this.mSize = in.readInt();
         this.mItems = new LinkedHashMap<>();
         Quote q;
         String s;
-        for (int i = 0; i < mSize; i++) {
+        final int size = size();
+        for (int i = 0; i < size; i++) {
             q = in.readParcelable(null);
             s = in.readString();
             this.mItems.put(q, s);
@@ -63,11 +57,11 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     };
 
     /**
-     * {@link #mSize} getter
-     * @return
+     * The number of elements the cache contains.
+     * @return cache size
      */
-    public int getSize() {
-        return mSize;
+    public int size() {
+        return mItems.size();
     }
 
     /**
@@ -86,26 +80,24 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
         }
         if (mItems.size() >= maxSize) {
             mItems.remove(0);
-            mSize--;
         }
         mItems.put(quote, str);
-        mSize++;
-    }
+}
 
     @Override
     public Quote getKey(int pos) {
-        return (pos < mSize) ? new ArrayList<>(mItems.keySet()).get(pos) : null;
+        return (pos < size()) ? new ArrayList<>(mItems.keySet()).get(pos) : null;
     }
 
     @Override
     public String getValue(int pos) {
-        return (pos < mSize) ? new ArrayList<>(mItems.values()).get(pos) : null;
+        return (pos < size()) ? new ArrayList<>(mItems.values()).get(pos) : null;
     }
 
     @Override
     public Quote getRandom() {
         Random generator = new Random();
-        if (mSize <= 0) {
+        if (size() == 0) {
             return null;
         }
         int pos = generator.nextInt(mItems.size());
@@ -132,27 +124,21 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     /**
      * Loads the items stored in given cache into {@link #mItems}.
      *
-     * If the given cache contains more elements than the current one might contain, then extra
-     * elements are to be ignored.
+     * NB: no control is preformed whether the cache to be loaded contains too many elements.
      * @param cache
      */
     @Override
     public void loadBundle(Parcelable cache) {
         final QuoteCache c = (QuoteCache) cache;
         if (c != null) {
-            int cSize = c.getSize();
-            if (cSize > maxSize) {
-                cSize = maxSize;
-            }
             mItems.clear();
-            for (int i = 0; i < cSize; i++) {
-                Log.i(TAG, "loadBundle: loading item number " + i + " out of " + cSize);
-                final Quote q = c.getKey(i);
-                final String s = c.getValue(i);
-                mItems.put(q, s);
-            }
-            mSize = cSize;
+            mItems.putAll(c.items());
         }
+    }
+
+    @Override
+    public Map<Quote, String> items() {
+        return mItems;
     }
 
 
@@ -178,7 +164,6 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(maxSize);
-        dest.writeInt(mSize);
         for (Quote q : mItems.keySet()) {
             dest.writeParcelable(q, 0);
             dest.writeString(mItems.get(q));

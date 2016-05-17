@@ -2,6 +2,8 @@ package com.veontomo.yoda;
 
 import android.os.Parcelable;
 
+import java.util.Map;
+
 /**
  * Interface for caching objects.
  */
@@ -29,4 +31,6 @@ public interface Cache<T extends Parcelable, K> {
     K get(final T key);
 
     void loadBundle(Parcelable cache);
+
+    Map<? extends T, ? extends K> items();
 }

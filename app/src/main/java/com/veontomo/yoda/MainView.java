@@ -99,12 +99,6 @@ public class MainView extends AppCompatActivity implements MVPView {
         mState = null;
     }
 
-    @Override
-    public void onPause() {
-        mPresenter.stop();
-        super.onPause();
-    }
-
     /**
      * Restores the activity state from a bundle.
      * <p/>
@@ -113,7 +107,6 @@ public class MainView extends AppCompatActivity implements MVPView {
      * @param bundle a bundle containing the view's state
      */
     private void restoreState(Bundle bundle) {
-        Log.i(TAG, "restoreState: bundle is null? " + (bundle == null ? "yes" : "no"));
         if (bundle == null) {
             return;
         }
@@ -258,9 +251,7 @@ public class MainView extends AppCompatActivity implements MVPView {
      */
     @Override
     public void setCategories(final boolean[] statuses) {
-        Log.i(TAG, "setCategories: setting the statuses");
         if (statuses != null && statuses.length == 2) {
-            Log.i(TAG, "setCategories: status array is valid");
             mCheck1.setChecked(statuses[0]);
             mCheck2.setChecked(statuses[1]);
         }

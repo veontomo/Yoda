@@ -163,7 +163,7 @@ public class MVPPresenter {
      * In case the case is empty, passes the given string to the {@link MVPView#retrieveResponseFailure(String)} method.
      */
     public void onQuoteFailure(final String s) {
-        if (mCache.getSize() > 0) {
+        if (mCache.size() > 0) {
             final Quote q = mCache.getRandom();
             onQuoteReceived(q);
         } else {
@@ -206,15 +206,6 @@ public class MVPPresenter {
     public void retrieveQuote() {
         mView.disableButton(true);
         mRetrieveModel.retrieveQuote();
-    }
-
-
-    /**
-     *
-     */
-    public void stop() {
-        Log.i(TAG, "stop: presenter");
-
     }
 
     /**
