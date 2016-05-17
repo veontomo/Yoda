@@ -58,6 +58,7 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
 
     /**
      * The number of elements the cache contains.
+     *
      * @return cache size
      */
     public int size() {
@@ -66,23 +67,27 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
 
     /**
      * Put the quote and its translation into this cache.
-     *
+     * <p/>
      * If the quote is already present in the cache, it is not added.
-     *
+     * <p/>
      * If the cache becomes larger that its maximally allowed capacity, then its first element is removed.
+     *
      * @param quote
      * @param str
      */
     @Override
     public void put(final Quote quote, final String str) {
-        if (mItems.containsKey(quote)){
+        if (mItems.containsKey(quote)) {
             return;
         }
         if (mItems.size() >= maxSize) {
-            mItems.remove(0);
+            final Quote q = getKey(0);
+            if (q != null) {
+                mItems.remove(q);
+            }
         }
         mItems.put(quote, str);
-}
+    }
 
     @Override
     public Quote getKey(int pos) {
@@ -123,8 +128,9 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
 
     /**
      * Loads the items stored in given cache into {@link #mItems}.
-     *
+     * <p/>
      * NB: no control is preformed whether the cache to be loaded contains too many elements.
+     *
      * @param cache
      */
     @Override
