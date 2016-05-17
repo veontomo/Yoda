@@ -3,7 +3,6 @@ package com.veontomo.yoda;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
@@ -89,20 +88,15 @@ public class MainView extends AppCompatActivity implements MVPView {
         }
 
         setContentView(R.layout.activity_main);
-        if (savedInstanceState != null) {
-            mState = savedInstanceState;
-        }
-
+        mState = savedInstanceState;
     }
 
     @Override
     public void onResume() {
         super.onResume();
         init();
-        if (mState != null) {
-            restoreState(mState);
-            mState = null;
-        }
+        restoreState(mState);
+        mState = null;
     }
 
     @Override
@@ -116,16 +110,20 @@ public class MainView extends AppCompatActivity implements MVPView {
      * <p/>
      * It is supposed that the bundle has previously been created by {@link #onSaveInstanceState(Bundle)}.
      *
-     * @param savedInstanceState a bundle containing the view's state
+     * @param bundle a bundle containing the view's state
      */
-    private void restoreState(@NonNull Bundle savedInstanceState) {
-        final Quote q = savedInstanceState.getParcelable(QUOTE_TOKEN);
+    private void restoreState(Bundle bundle) {
+        Log.i(TAG, "restoreState: bundle is null? " + (bundle == null ? "yes" : "no"));
+        if (bundle == null) {
+            return;
+        }
+        final Quote q = bundle.getParcelable(QUOTE_TOKEN);
         mPresenter.setCurrentQuote(q);
-        mPresenter.loadCacheAsBundle(savedInstanceState.getBundle(CACHE_TOKEN));
-        mPresenter.setCategoryStatuses(savedInstanceState.getBooleanArray(CHECK_TOKEN));
-        mPresenter.setTranslationStatus(savedInstanceState.getShort(TRANSLATION_STATUS_TOKEN));
-        mPresenter.enableUserInput(savedInstanceState.getBoolean(SWITCHER_TOKEN));
-        onTranslationReady(savedInstanceState.getString(TRANSLATION_TOKEN));
+        mPresenter.loadCacheAsBundle(bundle.getBundle(CACHE_TOKEN));
+        mPresenter.setCategoryStatuses(bundle.getBooleanArray(CHECK_TOKEN));
+        mPresenter.setTranslationStatus(bundle.getShort(TRANSLATION_STATUS_TOKEN));
+        mPresenter.enableUserInput(bundle.getBoolean(SWITCHER_TOKEN));
+        onTranslationReady(bundle.getString(TRANSLATION_TOKEN));
         setQuote(q);
     }
 
@@ -360,6 +358,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     /**
      * Enable/disable the user input in the switcher and adust the
      * button text.
+     *
      * @param status true to enable, false to disable
      */
     public void enableUserInput(boolean status) {

@@ -62,12 +62,28 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
         }
     };
 
+    /**
+     * {@link #mSize} getter
+     * @return
+     */
     public int getSize() {
         return mSize;
     }
 
+    /**
+     * Put the quote and its translation into this cache.
+     *
+     * If the quote is already present in the cache, it is not added.
+     *
+     * If the cache becomes larger that its maximally allowed capacity, then its first element is removed.
+     * @param quote
+     * @param str
+     */
     @Override
     public void put(final Quote quote, final String str) {
+        if (mItems.containsKey(quote)){
+            return;
+        }
         if (mItems.size() >= maxSize) {
             mItems.remove(0);
             mSize--;
@@ -130,7 +146,10 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
             }
             mItems.clear();
             for (int i = 0; i < cSize; i++) {
-                mItems.put(c.getKey(i), c.getValue(i));
+                Log.i(TAG, "loadBundle: loading item number " + i + " out of " + cSize);
+                final Quote q = c.getKey(i);
+                final String s = c.getValue(i);
+                mItems.put(q, s);
             }
             mSize = cSize;
         }
