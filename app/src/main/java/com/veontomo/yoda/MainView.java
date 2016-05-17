@@ -186,8 +186,8 @@ public class MainView extends AppCompatActivity implements MVPView {
         mCheck2 = (CheckBox) findViewById(R.id.check_2);
         mPresenter = MVPPresenter.create(this);
 
-        mSpanSuccess = createImageSpan(R.drawable.yoda_square);
-        mSpanFailure = createImageSpan(R.drawable.panda_square);
+        mSpanSuccess = createImageSpan(R.drawable.yoda);
+        mSpanFailure = createImageSpan(R.drawable.panda);
     }
 
     /**
