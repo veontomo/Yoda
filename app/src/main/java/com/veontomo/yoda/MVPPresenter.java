@@ -27,18 +27,10 @@ public class MVPPresenter {
 
     private Quote mCurrentQuote;
 
-    private short mStatus;
-
     /**
-     * a code corresponding to a state in which the switcher's text field is active
+     * whether the switcher state corresponds to a one in which the user can insert text
      */
-    private final short SWITCHER_STATUS_1 = 1;
-
-    /**
-     * a code corresponding to a state in which the switcher's edit field is active
-     */
-    private final short SWITCHER_STATUS_2 = 2;
-
+    private boolean mIsUserInputActive;
 
     private short mTranslationStatus = TRANSLATION_OK;
 
@@ -87,7 +79,7 @@ public class MVPPresenter {
     /**
      * {@link #mTranslationStatus} setter
      *
-     * @param status
+     * @param status either {@link #TRANSLATION_OK}, {@link #TRANSLATION_FAILURE} or {@link #TRANSLATION_PROBLEM
      */
     public void setTranslationStatus(short status) {
         mTranslationStatus = status;
@@ -167,7 +159,7 @@ public class MVPPresenter {
     /**
      * Displays a message that a quote has been retrieved, but the response from the corresponding service is not successful.
      *
-     * @param quote
+     * @param quote a quote whose translation has caused the problem
      */
     public void onQuoteProblem(final Quote quote) {
         mView.onQuoteProblem(quote);
@@ -177,19 +169,23 @@ public class MVPPresenter {
     /**
      * Stores the given quote in {@link #mCurrentQuote} and passes the quote content to the translation service.
      *
-     * @param quote
+     * @param quote a quote to translate
      */
     private void translate(final Quote quote) {
         this.mCurrentQuote = quote;
         mTranslateModel.translate(quote.quote);
     }
 
+    /**
+     * Creates a quote with given content and passes it to the {@link #translate(Quote)}
+     *
+     * @param userInput quote content
+     */
     public void translate(String userInput) {
         final Quote q = new Quote();
         q.quote = userInput;
         mView.setQuote(q);
         translate(q);
-
     }
 
     /**
@@ -203,7 +199,7 @@ public class MVPPresenter {
     /**
      * Passes the statuses of the category checkboxes to the retrieval service.
      *
-     * @param categoryStatuses
+     * @param categoryStatuses array of checkbox statuses
      */
     public void setCategoryStatuses(final boolean[] categoryStatuses) {
         mRetrieveModel.setCategoryStatuses(categoryStatuses);
@@ -238,7 +234,7 @@ public class MVPPresenter {
     /**
      * {@link #mCurrentQuote} setter
      *
-     * @param q
+     * @param q a quote to be set as a current one
      */
     public void setCurrentQuote(final Quote q) {
         this.mCurrentQuote = q;
@@ -247,7 +243,7 @@ public class MVPPresenter {
     /**
      * {@link #mCurrentQuote} getter
      *
-     * @return
+     * @return a current quote
      */
     public Quote getCurrentQuote() {
         return mCurrentQuote;
@@ -259,16 +255,16 @@ public class MVPPresenter {
      * @param status true - to enable, false - to disable
      */
     public void enableUserInput(boolean status) {
-        mStatus = status ? SWITCHER_STATUS_2 : SWITCHER_STATUS_1;
+        mIsUserInputActive = status;
         mView.enableUserInput(status);
     }
 
     /**
      * Whether the user input field is active
      *
-     * @return
+     * @return true or false
      */
     public boolean isUserInputActive() {
-        return mStatus == SWITCHER_STATUS_2;
+        return mIsUserInputActive;
     }
 }

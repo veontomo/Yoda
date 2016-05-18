@@ -18,7 +18,7 @@ abstract class Config {
     /**
      * api key for the quote retrieval service
      */
-    @SuppressWarnings("SpellCheckingInspection")
+    @SuppressWarnings({"SpellCheckingInspection", "ConstantConditions"})
     public static final String API_KEY_1 = IS_PRODUCTION ? "cdY74PzM7lmshAFnL81d4g8Nmkmjp19ctRPjsns3cfVRoORLhD" : "BcsP5qtoB9mshvuD0VHmv78FP75Tp1uqnt1jsnv9YEFqi9oygG";
 
     /**

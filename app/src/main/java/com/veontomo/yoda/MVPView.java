@@ -12,8 +12,9 @@ interface MVPView {
     void setQuote(Quote quote);
 
     /**
-     * Disables the button that activates  phrase retrieval
-     * @param b
+     * Enables/Disables the button that activates phrase retrieval
+     *
+     * @param b true - to disable, false - to enable
      */
     void disableButton(boolean b);
 
@@ -25,7 +26,7 @@ interface MVPView {
 
     /**
      * Sets the statuses of the view checkboxes
-     * @param statuses
+     * @param statuses array containing statuses of each checkbox.
      */
     void setCategories(final boolean[] statuses);
 

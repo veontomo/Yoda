@@ -85,7 +85,7 @@ public class MVPRetrieveModel {
      * Only categories whose statuses are "true" can be retrieved. In case when multiple categories
      * have status "true", a random one is chosen.
      *
-     * @return
+     * @return {@link #CATEGORY_1} or {@link #CATEGORY_2}
      */
     public String getCategoryToRetrieve() {
         if (mCategoryStatuses[0] && !mCategoryStatuses[1]) {
@@ -100,7 +100,7 @@ public class MVPRetrieveModel {
     /**
      * Returns a random category: either {@link #CATEGORY_1} or {@link #CATEGORY_2}.
      *
-     * @return
+     * @return {@link #CATEGORY_1} or {@link #CATEGORY_2}
      */
     public String getRandomCategory() {
         Random generator = new Random();

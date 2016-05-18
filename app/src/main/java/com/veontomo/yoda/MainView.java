@@ -72,6 +72,7 @@ public class MainView extends AppCompatActivity implements MVPView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //noinspection PointlessBooleanExpression
         if (!Config.IS_PRODUCTION) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
@@ -230,7 +231,6 @@ public class MainView extends AppCompatActivity implements MVPView {
     /**
      * Prepends the failure image to the Yoda default text and then displays it in the translation field.
      * After that, enables the button.
-     *
      */
     @Override
     public void onTranslationProblem() {
@@ -297,9 +297,9 @@ public class MainView extends AppCompatActivity implements MVPView {
 
 
     /**
-     * Disables the button that activates  phrase retrieval
+     * Enables/Disables the button that activates phrase retrieval
      *
-     * @param b
+     * @param b true - to disable, false - to enable
      */
     @Override
     public void disableButton(boolean b) {
@@ -318,9 +318,10 @@ public class MainView extends AppCompatActivity implements MVPView {
 
     /**
      * Enables the input field that is initially hidden in the switcher view.
-     *
+     * <p/>
      * This method is executed once the corresponding edit text view is clicked.
      * For this reason the argument is required, but the method does not use it.
+     *
      * @param v a click on this view triggers the execution of this method
      */
     public void textViewClicked(@SuppressWarnings("UnusedParameters") View v) {

@@ -74,8 +74,8 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
      * <p/>
      * If the cache becomes larger that its maximally allowed capacity, then its first element is removed.
      *
-     * @param quote
-     * @param str
+     * @param quote a key of the key-value pair to be added to the cache
+     * @param str a value of the key-value pair to be added to the cache
      */
     @Override
     public void put(final Quote quote, final String str) {
@@ -96,7 +96,7 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
      * <p/>
      * If a map at given position does not exist, null is returned
      *
-     * @param pos
+     * @param pos index of the key-value pair
      * @return the quote at given position or null
      */
     @Override
@@ -140,7 +140,7 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     /**
      * Returns a string associated with given quote
      *
-     * @param key
+     * @param key a key whose corresponding value one wants to get
      * @return value corresponding to the key
      */
     public String getValue(Quote key) {
@@ -153,7 +153,7 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
      * <p/>
      * NB: no control is preformed whether the cache to be loaded contains too many elements.
      *
-     * @param cache
+     * @param cache the key-value pairs of this cache are to loaded into the current cache
      */
     public void loadBundle(Parcelable cache) {
         final QuoteCache c = (QuoteCache) cache;
