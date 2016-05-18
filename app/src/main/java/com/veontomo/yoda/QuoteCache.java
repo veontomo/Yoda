@@ -2,8 +2,9 @@ package com.veontomo.yoda;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
@@ -14,11 +15,15 @@ import java.util.Random;
 public class QuoteCache implements Cache<Quote, String>, Parcelable {
 
     private static final String TAG = Config.appName;
+
     /**
      * the maximal number of the items that the cache might contain. It is supposed to be positive.
      */
     private final int maxSize;
 
+    /**
+     * list that stores the key-value pairs
+     */
     private final LinkedHashMap<Quote, String> mItems;
 
     /**
@@ -89,18 +94,53 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
         mItems.put(quote, str);
     }
 
+    /**
+     * Returns the key of a key-value map at given position.
+     * <p/>
+     * If a map at given position does not exist, null is returned
+     *
+     * @param pos
+     * @return the quote at given position or null
+     */
     @Override
+    @Nullable
     public Quote getKey(int pos) {
-        return (pos < size()) ? new ArrayList<>(mItems.keySet()).get(pos) : null;
+        Iterator iterator = mItems.keySet().iterator();
+        int pointer = 0;
+        while (pointer < pos && iterator.hasNext()) {
+            iterator.next();
+            pointer++;
+        }
+        if (pointer == pos && iterator.hasNext()) {
+            return (Quote) iterator.next();
+        }
+        return null;
     }
 
+    /**
+     * Returns the value of a key-value map at given position.
+     * <p/>
+     * If a map at given position does not exist, null is returned
+     *
+     * @param pos
+     * @return the string at given position or null
+     */
     @Override
+    @Nullable
     public String getValue(int pos) {
-        return (pos < size()) ? new ArrayList<>(mItems.values()).get(pos) : null;
+        final Quote q = getKey(pos);
+        if (q != null){
+            return mItems.get(q);
+        }
+        return null;
     }
 
+    /**
+     * Returns a random key from key-value pairs stored in the cache.
+     * @return a random quote
+     */
     @Override
-    public Quote getRandom() {
+    public Quote getRandomKey() {
         Random generator = new Random();
         if (size() == 0) {
             return null;
@@ -115,13 +155,13 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     }
 
     /**
-     * Returns cached value
+     * Returns a string associated with given quote
      *
      * @param key
      * @return value corresponding to the key
      */
     @Override
-    public String get(Quote key) {
+    public String getValue(Quote key) {
         return mItems.get(key);
     }
 

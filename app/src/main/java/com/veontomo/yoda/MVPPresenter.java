@@ -150,7 +150,7 @@ public class MVPPresenter {
     public void onQuoteReceived(final Quote quote) {
         mView.setQuote(quote);
         if (mCache.contains(quote)) {
-            final String translation = mCache.get(quote);
+            final String translation = mCache.getValue(quote);
             onTranslationReceived(quote.quote, translation);
         } else {
             translate(quote);
@@ -164,7 +164,7 @@ public class MVPPresenter {
      */
     public void onQuoteFailure(final String s) {
         if (mCache.size() > 0) {
-            final Quote q = mCache.getRandom();
+            final Quote q = mCache.getRandomKey();
             onQuoteReceived(q);
         } else {
             mView.retrieveResponseFailure(s);

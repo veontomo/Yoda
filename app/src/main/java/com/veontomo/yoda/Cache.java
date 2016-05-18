@@ -14,7 +14,11 @@ public interface Cache<T extends Parcelable, K> {
 
     K getValue(int pos);
 
-    T getRandom();
+    /**
+     * Returns a random key from key-value pairs stored in the cache.
+     * @return a random quote
+     */
+    T getRandomKey();
 
     /**
      * Whether the cache contains given key.
@@ -28,7 +32,7 @@ public interface Cache<T extends Parcelable, K> {
      * @param key
      * @return value corresponding to the key
      */
-    K get(final T key);
+    K getValue(final T key);
 
     void loadBundle(Parcelable cache);
 

@@ -66,14 +66,14 @@ public class QuoteCacheTest {
     @Test
     public void testGetRandomReturnsNullFromEmptyCache() {
         QuoteCache cache = new QuoteCache(10);
-        assertNull(cache.getRandom());
+        assertNull(cache.getRandomKey());
     }
 
     @Test
     public void testGetRandomReturnsNotNullFromSingleElementCache() {
         QuoteCache cache = new QuoteCache(1);
         cache.put(new Quote(), "");
-        assertNotNull(cache.getRandom());
+        assertNotNull(cache.getRandomKey());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class QuoteCacheTest {
         cache.put(new Quote(), "");
         cache.put(new Quote(), "");
         cache.put(new Quote(), "");
-        assertNotNull(cache.getRandom());
+        assertNotNull(cache.getRandomKey());
     }
 
     @Test
@@ -93,7 +93,7 @@ public class QuoteCacheTest {
         q.category = "favorite";
         q.quote = "Never mind";
         cache.put(q, "");
-        Quote q2 = cache.getRandom();
+        Quote q2 = cache.getRandomKey();
         assertEquals("A.Uthor", q2.author);
         assertEquals("favorite", q2.category);
         assertEquals("Never mind", q2.quote);
