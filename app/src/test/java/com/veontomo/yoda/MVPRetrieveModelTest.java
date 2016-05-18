@@ -64,7 +64,7 @@ public class MVPRetrieveModelTest {
     @Test
     public void testGetRandomCategoryWhenRuns100Times(){
         final boolean[] results = new boolean[]{false, false};
-        int maxIter = 10;
+        int maxIterations = 10;
         int i = 0;
         String category;
         do {
@@ -75,9 +75,9 @@ public class MVPRetrieveModelTest {
                 results[1] = true;
             }
             i++;
-        } while (i < maxIter && !(results[0] && results[1]));
-        assertTrue("in " + maxIter + " iteration it was supposed to see at least one \"movie\"", results[0]);
-        assertTrue("in " + maxIter + " iteration it was supposed to see at least one \"famous\"", results[1]);
+        } while (i < maxIterations && !(results[0] && results[1]));
+        assertTrue("in " + maxIterations + " iteration it was supposed to see at least one \"movie\"", results[0]);
+        assertTrue("in " + maxIterations + " iteration it was supposed to see at least one \"famous\"", results[1]);
     }
 
 }

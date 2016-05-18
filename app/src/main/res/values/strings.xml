@@ -6,7 +6,7 @@
     <string name="type_hint">Here type or  button click if you feel lucky</string>
     <string name="translate">Say like Yoda</string>
     <string name="i_feel_lucky">I feel lucky</string>
-    <string name="no_presenter_error">Happend, something strange has...</string>
+    <string name="no_presenter_error">Happened, something strange has...</string>
     <string name="yoda_translate_failure_string">Always get what you want you can not.</string>
     <string name="yoda_translate_problem_string">Your patience use.  The problem gets resolved.</string>
 </resources>

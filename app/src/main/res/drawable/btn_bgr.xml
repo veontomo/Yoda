@@ -31,7 +31,7 @@
                 android:radius="5dp"
                 />
             <solid
-                android:color="@color/white"
+                android:color="@color/yellowFade"
                 />
             <padding
                 android:bottom="16dp"

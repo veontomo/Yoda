@@ -8,7 +8,8 @@ import retrofit2.http.Query;
 /**
  * API of Yoda translation service
  */
-public interface YodaApi {
+interface YodaApi {
+    @SuppressWarnings("SpellCheckingInspection")
     @Headers({
             "Accept: text/plain",
             "X-Mashape-Key: " + Config.API_KEY_1})

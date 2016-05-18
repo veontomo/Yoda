@@ -9,7 +9,8 @@ import retrofit2.http.Query;
  * API for quote retrieval
  *
  */
-public interface QuotesApi {
+interface QuotesApi {
+    @SuppressWarnings("SpellCheckingInspection")
     @Headers({
             "Accept: application/json",
             "X-Mashape-Key: " + Config.API_KEY_1})

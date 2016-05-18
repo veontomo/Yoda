@@ -2,39 +2,17 @@ package com.veontomo.yoda;
 
 import android.os.Parcelable;
 
-import java.util.Map;
-
 /**
  * Interface for caching objects.
  */
-public interface Cache<T extends Parcelable, K> {
+interface Cache<T extends Parcelable, K> {
     void put(final T t, final K k);
 
     T getKey(int pos);
-
-    K getValue(int pos);
 
     /**
      * Returns a random key from key-value pairs stored in the cache.
      * @return a random quote
      */
     T getRandomKey();
-
-    /**
-     * Whether the cache contains given key.
-     * @param key a key to find in the cache
-     * @return true if the cache contains given key, false otherwise.
-     */
-    boolean contains(final T key);
-
-    /**
-     * Returns cached value
-     * @param key
-     * @return value corresponding to the key
-     */
-    K getValue(final T key);
-
-    void loadBundle(Parcelable cache);
-
-    Map<? extends T, ? extends K> items();
 }

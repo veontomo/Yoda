@@ -16,7 +16,7 @@ import retrofit2.Retrofit;
  * Custom factory to convert json into a string
  *
  */
-public class ToStringConverterFactory extends Converter.Factory {
+class ToStringConverterFactory extends Converter.Factory {
     private static final MediaType MEDIA_TYPE = MediaType.parse("text/plain");
 
 

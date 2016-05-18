@@ -138,9 +138,9 @@ public class MainView extends AppCompatActivity implements MVPView {
      * then a translation of that string is initiated.
      * Otherwise, a quote retrieval is initiated.
      *
-     * @param view view a click on which triggers execution of this method
+     * @param view view a click on which triggers execution of this method. It is not used in the method.
      */
-    public void elaborate(View view) {
+    public void elaborate(@SuppressWarnings("UnusedParameters") View view) {
         if (mPresenter == null) {
             showMessage(getResources().getString(R.string.no_presenter_error));
         }
@@ -158,8 +158,7 @@ public class MainView extends AppCompatActivity implements MVPView {
         }
     }
 
-    @Override
-    public void showMessage(final String txt) {
+    private void showMessage(final String txt) {
         Toast.makeText(getApplicationContext(), txt, Toast.LENGTH_SHORT).show();
     }
 
@@ -232,11 +231,9 @@ public class MainView extends AppCompatActivity implements MVPView {
      * Prepends the failure image to the Yoda default text and then displays it in the translation field.
      * After that, enables the button.
      *
-     * @param quote   a quote translation of which has caused the problem
-     * @param message string received as a translation of the quote
      */
     @Override
-    public void onTranslationProblem(final Quote quote, final String message) {
+    public void onTranslationProblem() {
         showTranslation(getResources().getString(R.string.yoda_translate_problem_string));
         disableButton(false);
     }
@@ -319,8 +316,14 @@ public class MainView extends AppCompatActivity implements MVPView {
         Log.i(TAG, "onQuoteProblem: some problem with " + quote.toString());
     }
 
-
-    public void textViewClicked(View v) {
+    /**
+     * Enables the input field that is initially hidden in the switcher view.
+     *
+     * This method is executed once the corresponding edit text view is clicked.
+     * For this reason the argument is required, but the method does not use it.
+     * @param v a click on this view triggers the execution of this method
+     */
+    public void textViewClicked(@SuppressWarnings("UnusedParameters") View v) {
         mSwitcher.showNext();
         mPresenter.enableUserInput(true);
         setCheckboxVisibility(View.INVISIBLE);
@@ -342,12 +345,12 @@ public class MainView extends AppCompatActivity implements MVPView {
      *
      * @param view a click on this view triggers the execution of this method
      */
-    public void onCategoryStatusChange(View view) {
+    public void onCategoryStatusChange(@SuppressWarnings("UnusedParameters") View view) {
         mPresenter.setCategoryStatuses(new boolean[]{mCheck1.isChecked(), mCheck2.isChecked()});
     }
 
     /**
-     * Enable/disable the user input in the switcher and adust the
+     * Enable/disable the user input in the switcher and adjust the
      * button text.
      *
      * @param status true to enable, false to disable

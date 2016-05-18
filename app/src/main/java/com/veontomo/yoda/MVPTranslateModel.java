@@ -8,7 +8,7 @@ import retrofit2.Retrofit;
 /**
  * A model of the MVP architecture responsible for translations.
  */
-public class MVPTranslateModel {
+class MVPTranslateModel {
     private final YodaApi yodaService;
     private final Callback<String> translateExec;
     private MVPPresenter mPresenter;
@@ -31,13 +31,13 @@ public class MVPTranslateModel {
                 if (response.isSuccessful()) {
                     mPresenter.onTranslationReceived(mPhrase, response.body());
                 } else {
-                    mPresenter.onTranslationProblem(mPhrase, response.body());
+                    mPresenter.onTranslationProblem();
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                mPresenter.onTranslationFailure(mPhrase, t.getMessage());
+                mPresenter.onTranslationFailure(t.getMessage());
             }
         };
     }

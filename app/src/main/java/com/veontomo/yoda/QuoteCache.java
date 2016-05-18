@@ -13,9 +13,6 @@ import java.util.Random;
  * Quote cache
  */
 public class QuoteCache implements Cache<Quote, String>, Parcelable {
-
-    private static final String TAG = Config.appName;
-
     /**
      * the maximal number of the items that the cache might contain. It is supposed to be positive.
      */
@@ -36,7 +33,7 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
         this.mItems = new LinkedHashMap<>();
     }
 
-    protected QuoteCache(Parcel in) {
+    private QuoteCache(Parcel in) {
         this.maxSize = in.readInt();
         this.mItems = new LinkedHashMap<>();
         Quote q;
@@ -118,24 +115,6 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
     }
 
     /**
-     * Returns the value of a key-value map at given position.
-     * <p/>
-     * If a map at given position does not exist, null is returned
-     *
-     * @param pos
-     * @return the string at given position or null
-     */
-    @Override
-    @Nullable
-    public String getValue(int pos) {
-        final Quote q = getKey(pos);
-        if (q != null){
-            return mItems.get(q);
-        }
-        return null;
-    }
-
-    /**
      * Returns a random key from key-value pairs stored in the cache.
      * @return a random quote
      */
@@ -149,7 +128,11 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
         return getKey(pos);
     }
 
-    @Override
+    /**
+     * Whether the cache contains given key.
+     * @param key a key to find in the cache
+     * @return true if the cache contains given key, false otherwise.
+     */
     public boolean contains(final Quote key) {
         return mItems.containsKey(key);
     }
@@ -160,7 +143,6 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
      * @param key
      * @return value corresponding to the key
      */
-    @Override
     public String getValue(Quote key) {
         return mItems.get(key);
     }
@@ -173,7 +155,6 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
      *
      * @param cache
      */
-    @Override
     public void loadBundle(Parcelable cache) {
         final QuoteCache c = (QuoteCache) cache;
         if (c != null) {
@@ -182,17 +163,20 @@ public class QuoteCache implements Cache<Quote, String>, Parcelable {
         }
     }
 
-    @Override
-    public Map<Quote, String> items() {
+    /**
+     * {@link #mItems} getter
+     * @return the cache key-value pairs
+     */
+    private Map<Quote, String> items() {
         return mItems;
     }
 
 
     /**
      * Describe the kinds of special objects contained in this Parcelable's
-     * marshalled representation.
+     * marshaled representation.
      *
-     * @return a bitmask indicating the set of special object types marshalled
+     * @return a bitmask indicating the set of special object types marshaled
      * by the Parcelable.
      */
     @Override

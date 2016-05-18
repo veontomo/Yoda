@@ -7,12 +7,11 @@ import android.os.Parcelable;
  * Quote how it is retrieved from quote-related API
  */
 public class Quote implements Parcelable{
-    public static final String SEPARATOR = "#";
     public String quote;
     public String author;
     public String category;
 
-    protected Quote(Parcel in) {
+    private Quote(Parcel in) {
         quote = in.readString();
         author = in.readString();
         category = in.readString();
@@ -36,29 +35,11 @@ public class Quote implements Parcelable{
         }
     };
 
-    public String serialize() {
-        return quote + SEPARATOR + author + SEPARATOR + category;
-    }
-
-    public static Quote deserialize(final String str) {
-        Quote q = new Quote();
-        if (str == null) {
-            return q;
-        }
-        String[] parts = str.split(SEPARATOR, -2);
-        if (parts.length == 3) {
-            q.quote = parts[0];
-            q.author = parts[1];
-            q.category = parts[2];
-        }
-        return q;
-    }
-
     /**
      * Describe the kinds of special objects contained in this Parcelable's
-     * marshalled representation.
+     * marshaled representation.
      *
-     * @return a bitmask indicating the set of special object types marshalled
+     * @return a bitmask indicating the set of special object types marshaled
      * by the Parcelable.
      */
     @Override

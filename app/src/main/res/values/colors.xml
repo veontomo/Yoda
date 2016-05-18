@@ -4,8 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="yellow">#edfde90e</color>
-    <color name="yellowFade">#d9c80d</color>
+
+    <color name="yellow">#fde90e</color>
+    <color name="yellowFade">#ded46e</color>
     <color name="yellow2">#f1d4d40d</color>
     <color name="black">#ff000000</color>
     <color name="white">#f4ffffff</color>

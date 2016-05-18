@@ -89,12 +89,12 @@ public class QuoteCacheTest {
     public void testGetRandomReturnsTheSameFromSingleElementCache() {
         QuoteCache cache = new QuoteCache(1);
         Quote q = new Quote();
-        q.author = "A.Uthor";
+        q.author = "A.Miln";
         q.category = "favorite";
         q.quote = "Never mind";
         cache.put(q, "");
         Quote q2 = cache.getRandomKey();
-        assertEquals("A.Uthor", q2.author);
+        assertEquals("A.Miln", q2.author);
         assertEquals("favorite", q2.category);
         assertEquals("Never mind", q2.quote);
     }

@@ -1,5 +1,7 @@
 package com.veontomo.yoda;
 
+import android.support.annotation.NonNull;
+
 import java.util.Random;
 
 import retrofit2.Call;
@@ -12,10 +14,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * A model of the MVP architecture responsible for retrieval of the phrases.
  */
 public class MVPRetrieveModel {
-    private static final String TAG = Config.appName;
-
-    public static final String CATEGORY_1 = "movie";
-    public static final String CATEGORY_2 = "famous";
+    private static final String CATEGORY_1 = "movie";
+    private static final String CATEGORY_2 = "famous";
 
     private MVPPresenter mPresenter;
 
@@ -108,10 +108,7 @@ public class MVPRetrieveModel {
 
     }
 
-    public void setCategoryStatuses(boolean[] categoryStatuses) {
-        final int categories = mCategoryStatuses.length;
-        for (int i = 0; i < categories; i++){
-            mCategoryStatuses[i] = categoryStatuses[i];
-        }
+    public void setCategoryStatuses(@NonNull boolean[] categoryStatuses) {
+        System.arraycopy(categoryStatuses, 0, mCategoryStatuses, 0,  mCategoryStatuses.length);
     }
 }

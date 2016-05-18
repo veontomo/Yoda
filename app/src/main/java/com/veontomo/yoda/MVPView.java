@@ -1,14 +1,10 @@
 package com.veontomo.yoda;
 
-import java.util.List;
-
 /**
  * View interface according to MVP approach
  *
  */
-public interface MVPView {
-    void showMessage(final String msg);
-
+interface MVPView {
     void onTranslationReady(String text);
 
     void onTranslationFailure(final String s);
@@ -25,7 +21,7 @@ public interface MVPView {
 
     void onQuoteProblem(final Quote body);
 
-    void onTranslationProblem(Quote quote, String translation);
+    void onTranslationProblem();
 
     /**
      * Sets the statuses of the view checkboxes

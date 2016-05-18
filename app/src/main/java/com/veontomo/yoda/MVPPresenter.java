@@ -32,12 +32,12 @@ public class MVPPresenter {
     /**
      * a code corresponding to a state in which the switcher's text field is active
      */
-    public final short SWITCHER_STATUS_1 = 1;
+    private final short SWITCHER_STATUS_1 = 1;
 
     /**
      * a code corresponding to a state in which the switcher's edit field is active
      */
-    public final short SWITCHER_STATUS_2 = 2;
+    private final short SWITCHER_STATUS_2 = 2;
 
 
     private short mTranslationStatus = TRANSLATION_OK;
@@ -117,10 +117,9 @@ public class MVPPresenter {
      * Sets the translation status to be {@link #TRANSLATION_FAILURE},  calls the view
      * methods to display the message and enables the button.
      *
-     * @param txt text to be translated
      * @param msg a message describing the failure
      */
-    public void onTranslationFailure(final String txt, final String msg) {
+    public void onTranslationFailure(final String msg) {
         mTranslationStatus = TRANSLATION_FAILURE;
         mView.onTranslationFailure(msg);
         mView.disableButton(false);
@@ -128,17 +127,10 @@ public class MVPPresenter {
 
     /**
      * Displays a message that the response for the translation has been received, but it has not been successful.
-     *
-     * @param str         a text to translate
-     * @param translation
      */
-    public void onTranslationProblem(final String str, final String translation) {
+    public void onTranslationProblem() {
         mTranslationStatus = TRANSLATION_PROBLEM;
-        if (this.mCurrentQuote != null && this.mCurrentQuote.quote != null && this.mCurrentQuote.quote.equals(str)) {
-            mView.onTranslationProblem(this.mCurrentQuote, translation);
-        } else {
-            Log.i(TAG, "onTranslationReady: stored quote content does not coincides with received string " + str);
-        }
+        mView.onTranslationProblem();
     }
 
     /**
@@ -263,8 +255,8 @@ public class MVPPresenter {
 
     /**
      * Enables/Disables the user input field in the switcher.
-     * @param status  true - to enable, false - to disable
      *
+     * @param status true - to enable, false - to disable
      */
     public void enableUserInput(boolean status) {
         mStatus = status ? SWITCHER_STATUS_2 : SWITCHER_STATUS_1;
@@ -273,6 +265,7 @@ public class MVPPresenter {
 
     /**
      * Whether the user input field is active
+     *
      * @return
      */
     public boolean isUserInputActive() {
