@@ -13,13 +13,13 @@ abstract class Config {
      *
      * true - production mode, false - develop mode.
      */
-    public static final boolean IS_PRODUCTION = false;
+    public static final boolean IS_PRODUCTION = true;
 
     /**
      * api key for the quote retrieval service
      */
-    @SuppressWarnings({"SpellCheckingInspection", "ConstantConditions"})
-    public static final String API_KEY_1 = IS_PRODUCTION ? "cdY74PzM7lmshAFnL81d4g8Nmkmjp19ctRPjsns3cfVRoORLhD" : "BcsP5qtoB9mshvuD0VHmv78FP75Tp1uqnt1jsnv9YEFqi9oygG";
+    @SuppressWarnings({"SpellCheckingInspection"})
+    public static final String API_KEY_1 = "cdY74PzM7lmshAFnL81d4g8Nmkmjp19ctRPjsns3cfVRoORLhD";
 
     /**
      * api key for the Yoda translation service
