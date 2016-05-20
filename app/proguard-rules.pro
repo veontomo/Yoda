@@ -16,3 +16,4 @@
 #   public *;
 #}
 -ignorewarnings
+-dontobfuscate

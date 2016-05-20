@@ -5,6 +5,10 @@ apply plugin: 'jacoco'
 android {
     signingConfigs {
         config {
+            keyAlias 'ItaProVerb'
+            storeFile file('C:/Users/Andrea/android_keystore.jks')
+            keyPassword 'moje1Prilozhenie'
+            storePassword 'sT_28l_.'
         }
     }
     compileSdkVersion 23
@@ -13,17 +17,15 @@ android {
         applicationId "com.veontomo.yoda"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 3
+        versionCode 5
         versionName "1.0"
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testCoverageEnabled = true
         }
     }
