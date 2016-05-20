@@ -22,7 +22,6 @@ class ToStringConverterFactory extends Converter.Factory {
 
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
-        Log.i(Config.appName, "responseBodyConverter started");
         if (String.class.equals(type)) {
             return new Converter<ResponseBody, String>() {
                 @Override
@@ -36,7 +35,6 @@ class ToStringConverterFactory extends Converter.Factory {
 
     @Override
     public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] annotations, Annotation[] methodAnnotations, Retrofit retrofit) {
-        Log.i(Config.appName, "requestBodyConverter started");
         if (String.class.equals(type)) {
             return new Converter<String, RequestBody>() {
                 @Override
