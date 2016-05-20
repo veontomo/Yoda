@@ -16,18 +16,15 @@ abstract class Config {
     public static final boolean IS_PRODUCTION = false;
 
     /**
-     * api key for the quote retrieval service
+     * api key api key to access the online services
      */
     @SuppressWarnings({"SpellCheckingInspection"})
-    public static final String API_KEY_1 =  "BcsP5qtoB9mshvuD0VHmv78FP75Tp1uqnt1jsnv9YEFqi9oygG";
+    public static final String API_KEY =  "BcsP5qtoB9mshvuD0VHmv78FP75Tp1uqnt1jsnv9YEFqi9oygG";
 
-    /**
-     * api key for the Yoda translation service
-     */
-    @SuppressWarnings("SpellCheckingInspection")
     /**
      * url of the Yoda translation API
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public static final String YODA_SERVICE_URL = "https://yoda.p.mashape.com/";
 
     /**

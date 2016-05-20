@@ -12,7 +12,7 @@ interface YodaApi {
     @SuppressWarnings("SpellCheckingInspection")
     @Headers({
             "Accept: text/plain",
-            "X-Mashape-Key: " + Config.API_KEY_1})
+            "X-Mashape-Key: " + Config.API_KEY})
     @GET("yoda")
     Call<String> translate(@Query("sentence") String phrase);
 }

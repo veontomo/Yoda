@@ -13,7 +13,7 @@ interface QuotesApi {
     @SuppressWarnings("SpellCheckingInspection")
     @Headers({
             "Accept: application/json",
-            "X-Mashape-Key: " + Config.API_KEY_1})
+            "X-Mashape-Key: " + Config.API_KEY})
     @GET("/")
     Call<Quote> getByCategory(@Query("cat") String category);
 }
