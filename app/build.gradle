@@ -3,14 +3,7 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'jacoco'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'ItaProVerb'
-            storeFile file('C:/Users/Andrea/android_keystore.jks')
-            keyPassword 'moje1Prilozhenie'
-            storePassword 'sT_28l_.'
-        }
-    }
+
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
     defaultConfig {
