@@ -15,6 +15,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ViewSwitcher
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainView : AppCompatActivity(), MVPView {
 
@@ -31,7 +33,7 @@ class MainView : AppCompatActivity(), MVPView {
     private var mSpanSuccess: ImageSpan? = null
     private var mSpanFailure: ImageSpan? = null
 
-    fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //noinspection PointlessBooleanExpression
         if (!Config.IS_PRODUCTION) {
@@ -41,7 +43,13 @@ class MainView : AppCompatActivity(), MVPView {
         }
 
         setContentView(R.layout.activity_main)
-        mState = savedInstanceState
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+        mState = savedInstanceState;
+
     }
 
     override fun onResume() {
@@ -119,14 +127,14 @@ class MainView : AppCompatActivity(), MVPView {
      * Create references to required views and initialize the presenter.
      */
     private fun init() {
-        mTranslation = findViewById(R.id.translation) as TextView
-        mQuoteText = findViewById(R.id.phrase) as TextView
-        mQuoteAuthor = findViewById(R.id.author) as TextView
-        mSwitcher = findViewById(R.id.my_switcher) as ViewSwitcher
-        mUserInput = findViewById(R.id.input_view) as EditText
-        mButton = findViewById(R.id.retrieveBtn) as Button
-        mCheck1 = findViewById(R.id.check_1) as CheckBox
-        mCheck2 = findViewById(R.id.check_2) as CheckBox
+        mTranslation = this.translation
+        mQuoteText = this.phrase
+        mQuoteAuthor = this.author
+        mSwitcher = this.my_switcher
+        mUserInput = this.input_view
+        mButton = this.retrieveBtn
+        mCheck1 = this.check_1
+        mCheck2 = this.check_2
         mPresenter = MVPPresenter.create(this)
 
         mSpanSuccess = createImageSpan(R.drawable.success)

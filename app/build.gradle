@@ -1,17 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'jacoco'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'ItaProVerb'
-            storeFile file('C:/Users/Andrea/android_keystore.jks')
-            keyPassword 'moje1Prilozhenie'
-            storePassword 'sT_28l_.'
-        }
-    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
     defaultConfig {
@@ -34,6 +27,21 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 }
+buildscript {
+    ext.kotlin_version = '1.0.2'
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -52,6 +60,8 @@ dependencies {
     }
     testCompile 'org.assertj:assertj-core:1.7.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+
 }
 repositories {
     mavenCentral()
